@@ -1,6 +1,10 @@
 # KLE Conversion Script
 Install dependencies:
-`npm install`
+```
+npm install
+```
 
 Run script (defaults to using `layout.json`):
-`npm start -- <layout json file>`
+```
+npm start -- <layout json file>
+```
