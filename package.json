@@ -1,0 +1,20 @@
+{
+  "name": "openscad_pcb_generator",
+  "version": "1.0.0",
+  "description": "Generate a 3d-printable solderless hotswap \"PCB\" given a KLE layout",
+  "main": "index.js",
+  "dependencies": {
+    "@ijprest/kle-serial": "github:kevin-wells/kle-serial#master"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Gareth Chen",
+  "license": "GPL-3.0-or-later"
+}
