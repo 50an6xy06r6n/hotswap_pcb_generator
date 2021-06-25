@@ -1,5 +1,18 @@
 /* [Layout Values] */
-// Layout (Format is [[[x_location, y_location], [rotation, rotation_x, rotation_y]], [key_size, [top_border, bottom_border, left_border, right_border], rotate_column]])
+/* Layout Format (each key): 
+    [
+        [
+            [x_location, y_location], 
+            [rotation, rotation_x, rotation_y]
+        ], 
+        [
+            key_size, 
+            [top_border, bottom_border, left_border, right_border], 
+            rotate_column
+        ]
+    ]
+*/
+// Keyswitch Layout
 layout = [
     [[[0,0.125]],[1,[0,1,0,2],false]],
     [[[0,1.125]],[1,[1,1,0,1],false]],
