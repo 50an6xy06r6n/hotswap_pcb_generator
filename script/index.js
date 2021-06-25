@@ -3,15 +3,16 @@ const fs = require('fs')
 const util = require('util')
 
 
-var layout_filename = process.argv[2] ?? 'layout.json';
+var kle_filename = process.argv[2] ?? 'layout.json';
+var output_filename = process.argv[3] ?? '../layout.scad';
 
 try {
-    var layout_json = fs.readFileSync(layout_filename, 'UTF-8');
+    var kle_json = fs.readFileSync(kle_filename, 'UTF-8');
 } catch (err) {
     console.error(err);
 }
 
-var keyboard = kle.Serial.parse(layout_json);
+var keyboard = kle.Serial.parse(kle_json);
 
 var formatted_keys = keyboard.keys.map(
     key =>
@@ -25,4 +26,11 @@ var formatted_keys = keyboard.keys.map(
 
 )
 
-console.log(JSON.stringify(formatted_keys));
+try {
+    var file_content = "layout = " + JSON.stringify(formatted_keys) + ";\n" +
+                       "hole_layout = [];\n";
+    console.log(file_content);
+    const data = fs.writeFileSync(output_filename, file_content);
+} catch (err) {
+    console.error(err);
+}

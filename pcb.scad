@@ -1,61 +1,16 @@
+include <default_layout.scad>
+include <layout.scad>
+
 /* [PCB Properties] */
 // Diameter of row/column wire channels
 wire_diameter = 2.15;
-// Upward angle of switch pin in contact with diode anode (gives more reliable connections but slightly deforms pin)
+// Upward angle of switch pin in contact with diode anode (gives more reliable
+// connections but slightly deforms pin)
 diode_pin_angle = 5;  // [0:15]
 // Diameter of standoff hole
 standoff_hole_diameter = 3;
 // Overall thickness of PCB
 thickness = 4;
-
-
-/* [Layout Values] */
-// Layout (Format is [[[x_location, y_location], [rotation, rotation_x, rotation_y]], [key_size, [top_border, bottom_border, left_border, right_border], rotate_column]])
-layout = [
-    [[[0,0.125]],[1,[0,1,0,2],false]],
-    [[[0,1.125]],[1,[1,1,0,1],false]],
-    [[[0,2.125]],[1,[1,1,0,1],false]],
-    [[[0,3.125]],[1,[1,0,0,0],false]],
-    [[[1,0]],[1,[0,1,0,0],false]],
-    [[[1,1]]],
-    [[[1,2]]],
-    [[[1,3]],[1,[1,0,2,2],false]],
-    [[[2,0.125]],[1,[0,1,2,2],false]],
-    [[[2,1.125]]],
-    [[[2,2.125]]],
-    [[[2,3.125]],[1,[1,0,0,0],false]],
-    [[[3,0]],[1,[0,1,0,0],false]],
-    [[[3,1]]],
-    [[[3,2]]],
-    [[[3,3]],[1,[1,0,2,2],false]],
-    [[[4,0.125]],[1,[0,1,2,0],false]],
-    [[[4,1.125]]],
-    [[[4,2.125]]],
-    [[[4,3.125]],[1,[1,0,0,0],false]],
-    [[[5,0.25]],[1,[0,1,2,0],false]],
-    [[[5,1.25]]],
-    [[[5,2.25]],[1,[1,6,2,0],false]],
-    [[[6,1]],[1,[0,1,2,0],false]],
-    [[[6,2]],[1,[1,0,2,0],false]],
-    [[[4.875,4.625],[60,4.875,4.625]],[1.5,[6,1,0,0],true]],
-    [[[4.875,5.625],[60,4.875,4.625]],[1.5,[1,0,0,0],true]],
-];
-
-// Standoff hole layout
-hole_layout = [
-    [[[0,1.625]]],
-    [[[2.5,0]]],
-    [[[2.5,3.125]]],
-    [[[3,1.5]]],
-    [[[6,1.5]]],
-    [[[4.875,5.125],[60,4.875,4.625]],[1.5,[0,0,0,0],true]],
-];
-
-// Whether to flip the layout
-invert_layout_flag = false;
-
-// Whether the layout is staggered-row or staggered-column
-layout_type = "column";  // [column, row]
 
 
 /* [Advanced Values (related to switch size)] */
@@ -69,15 +24,18 @@ socket_depth = 3.5;
 grid = 1.27;
 // Resolution of holes (affects render times)
 $fn=12;
-// Thickness of a border unit around the socket (for joining adjacent sockets)
-border_width = (unit - socket_size)/2;
 
 module __Customizer_Limit__ () {}
 
-// Calculate some constants
+// Determine whether to invert the layout
 layout_final = invert_layout_flag ? invert_layout(layout) : layout;
 hole_layout_final = invert_layout_flag ? invert_layout(hole_layout) : hole_layout;
 
+// Thickness of a border unit around the socket (for joining adjacent sockets)
+border_width = (unit - socket_size)/2;
+
+// Moves the flat part to the top if layout is row-staggered so column wires 
+// can be routed. PCB should be printed upside down in this case.
 border_z_offset =
     layout_type == "column"
     ? -1
@@ -85,6 +43,7 @@ border_z_offset =
         ? 1
         : assert(false, "layout_type parameter is invalid");
 
+// Tweaks to make wire channels connect properly depending on the key alignment
 row_cutout_length =
     layout_type == "column"
     ? unit+1
