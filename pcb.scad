@@ -23,13 +23,13 @@ socket_depth = 3.5;
 // Spacing of grid for pins
 grid = 1.27;
 // Resolution of holes (affects render times)
-$fn=12;
+$fn=120;
 
 module __Customizer_Limit__ () {}
 
 // Determine whether to invert the layout
-layout_final = invert_layout_flag ? invert_layout(layout) : layout;
-hole_layout_final = invert_layout_flag ? invert_layout(hole_layout) : hole_layout;
+layout_final = invert_layout_flag ? invert_layout(base_layout) : base_layout;
+hole_layout_final = invert_layout_flag ? invert_layout(base_hole_layout) : base_hole_layout;
 
 // Thickness of a border unit around the socket (for joining adjacent sockets)
 border_width = (unit - socket_size)/2;
@@ -182,14 +182,18 @@ module layout_pattern(layout) {
     }
 }
 
-difference() {
-    layout_pattern(layout_final) {
-        key_socket_base($borders);
-    }
-    layout_pattern(layout_final) {
-        key_socket_cutouts($borders, $rotate_column);
-    }
-    layout_pattern(hole_layout_final) {
-        standoff_hole();
+module pcb(layout, hole_layout) {
+    difference() {
+        layout_pattern(layout) {
+            key_socket_base($borders);
+        }
+        layout_pattern(layout) {
+            key_socket_cutouts($borders, $rotate_column);
+        }
+        layout_pattern(hole_layout) {
+            standoff_hole();
+        }
     }
 }
+
+pcb(layout_final, hole_layout_final);

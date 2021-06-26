@@ -27,8 +27,8 @@ var formatted_keys = keyboard.keys.map(
 )
 
 try {
-    var file_content = "layout = " + JSON.stringify(formatted_keys) + ";\n" +
-                       "hole_layout = [];\n";
+    var file_content = "base_layout = " + JSON.stringify(formatted_keys) + ";\n" +
+                       "base_hole_layout = [];\n";
     console.log(file_content);
     const data = fs.writeFileSync(output_filename, file_content);
 } catch (err) {

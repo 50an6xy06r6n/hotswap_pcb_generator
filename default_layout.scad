@@ -13,7 +13,7 @@
     ]
 */
 // Keyswitch Layout
-layout = [
+base_layout = [
     [[[0,0.125]],[1,[0,1,0,2],false]],
     [[[0,1.125]],[1,[1,1,0,1],false]],
     [[[0,2.125]],[1,[1,1,0,1],false]],
@@ -44,7 +44,7 @@ layout = [
 ];
 
 // Standoff hole layout
-hole_layout = [
+base_hole_layout = [
     [[[0,1.625]]],
     [[[2.5,0]]],
     [[[2.5,3.125]]],
