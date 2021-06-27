@@ -1,3 +1,4 @@
 node_modules/
+*.stl
 layout.scad
 layout.json
