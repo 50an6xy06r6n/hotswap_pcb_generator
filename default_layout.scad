@@ -1,3 +1,5 @@
+include <parameters.scad>
+
 /* [Layout Values] */
 /* Layout Format (each key): 
     [
@@ -36,15 +38,15 @@ base_layout = [
     [[[4,3.125]],[1,[1,0,0,0],false]],
     [[[5,0.25]],[1,[0,1,2,0],false]],
     [[[5,1.25]]],
-    [[[5,2.25]],[1,[1,6,2,0],false]],
+    [[[5,2.25]],[1,[1,15*mm,2,0],false]],
     [[[6,1]],[1,[0,1,2,0],false]],
     [[[6,2]],[1,[1,0,2,0],false]],
-    [[[4.875,4.625],[60,4.875,4.625]],[1.5,[6,1,0,0],true]],
+    [[[4.875,4.625],[60,4.875,4.625]],[1.5,[15*mm,1,0,0],true]],
     [[[4.875,5.625],[60,4.875,4.625]],[1.5,[1,0,0,0],true]],
 ];
 
 // Standoff hole layout
-base_hole_layout = [
+base_standoff_layout = [
     [[[0,1.625]]],
     [[[2.5,0]]],
     [[[2.5,3.125]]],
@@ -58,3 +60,6 @@ invert_layout_flag = false;
 
 // Whether the layout is staggered-row or staggered-column
 layout_type = "column";  // [column, row]
+
+// Standoff configuration
+standoff_type = "plate"; // [plate, pcb, separate]
