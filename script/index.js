@@ -26,10 +26,13 @@ var formatted_keys = keyboard.keys.map(
 
 )
 
+var file_content = formatted_keys.reduce(
+    (total, key) => total + "  " + JSON.stringify(key) + ",\n",
+    "base_layout = [\n"
+);
+file_content = file_content + "];\nbase_hole_layout = [];\n";
+
 try {
-    var file_content = "base_layout = " + JSON.stringify(formatted_keys) + ";\n" +
-                       "base_hole_layout = [];\n";
-    console.log(file_content);
     const data = fs.writeFileSync(output_filename, file_content);
 } catch (err) {
     console.error(err);

@@ -23,7 +23,7 @@ socket_depth = 3.5;
 // Spacing of grid for pins
 grid = 1.27;
 // Resolution of holes (affects render times)
-$fn=120;
+$fn=12;
 
 module __Customizer_Limit__ () {}
 
