@@ -1,4 +1,9 @@
-node_modules/
 *.stl
+node_modules/
+diode_bending_template.json
 layout.scad
 layout.json
+parameters.json
+pcb.json
+plate.json
+utils.json
