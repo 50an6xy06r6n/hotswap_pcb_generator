@@ -1,7 +1,7 @@
 # 3D-Printable Hotswap Keyboard PCB Generator
 ![Example PCB](img/pcb_front.jpg)
 
-This is an OpenSCAD script that can be used to generate 3D-printable hotswap "PCBs" for prototyping new keyboard layouts. I originally wrote this to help me prototype a split ergo layout without needing to solder/desolder all the switches every time. If you're only going to be building the keyboard once, this is probably a lot more work than just handwiring, but it might be useful if you're iterating on a design and want to reuse your switches. Currently only supports MX-style switches.
+This is an OpenSCAD script that can be used to generate 3D-printable hotswap "PCBs" for prototyping new keyboard layouts. I originally wrote this to help me prototype a split ergo layout without needing to solder/desolder all the switches every time. If you're only going to be building the keyboard once, this is probably a lot more work than just handwiring, but it might be useful if you're iterating on a design and want to reuse your switches. Currently supports MX and Kailh Choc v1 switches. If someone wants to send me v2 Chocs I can add those as well.
 
 ### Usage
 The OpenSCAD script reads the layout data from the `layout.scad` header file, which you can either write by hand (the format is described in `default_layout.scad`) or generate from a KLE json file using the provided script:
@@ -34,7 +34,9 @@ The design was originally designed for use with staggered-column or ortholinear 
 
 By default, the plates are generated with a 5mm margin around the PCB, but this can be changed via the `plate_margin` variable. Default plate thickness is 1.5mm and is likewise controlled by `plate_thickness`.
 
-Finally, there's also a `base_standoff_layout` parameter that you can use to add standoffs and clearance holes for mounting the PCB and plate together (or to mount the PCB to a separate case). Standoffs can be attached to either the plate or PCB, or be completely separated using the `standoff_type` parameter. Default standoff size is for M2 screws. You may need to tweak the `fit_tolerance` parameter a little bit if you find that the PCB and plate are too far apart due to print tolerances.
+There's a `base_standoff_layout` parameter that you can use to add standoffs and clearance holes for mounting the PCB and plate together (or to mount the PCB to a separate case). Standoffs can be attached to either the plate or PCB, or be completely separated using the `standoff_type` parameter. Default standoff size is for M2 screws. You may need to tweak the `fit_tolerance` parameter a little bit if you find that the PCB and plate are too far apart due to print tolerances.
+
+If you want to use Kailh Choc switches, just change the `switch_type` parameter. You can also use custom horizontal and vertical key spacings (to eliminate gaps between Choc keycaps, for example) using the `h_unit` and `v_unit` parameters. Switches are south-facing by default, but you can flip them using `switch_orientation`.
 
 ### Additional Context
 My original design was inspired by [stingray127's handwirehotswap project](https://github.com/stingray127/handwirehotswap), with the key difference being that I wanted to use stranded wire for the row contacts. That design worked pretty well, but I was using diode legs to connect the sockets vertically, and those connections turned out to be pretty flaky. In addition, there was nothing holding the sockets in place besides friction with the switch legs, and when seating switches you had to be pushing up on the socket from the back. I solved these problems by just using another set of wires for the columns and combining all the sockets into a solid plate.

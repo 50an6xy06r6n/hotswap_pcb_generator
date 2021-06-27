@@ -70,7 +70,7 @@ invert_layout_flag = false;
 layout_type = "column";  // [column, row]
 
 // Standoff configuration
-standoff_type = "plate"; // [plate, pcb, separate]
+standoff_type = "plate"; // [plate, pcb, separate, none]
 `;
 
 try {

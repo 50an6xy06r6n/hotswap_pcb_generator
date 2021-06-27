@@ -18,7 +18,7 @@ border_z_offset =
 // Tweaks to make wire channels connect properly depending on the key alignment
 row_cutout_length =
     layout_type == "column"
-    ? unit+1
+    ? h_unit+1
     : layout_type == "row"
         ? 1000
         : assert(false, "layout_type parameter is invalid");
@@ -27,9 +27,15 @@ col_cutout_length =
     layout_type == "column"
     ? 1000
     : layout_type == "row"
-        ? unit+1
+        ? v_unit+1
         : assert(false, "layout_type parameter is invalid");
 
+switch_rotation = 
+    switch_orientation == "south"
+    ? 0
+    : switch_orientation == "north"
+        ? 180
+        : assert(false, "switch_orientation is invalid");
 
 
 function invert_layout(layout) = [
@@ -51,14 +57,14 @@ function invert_layout(layout) = [
 ];
     
 module standoff(height) {
-    translate([unit/2,-unit/2,0]) difference() {
+    translate([h_unit/2,-v_unit/2,0]) difference() {
         cylinder(h=height,d=standoff_diameter,center=true);
         cylinder(h=height+1,d=standoff_pilot_hole_diameter,center=true);
     }
 }
     
 module standoff_hole(depth) {
-    translate([unit/2,-unit/2,0]) cylinder(h=depth,d=standoff_clearance_hole_diameter,center=true);
+    translate([h_unit/2,-v_unit/2,0]) cylinder(h=depth,d=standoff_clearance_hole_diameter,center=true);
 }
 
 module layout_pattern(layout) {
@@ -70,10 +76,10 @@ module layout_pattern(layout) {
 
             switch_offset = (shape[0]-1)/2;
 
-            translate([location[1][1]*unit,-location[1][2]*unit,0]) {
+            translate([location[1][1]*h_unit,-location[1][2]*v_unit,0]) {
                 rotate([0,0,location[1][0]]) {
-                    translate([(location[0][0]-location[1][1]+switch_offset)*unit,
-                               (location[1][2]-location[0][1])*unit,
+                    translate([(location[0][0]-location[1][1]+switch_offset)*h_unit,
+                               (location[1][2]-location[0][1])*v_unit,
                                0]) {
                         $borders = shape[1];
                         $rotate_column = shape[2];

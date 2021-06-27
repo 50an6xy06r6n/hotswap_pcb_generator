@@ -6,14 +6,15 @@ function plate_borders(borders) = [
 ];
 
 module plate_base(borders=[1,1,1,1]) {
-    translate([unit/2,-unit/2,0]) union() {
+    translate([h_unit/2,-v_unit/2,0]) union() {
         translate([
-            border_width/2 * (borders[3] - borders[2]),
-            border_width/2 * (borders[0] - borders[1]),
+            h_border_width/2 * (borders[3] - borders[2]),
+            v_border_width/2 * (borders[0] - borders[1]),
+            0
         ]) {
             cube([
-                socket_size+border_width*(borders[2]+borders[3])+0.001,
-                socket_size+border_width*(borders[0]+borders[1])+0.001,
+                socket_size+h_border_width*(borders[2]+borders[3])+0.001,
+                socket_size+v_border_width*(borders[0]+borders[1])+0.001,
                 plate_thickness
             ], center=true);
         }
@@ -21,7 +22,7 @@ module plate_base(borders=[1,1,1,1]) {
 }
 
 module plate_cutout() {
-    translate([unit/2,-unit/2,0]) {
+    translate([h_unit/2,-v_unit/2,0]) {
         cube([plate_cutout_size, plate_cutout_size, plate_thickness+1],center=true);
     }
 }
@@ -35,7 +36,6 @@ module plate(layout, standoff_layout) {
             }
             if (standoff_type == "plate") {
                 standoff_height = pcb_plate_spacing - min(border_z_offset * 2, 0) - fit_tolerance;
-                echo(standoff_height)
                 layout_pattern(standoff_layout) {
                     translate([0,0,-(standoff_height-plate_thickness)/2]) standoff(standoff_height);
                 }
