@@ -1,5 +1,5 @@
 # 3D-Printable Hotswap Keyboard PCB Generator
-![Example PCB](img/pcb_0.jpg)
+![Example PCB](img/pcb_front.jpg)
 
 This is an OpenSCAD script that can be used to generate 3D-printable hotswap "PCBs" for prototyping new keyboard layouts. I originally wrote this to help me prototype a split ergo layout without needing to solder/desolder all the switches every time. If you're only going to be building the keyboard once, this is probably a lot more work than just handwiring, but it might be useful if you're iterating on a design and want to reuse your switches. Currently only supports MX-style switches.
 
@@ -25,9 +25,7 @@ Once the basic layout is set there are more values you can tweak in `layout.scad
 
 6. At this point you have a completed PCB, and you can mount it to your plate and add switches (as you would with any other PCB).
 
-### Additional Context
-My original design was inspired by [stingray127's handwirehotswap project](https://github.com/stingray127/handwirehotswap), with the key difference being that I wanted to use stranded wire for the row contacts. That design worked pretty well, but I was using diode legs to connect the sockets vertically, and those connections turned out to be pretty flaky. In addition, there was nothing holding the sockets in place besides friction with the switch legs, and when seating switches you had to be pushing up on the socket from the back. I solved these problems by just using another set of wires for the columns and combining all the sockets into a solid plate.
-
+### Design Details
 The design uses 22AWG stranded wire for the matrix rows and columns (wire gauge is configurable via `wire_diameter`), with the top switch pin plugging directly into the row wire and the diode cathode sticking through the column wire. The bottom switch pin makes contact with the diode anode, though that connection can be a bit finicky. I've solved this for now by putting a slight angle on the channel that holds the anode leg and switch pin, but it does slightly bend the switch pin in the process. The bend is pretty minor and can be easily bent back, but the angle is configurable via `diode_pin_angle` if you prefer not to have one. You can also use a bit of aluminum foil to solidify the contact point, but I found that to be too tedious in practice. Electrical integrity is pretty good overall once the switches are properly seated. Hole sizes and such are tuned to my printer, which isn't the most dimensionally accurate, so you may get a better fit by tweaking the hole sizes slightly. I also recommend generating the final STL with a larger `$fn` value (the edge count for circles), though it does take a while to finish.
 
 The basic layout format matches the commonly-used Keyboard Layout Editor (KLE) format, and the provided node.js script can convert a KLE json into an SCAD file that is included in the main script as a header. I originally wanted to use the OpenSCAD customizer to do this, but it turns out that doesn't support nested vectors at the moment. There are also a couple of additional parameters on each key in the `base_layout` array pertaining to the geometry of the PCB that you might want to change. One affects how much the PCB extends past each socket, which allows you to trim off excess on the edges and connect parts that are not directly adjacent (such as thumb clusters). Another allows you to rotate the wire channels for the column wires, which is also useful for wiring parts that don't follow a grid, like thumb clusters.
@@ -37,3 +35,19 @@ The design was originally designed for use with staggered-column or ortholinear 
 By default, the plates are generated with a 5mm margin around the PCB, but this can be changed via the `plate_margin` variable. Default plate thickness is 1.5mm and is likewise controlled by `plate_thickness`.
 
 Finally, there's also a `base_standoff_layout` parameter that you can use to add standoffs and clearance holes for mounting the PCB and plate together (or to mount the PCB to a separate case). Standoffs can be attached to either the plate or PCB, or be completely separated using the `standoff_type` parameter. Default standoff size is for M2 screws. You may need to tweak the `fit_tolerance` parameter a little bit if you find that the PCB and plate are too far apart due to print tolerances.
+
+### Additional Context
+My original design was inspired by [stingray127's handwirehotswap project](https://github.com/stingray127/handwirehotswap), with the key difference being that I wanted to use stranded wire for the row contacts. That design worked pretty well, but I was using diode legs to connect the sockets vertically, and those connections turned out to be pretty flaky. In addition, there was nothing holding the sockets in place besides friction with the switch legs, and when seating switches you had to be pushing up on the socket from the back. I solved these problems by just using another set of wires for the columns and combining all the sockets into a solid plate.
+
+### Pictures
+Completed keyboard
+![Completed keyboard](img/completed_keyboard.jpg)
+
+OpenSCAD output
+![OpenSCAD output](img/pcb_scad.png)
+
+Back of the PCB
+![Back of the PCB](img/pcb_back.jpg)
+
+Original design
+![Original design](img/pcb_individual.jpg)
