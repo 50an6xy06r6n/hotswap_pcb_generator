@@ -4,13 +4,19 @@
 This is an OpenSCAD script that can be used to generate 3D-printable hotswap "PCBs" for prototyping new keyboard layouts. I originally wrote this to help me prototype a split ergo layout without needing to solder/desolder all the switches every time. If you're only going to be building the keyboard once, this is probably a lot more work than just handwiring, but it might be useful if you're iterating on a design and want to reuse your switches. Currently supports MX and Kailh Choc v1 switches. If someone wants to send me low-profile Cherry switches or v2 Chocs I can add those as well.
 
 ### Usage
-The OpenSCAD script reads the layout data from the `layout.scad` header file, which you can either write by hand (the format is described in `default_layout.scad`) or generate from a KLE json file using the provided script:
+The OpenSCAD script reads the layout data from the `layout.scad` header file, which you can either write by hand (the format is described in `default_layout.scad`) or generate from a KLE json file using the provided script (requires node.js 14+):
 ```
 cd script/
 npm install
 npm start -- <layout json file>
 ```
 Once the basic layout is set there are more values you can tweak in `layout.scad` to change the footprint of the PCB or add standoff positions. Other parameters such as wire/pin diameters and pcb/plate thicknesses are contained in `parameters.scad`. These values are described in a bit more detail below.
+
+When running `npm start` for the first time, you may get this error:
+```
+Error: Cannot find module '.../hotswap_pcb_generator/script/node_modules/@ijprest/kle-serial/dist/index.js'. Please verify that the package.json has a valid "main" entry
+```
+If you see this, run `npm install` from inside the `kle-serial` directory. Tracking this issue [here](https://github.com/50an6xy06r6n/hotswap_pcb_generator/issues/1).
 
 ### Assembly
 1. Use `pcb.scad` to generate an STL for 3D printing. Column-staggered layouts can be printed as-is, while row-staggered layouts should be flipped for better printability. Any print settings should work, though you may want to tweak the hole sizes depending on your printer's tolerances and desired fit tightness. Make sure the holes are clear and that wires can be pushed into the wire channels without too much effort. A utility knife, a set of tiny drill bits, and a pin vise can help with this.
