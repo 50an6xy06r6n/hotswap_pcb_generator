@@ -1,7 +1,7 @@
 # 3D-Printable Hotswap Keyboard PCB Generator
 ![Example PCB](img/pcb_front.jpg)
 
-This is an OpenSCAD script that can be used to generate 3D-printable hotswap "PCBs" for prototyping new keyboard layouts. I originally wrote this to help me prototype a split ergo layout without needing to solder/desolder all the switches every time. If you're only going to be building the keyboard once, this is probably a lot more work than just handwiring, but it might be useful if you're iterating on a design and want to reuse your switches. Currently supports MX and Kailh Choc v1 switches. If someone wants to send me low-profile Cherry switches or v2 Chocs I can add those as well.
+This is an OpenSCAD script that can be used to generate 3D-printable hotswap "PCBs" and plates for prototyping new keyboard layouts. I originally wrote this to help me prototype a split ergo layout without needing to solder/desolder all the switches every time. If you're only going to be building the keyboard once, this is probably a lot more work than just handwiring, but it might be useful if you're iterating on a design and want to reuse your switches. Currently supports MX and Kailh Choc v1 switches. If someone wants to send me low-profile Cherry switches or v2 Chocs I can add those as well.
 
 ### Usage
 The OpenSCAD script reads the layout data from the `layout.scad` header file, which you can either write by hand (the format is described in `default_layout.scad`) or generate from a KLE json file using the provided script (requires node.js 14+):
