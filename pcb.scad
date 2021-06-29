@@ -1,6 +1,8 @@
 include <parameters.scad>
 include <utils.scad>
 
+use <standoff.scad>
+
 module key_socket(borders=[1,1,1,1], rotate_column=false) {
     difference() {
         key_socket_base(borders);

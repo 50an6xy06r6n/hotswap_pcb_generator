@@ -60,6 +60,3 @@ invert_layout_flag = false;
 
 // Whether the layout is staggered-row or staggered-column
 layout_type = "column";  // [column, row]
-
-// Standoff configuration
-standoff_type = "plate";  // [plate, pcb, separate, none]

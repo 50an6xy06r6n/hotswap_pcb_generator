@@ -8,6 +8,8 @@ diode_pin_angle = 5;  // [0:15]
 switch_type = "mx";  // [mx, choc]
 // Switch orientation (based on LED location)
 switch_orientation = "south";  // [north, south]
+// Standoff configuration
+standoff_type = "plate";  // [plate, pcb, separate, none]
 // Diameter of integrated standoffs
 standoff_diameter = 4;
 // Diameter of standoff clearance hole

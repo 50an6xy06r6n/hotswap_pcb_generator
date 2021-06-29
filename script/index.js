@@ -15,8 +15,9 @@ try {
 var keyboard = kle.Serial.parse(kle_json);
 
 var formatted_keys = keyboard.keys.map(
-    key =>
-        [
+    key => {
+        let side_border = ((key.width-1)/2);
+        return [
             [
                 [key.x, key.y],
                 [-key.rotation_angle, key.rotation_x, key.rotation_y]
@@ -26,12 +27,13 @@ var formatted_keys = keyboard.keys.map(
                 [
                     1,
                     1,
-                    "1+" + ((key.width-1)/2).toString() + "*unit*mm",
-                    "1+" + ((key.width-1)/2).toString() + "*unit*mm"
+                    side_border ? "1+" + side_border.toString() + "*unit*mm" : 1,
+                    side_border ? "1+" + side_border.toString() + "*unit*mm" : 1,
                 ],
                 false
             ]
-        ]
+        ];
+    }
 )
 
 var file_content =
@@ -68,9 +70,6 @@ invert_layout_flag = false;
 
 // Whether the layout is staggered-row or staggered-column
 layout_type = "column";  // [column, row]
-
-// Standoff configuration
-standoff_type = "plate"; // [plate, pcb, separate, none]
 `;
 
 try {

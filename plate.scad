@@ -1,6 +1,8 @@
 include <parameters.scad>
 include <utils.scad>
 
+use <standoff.scad>
+
 function plate_borders(borders) = [
     for (border = borders) border + plate_margin*mm
 ];
