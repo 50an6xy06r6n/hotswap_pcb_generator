@@ -12,12 +12,6 @@ npm start -- <layout json file>
 ```
 Once the basic layout is set there are more values you can tweak in `layout.scad` to change the footprint of the PCB or add standoff positions. Other parameters such as wire/pin diameters and pcb/plate thicknesses are contained in `parameters.scad`. These values are described in a bit more detail below.
 
-When running `npm start` for the first time, you may get this error:
-```
-Error: Cannot find module '.../hotswap_pcb_generator/script/node_modules/@ijprest/kle-serial/dist/index.js'. Please verify that the package.json has a valid "main" entry
-```
-If you see this, run `npm install` from inside the `kle-serial` directory. Tracking this issue [here](https://github.com/50an6xy06r6n/hotswap_pcb_generator/issues/1).
-
 ### Assembly
 1. Use `pcb.scad` to generate an STL for 3D printing. Column-staggered layouts can be printed as-is, while row-staggered layouts should be flipped for better printability. Any print settings should work, though you may want to tweak the hole sizes depending on your printer's tolerances and desired fit tightness. Make sure the holes are clear and that wires can be pushed into the wire channels without too much effort. A utility knife, a set of tiny drill bits, and a pin vise can help with this.
 
