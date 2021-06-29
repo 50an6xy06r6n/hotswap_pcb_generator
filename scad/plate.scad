@@ -33,7 +33,6 @@ module plate(layout, standoff_layout) {
     difference() {
         union() {
             hull() layout_pattern(layout) {
-                // pass in $borders if you want to customize the footprint per-key
                 plate_base(plate_borders($borders)); 
             }
             if (standoff_type == "plate") {

@@ -4,7 +4,7 @@ Install dependencies:
 npm install
 ```
 
-Run script (defaults to using `layout.json`):
+Run script (defaults to using `layout.json` and outputs to `scad/layout.scad`):
 ```
-npm start -- <layout json file>
+npm start -- <layout json file> <optional output filename>
 ```

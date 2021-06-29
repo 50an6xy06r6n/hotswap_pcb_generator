@@ -4,7 +4,7 @@ const util = require('util')
 
 
 var kle_filename = process.argv[2] ?? 'layout.json';
-var output_filename = process.argv[3] ?? '../layout.scad';
+var output_filename = process.argv[3] ?? '../scad/layout.scad';
 
 try {
     var kle_json = fs.readFileSync(kle_filename, 'UTF-8');
