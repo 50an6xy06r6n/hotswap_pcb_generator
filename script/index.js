@@ -62,6 +62,12 @@ file_content += formatted_keys.reduce(
 file_content +=
 `];
 
+// MCU Position(s)
+base_mcu_layout = [];
+
+// TRRS Position(s)
+base_trrs_layout = [];
+
 // Standoff hole layout
 base_standoff_layout = [];
 

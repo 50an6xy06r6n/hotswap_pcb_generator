@@ -4,6 +4,8 @@ include <layout.scad>
 
 // Determine whether to invert the layout
 layout_final = invert_layout_flag ? invert_layout(base_layout) : base_layout;
+mcu_layout_final = invert_layout_flag ? invert_layout(base_mcu_layout) : base_mcu_layout;
+trrs_layout_final = invert_layout_flag ? invert_layout(base_trrs_layout) : base_trrs_layout;
 standoff_layout_final = invert_layout_flag ? invert_layout(base_standoff_layout) : base_standoff_layout;
 
 // Moves the flat part to the top if layout is row-staggered so column wires 
@@ -80,3 +82,16 @@ module layout_pattern(layout) {
     }
 }
 
+module border(base_size, borders, thickness, h_unit=1, v_unit=1) {
+    translate([
+        h_unit/2 * (borders[3] - borders[2]),
+        v_unit/2 * (borders[0] - borders[1]),
+        0
+    ]) {
+        cube([
+            base_size[0]+h_unit*(borders[2]+borders[3])+0.001,
+            base_size[1]+v_unit*(borders[0]+borders[1])+0.001,
+            thickness
+        ], center=true);
+    }
+}
