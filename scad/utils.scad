@@ -2,11 +2,24 @@ include <parameters.scad>
 include <default_layout.scad>
 include <layout.scad>
 
+
 // Determine whether to invert the layout
-layout_final = invert_layout_flag ? invert_layout(base_layout) : base_layout;
-mcu_layout_final = invert_layout_flag ? invert_layout(base_mcu_layout) : base_mcu_layout;
-trrs_layout_final = invert_layout_flag ? invert_layout(base_trrs_layout) : base_trrs_layout;
-standoff_layout_final = invert_layout_flag ? invert_layout(base_standoff_layout) : base_standoff_layout;
+key_layout_final = invert_layout_flag 
+    ? invert_layout(set_defaults(base_key_layout, false)) 
+    : set_defaults(base_key_layout, false);
+mcu_layout_final = invert_layout_flag 
+    ? invert_layout(set_defaults(base_mcu_layout)) 
+    : set_defaults(base_mcu_layout);
+trrs_layout_final = invert_layout_flag 
+    ? invert_layout(set_defaults(base_trrs_layout)) 
+    : set_defaults(base_trrs_layout);
+standoff_layout_final = invert_layout_flag 
+    ? invert_layout(set_defaults(
+        base_standoff_layout, 
+        [standoff_integration_default,standoff_attachment_default])) 
+    : set_defaults(
+        base_standoff_layout, 
+        [standoff_integration_default,standoff_attachment_default]);
 
 // Moves the flat part to the top if layout is row-staggered so column wires 
 // can be routed. PCB should be printed upside down in this case.
@@ -40,40 +53,65 @@ switch_rotation =
         : assert(false, "switch_orientation is invalid");
 
 
-function invert_layout(layout) = [
-    for(key = layout)
+function set_defaults(layout, extra_data_default=[]) = [
+    for (item = layout)
         let(
-            location = len(key[0]) == 2 ? key[0] : [key[0][0],[0,0,0,0]],
-            shape = len(key) == 2 ? key[1] : [1,[1,1,1,1],false]
+            location = len(item[0]) == 3 
+                ? item[0] 
+                : len(item[0]) == 2
+                    ? [item[0][0],item[0][1],[0,0,0]]
+                    : [item[0][0],1,[0,0,0]],
+            borders = len(item) >= 2 
+                ? item[1] 
+                : [1,1,1,1],
+            extra_data = len(item) == 3 
+                ? item[2] 
+                : extra_data_default
+        )
+        [
+            location,
+            borders,
+            extra_data
+        ]
+];
+
+function invert_borders(borders, invert=true) = 
+    invert
+        ? [borders[0], borders[1], borders[3], borders[2]]
+        : borders;
+
+function invert_layout(layout) = [
+    for (item = layout)
+        let(
+            location = item[0],
+            borders = item[1],
+            extra_data = item[2]
         )
         [
             [
-                [-location[0][0]-shape[0], location[0][1]],
-                [-location[1][0], -location[1][1], location[1][2]]],
-            [
-                shape[0],
-                [shape[1][0], shape[1][1], shape[1][3], shape[1][2]],
-                shape[2]
-            ]
+                [-location[0][0]-location[1], location[0][1]],
+                location[1],
+                [-location[2][0], -location[2][1], location[2][2]],
+            ],
+            invert_borders(borders),
+            extra_data
         ]
 ];
     
 module layout_pattern(layout) {
     union() {
-        for (param = layout) {
-            // Setting defaults
-            location = len(param[0]) == 2 ? param[0] : [param[0][0],[0,0,0,0]];
-            shape = len(param) == 2 ? param[1] : [1,[1,1,1,1],false];
+        for (item = layout) {
+            location = item[0];
+            $borders = item[1];
+            $extra_data = item[2];
 
-            switch_offset = (shape[0]-1)/2;
+            switch_offset = (location[1]-1)/2;  // Coordinate offset based on key shape
 
-            translate([location[1][1]*h_unit,-location[1][2]*v_unit,0]) {
-                rotate([0,0,location[1][0]]) {
-                    translate([(location[0][0]-location[1][1]+switch_offset)*h_unit,
-                               (location[1][2]-location[0][1])*v_unit,
+            translate([location[2][1]*h_unit,-location[2][2]*v_unit,0]) {
+                rotate([0,0,location[2][0]]) {
+                    translate([(location[0][0]-location[2][1]+switch_offset)*h_unit,
+                               (location[2][2]-location[0][1])*v_unit,
                                0]) {
-                        $borders = shape[1];
-                        $rotate_column = shape[2];
                         children();
                     }
                 }

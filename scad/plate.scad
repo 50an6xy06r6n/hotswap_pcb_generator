@@ -13,29 +13,31 @@ function plate_borders(borders, h_unit=1, v_unit=1) = [
     borders[3] + plate_margin/h_unit,
 ];
 
-module plate(layout, mcu_layout, trrs_layout, standoff_layout) {
+module plate_base(key_layout, mcu_layout, trrs_layout, thickness=plate_thickness) {
+    hull() {
+        layout_pattern(key_layout) {
+            key_plate_base(
+                plate_borders($borders, h_border_width, v_border_width), thickness); 
+        }
+        layout_pattern(mcu_layout) {
+            mcu_plate_base(plate_borders($borders), thickness);
+        }
+        layout_pattern(trrs_layout) {
+            trrs_plate_base(plate_borders($borders), thickness);
+        }
+    }
+}
+
+module plate(key_layout, mcu_layout, trrs_layout, standoff_layout) {
     difference() {
         union() {
-            hull() {
-                layout_pattern(layout) {
-                    key_plate_base(plate_borders($borders, h_border_width, v_border_width)); 
-                }
-                layout_pattern(mcu_layout) {
-                    mcu_plate_base(plate_borders($borders));
-                }
-                layout_pattern(trrs_layout) {
-                    trrs_plate_base(plate_borders($borders));
-                }
-            }
-            if (standoff_type == "plate") {
-                standoff_height = pcb_plate_spacing - min(border_z_offset * 2, 0) - fit_tolerance;
-                layout_pattern(standoff_layout) {
-                    translate([0,0,-(standoff_height-plate_thickness)/2]) 
-                        standoff(standoff_height);
-                }
+            plate_base(key_layout, mcu_layout, trrs_layout, plate_thickness);
+            layout_pattern(standoff_layout) {
+                echo($extra_data);
+                plate_standoff($extra_data);
             }
         }
-        layout_pattern(layout) {
+        layout_pattern(key_layout) {
             key_plate_cutout();
         }
         layout_pattern(mcu_layout) {
@@ -44,12 +46,10 @@ module plate(layout, mcu_layout, trrs_layout, standoff_layout) {
         layout_pattern(trrs_layout) {
             trrs_plate_cutout();
         }
-        if (standoff_type == "pcb" || standoff_type == "separate") {
-            layout_pattern(standoff_layout) {
-                standoff_hole(plate_thickness+1);
-            }
+        layout_pattern(standoff_layout) {
+            plate_standoff_hole($extra_data);
         }
     }    
 }
 
-plate(layout_final, mcu_layout_final, trrs_layout_final, standoff_layout_final);
+plate(key_layout_final, mcu_layout_final, trrs_layout_final, standoff_layout_final);

@@ -63,6 +63,7 @@ module mx_socket_cutouts(borders=[1,1,1,1], rotate_column=false) {
                 // Column wire
                 translate([3*grid,-4*grid,-(pcb_thickness/2-wire_diameter/3)]) 
                     rotate([90,0,rotate_column?90:0])
+                        translate([0,0,-4*grid])
                         cylinder(h=col_cutout_length,d=wire_diameter,center=true);
 
                 // Diode Channel
@@ -143,20 +144,20 @@ module choc_socket_cutouts(borders=[1,1,1,1], rotate_column=false) {
         }
 }
 
-module key_plate_base(borders=[1,1,1,1]) {
+module key_plate_base(borders=[1,1,1,1], thickness=plate_thickness) {
     translate([h_unit/2,-v_unit/2,0])
         border(
             [socket_size,socket_size], 
             borders, 
-            plate_thickness, 
+            thickness, 
             h_border_width, 
             v_border_width
         );
 }
 
-module key_plate_cutout() {
+module key_plate_cutout(thickness=plate_thickness) {
     translate([h_unit/2,-v_unit/2,0]) {
-        cube([plate_cutout_size, plate_cutout_size, plate_thickness+1],center=true);
+        cube([plate_cutout_size, plate_cutout_size, thickness+1],center=true);
     }
 }
 

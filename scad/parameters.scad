@@ -28,6 +28,9 @@ mcu_pin_offset = 0;  // Offset from the rear of the PCB
 mcu_connector_width = 10;  // Width of the connector (for plate cutout)
 mcu_connector_length = 4;  // Distance the connector extends onto the MCU (for plate cutout)
 mcu_pcb_thickness = 1.6;
+mcu_socket_width = mcu_width+4;
+mcu_socket_length = mcu_length+4;
+
 
 /* TRRS Socket Properties */
 trrs_width = 6;
@@ -43,8 +46,10 @@ trrs_nub_offset = 1.5;  // Distance from the front of the socket (not including 
 
 
 /* Standoff Properties */
-// Standoff configuration
-standoff_type = "plate";  // [plate, pcb, separate, none]
+// Component the standoff is integrated with
+standoff_integration_default = "plate";  // [plate, backplate, pcb, separate, none]
+// Component the standoff is screwed to
+standoff_attachment_default = "pcb";  // [plate, backplate, pcb, plate_backplate, none]
 // Diameter of integrated standoffs
 standoff_diameter = 4;
 // Diameter of standoff clearance hole
@@ -101,7 +106,17 @@ pcb_plate_spacing =
         ? 2.2
         : assert(false, "switch_type is invalid");
 
-// Thickness of a border unit around the socket (for joining adjacent sockets)
+// Thickness of the backplate        
+backplate_thickness = 2;
+// Spacing between the bottom of the PCB and the top of the backplate
+pcb_backplate_spacing = 4;
+
+// Total assembly thickness (for reference)
+total_thickness = 
+    pcb_plate_spacing + pcb_thickness + pcb_backplate_spacing + backplate_thickness;
+//echo(str("Total thickness is ", total_thickness, "mm."));
+
+// Width of a border unit around the socket (for joining adjacent sockets)
 border_width = (unit - socket_size)/2;
 h_border_width = (h_unit - socket_size)/2;
 v_border_width = (v_unit - socket_size)/2;
@@ -110,4 +125,10 @@ v_border_width = (v_unit - socket_size)/2;
 mm = 1/border_width;
 h_mm = 1/h_border_width;
 v_mm = 1/v_border_width;
+
+// Align mcu to a unit
+mcu_unit_resolution = .5;  // Grid size to snap to (as fractional unit)
+mcu_h_unit_size = ceil(mcu_socket_width/mcu_unit_resolution/h_unit) * mcu_unit_resolution;
+mcu_v_unit_size = ceil(mcu_socket_length/mcu_unit_resolution/v_unit) * mcu_unit_resolution;
+
 

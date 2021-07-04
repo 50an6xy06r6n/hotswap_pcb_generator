@@ -3,65 +3,78 @@ include <parameters.scad>
 /* [Layout Values] */
 /* Layout Format (each key): 
     [
-        [
-            [x_location, y_location], 
-            [rotation, rotation_x, rotation_y]
+        [                                       // Location Data
+            [x_location, y_location],
+            key_size,
+            [rotation, rotation_x, rotation_y],
         ], 
-        [
-            key_size, 
-            [top_border, bottom_border, left_border, right_border], 
-            rotate_column
-        ]
+        [                                       // Borders
+            top_border,
+            bottom_border,
+            left_border, 
+            right_border
+        ],
+        extra_data                              // Extra data (depending on component type)
     ]
 */
-// Keyswitch Layout
-base_layout = [
-    [[[0,0.125]],[1,[0,1,0,2],false]],
-    [[[0,1.125]],[1,[1,1,0,1],false]],
-    [[[0,2.125]],[1,[1,1,0,1],false]],
-    [[[0,3.125]],[1,[1,0,0,0],false]],
-    [[[1,0]],[1,[0,1,0,0],false]],
+
+// Keyswitch Layout 
+//     (extra_data = rotate_column)
+base_key_layout = [
+    [[[0,0.125]],[0,1,0,2]],
+    [[[0,1.125]],[1,1,0,1]],
+    [[[0,2.125]],[1,1,0,1]],
+    [[[0,3.125]],[1,0,0,0]],
+    [[[1,0]],[0,1,0,0]],
     [[[1,1]]],
     [[[1,2]]],
-    [[[1,3]],[1,[1,0,2,2],false]],
-    [[[2,0.125]],[1,[0,1,2,2],false]],
+    [[[1,3]],[1,0,2,2]],
+    [[[2,0.125]],[0,1,2,2]],
     [[[2,1.125]]],
     [[[2,2.125]]],
-    [[[2,3.125]],[1,[1,0,0,0],false]],
-    [[[3,0]],[1,[0,1,0,0],false]],
+    [[[2,3.125]],[1,0,0,0]],
+    [[[3,0]],[0,1,0,0]],
     [[[3,1]]],
     [[[3,2]]],
-    [[[3,3]],[1,[1,0,2,2],false]],
-    [[[4,0.125]],[1,[0,1,2,0],false]],
+    [[[3,3]],[1,0,2,2]],
+    [[[4,0.125]],[0,1,2,0]],
     [[[4,1.125]]],
     [[[4,2.125]]],
-    [[[4,3.125]],[1,[1,0,0,0],false]],
-    [[[5,0.25]],[1,[0,1,2,0],false]],
+    [[[4,3.125]],[1,0,0,0]],
+    [[[5,0.25]],[0,1,2,0]],
     [[[5,1.25]]],
-    [[[5,2.25]],[1,[1,15*mm,2,1],false]],
-    [[[4.875,4.625],[60,4.875,4.625]],[1.5,[15*mm,1,0,17.15*mm],true]],
-    [[[4.875,5.625],[60,4.875,4.625]],[1.5,[1,0,0,17.15*mm],true]],
+    [[[5,2.25]],[1,15*mm,2,1]],
+    [[[4.875,4.625],1.5,[60,4.875,4.625]],[15*mm,1,0,17.15*mm],true],
+    [[[4.875,5.625],1.5,[60,4.875,4.625]],[1,0,0,17.15*mm],true],
 ];
 
 // MCU Position(s)
 base_mcu_layout = [
-    [[[6,.5]],[1,[0,0,3,0],false]],
+    [[[6,0.5],mcu_h_unit_size],[0,0,3,0]],
 ];
 
 // TRRS Position(s)
 base_trrs_layout = [
-    [[[6.5,2.5]],[1,[0,6,0.5*h_unit,0],false]],
+    [[[6.5,2.5],1,[-90,7,3]],[0,0.5*h_unit,0,6]],
 ];
 
-// Standoff hole layout
+// Standoff layout 
+//     (extra_data = [standoff_integration_override, standoff_attachment_override])
 base_standoff_layout = [
     [[[0.5,0.125]]],
     [[[0.5,3]]],
     [[[2.5,1.5]]],
     [[[3.5,3]]],
     [[[4.5,0.25]]],
-    [[[4.875,5.125],[60,4.875,4.625]],[1.5,[0,0,0,0],true]],
+    [[[4.875,5.125],1.5,[60,4.875,4.625]], [0,0,0,0]],
     [[[6,2.5]]],
+    [[[-0.5,-0.375]],[0,0,0,0],["plate", "backplate"]],
+    [[[-0.5,3.625]],[0,0,0,0],["plate", "backplate"]],
+    [[[4,3.625]],[0,0,0,0],["plate", "backplate"]],
+    [[[4.375,6.125],1.5,[60,4.875,4.625]],[0,0,0,0],["plate", "backplate"]],
+    [[[6.5,3]],[0,0,0,0],["plate", "backplate"]],
+    [[[7,0]],[0,0,0,0],["plate", "backplate"]],
+    [[[5.5,-0.125]],[0,0,0,0],["plate", "backplate"]],
 ];
 
 // Whether to flip the layout
