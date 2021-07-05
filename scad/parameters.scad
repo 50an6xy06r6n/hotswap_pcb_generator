@@ -1,4 +1,4 @@
-/* PCB Properties */
+/* PCB Parameters */
 // Diameter of row/column wire channels
 wire_diameter = 2.15;
 // Upward angle of switch pin in contact with diode anode (gives more reliable
@@ -9,21 +9,23 @@ pcb_thickness = 4;  // [4:0.1:10]
 // Distance the plate sticks out past the PCB
 plate_margin = 5;
 
-/* Switch Properties */
+
+/* Switch Parameters */
 // Switch type
 switch_type = "mx";  // [mx, choc]
 // Switch orientation (based on LED location)
 switch_orientation = "south";  // [north, south]
 
-/* MCU Properties (Default values for Pro Micro) */
+
+/* MCU Parameters (Default values for Pro Micro) */
 mcu_type = "bare";  // [bare, socketed]
 mcu_width = 18;  
-mcu_length = 32.75;
+mcu_length = 33;
 mcu_height = 4.25;  // Distance to top of PCB
 mcu_row_spacing = 15.24;
 mcu_row_count = 2;  // Unused
-mcu_pin_pitch = 2.54;
 mcu_pin_count = 24;
+mcu_pin_pitch = 2.54;
 mcu_pin_offset = 0;  // Offset from the rear of the PCB
 mcu_connector_width = 10;  // Width of the connector (for plate cutout)
 mcu_connector_length = 4;  // Distance the connector extends onto the MCU (for plate cutout)
@@ -32,7 +34,7 @@ mcu_socket_width = mcu_width+4;
 mcu_socket_length = mcu_length+4;
 
 
-/* TRRS Socket Properties */
+/* TRRS Socket Parameters */
 trrs_width = 6;
 trrs_length = 12.1; 
 trrs_height = 5;
@@ -45,7 +47,7 @@ trrs_nub_spacing = 7;
 trrs_nub_offset = 1.5;  // Distance from the front of the socket (not including flange)
 
 
-/* Standoff Properties */
+/* Standoff Parameters */
 // Component the standoff is integrated with
 standoff_integration_default = "plate";  // [plate, backplate, pcb, separate, none]
 // Component the standoff is screwed to
@@ -57,13 +59,22 @@ standoff_clearance_hole_diameter = 2.5;
 // Diameter of standoff pilot hole
 standoff_pilot_hole_diameter = 1.6;
 
-/* Misc Values */
+
+/* Backplate Parameters */
+// Thickness of the backplate        
+backplate_thickness = 2;
+// Spacing between the bottom of the PCB and the top of the backplate
+pcb_backplate_spacing = 4;
+
+
+/* Misc Parameters */
 // Increase this if your standoffs are a bit too long due to printing tolerances
 fit_tolerance = 0;
 // Resolution of holes (affects render times)
 $fn=12;
 
-/* Advanced Values (related to switch size) */
+
+/* Advanced Parameters (related to switch size) */
 // Switch spacing distance
 unit = 19.05;
 // Horizontal unit size (18mm for choc keycaps)
@@ -81,9 +92,6 @@ socket_size =
         : assert(false, "switch_type is invalid");
 // Depth of the socket holes
 socket_depth = 3.5;
-
-module __Customizer_Limit__ () {}
-
 // Thickness of the plate
 plate_thickness = 
     switch_type == "mx"
@@ -106,15 +114,9 @@ pcb_plate_spacing =
         ? 2.2
         : assert(false, "switch_type is invalid");
 
-// Thickness of the backplate        
-backplate_thickness = 2;
-// Spacing between the bottom of the PCB and the top of the backplate
-pcb_backplate_spacing = 4;
-
 // Total assembly thickness (for reference)
 total_thickness = 
     pcb_plate_spacing + pcb_thickness + pcb_backplate_spacing + backplate_thickness;
-//echo(str("Total thickness is ", total_thickness, "mm."));
 
 // Width of a border unit around the socket (for joining adjacent sockets)
 border_width = (unit - socket_size)/2;

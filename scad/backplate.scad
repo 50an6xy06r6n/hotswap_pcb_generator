@@ -7,10 +7,10 @@ use <trrs.scad>
 use <standoff.scad>
 use <plate.scad>
 
-module backplate(key_layout, mcu_layout, trrs_layout, standoff_layout) {
+module backplate(switch_layout, mcu_layout, trrs_layout, standoff_layout) {
     difference() {
         union() {
-            plate_base(key_layout, mcu_layout, trrs_layout, backplate_thickness);
+            plate_base(switch_layout, mcu_layout, trrs_layout, backplate_thickness);
             layout_pattern(standoff_layout) {
                 backplate_standoff($extra_data);
             }
@@ -21,4 +21,4 @@ module backplate(key_layout, mcu_layout, trrs_layout, standoff_layout) {
     }
 }
 
-backplate(key_layout_final, mcu_layout_final, trrs_layout_final, standoff_layout_final);
+backplate(switch_layout_final, mcu_layout_final, trrs_layout_final, standoff_layout_final);

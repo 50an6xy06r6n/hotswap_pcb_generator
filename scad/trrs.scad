@@ -13,10 +13,10 @@ module trrs(borders=[0,0,0,0]) {
     translate([h_unit/2,-socket_length,0])
         rotate([0,layout_type == "row"?180:0,0])
             translate([-socket_width/2,0,-pcb_thickness/2])
-                uxcell_trrs(invert_borders(borders,layout_type == "row"));
+                pj320a_trrs(invert_borders(borders,layout_type == "row"));
 }
 
-module uxcell_trrs(borders=[0,0,0,0]) {
+module pj320a_trrs(borders=[0,0,0,0]) {
     difference() {
         union() {
             // Socket Base

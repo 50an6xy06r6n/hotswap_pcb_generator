@@ -2,14 +2,14 @@ include <parameters.scad>
 include <utils.scad>
 
 
-module key_socket(borders=[1,1,1,1], rotate_column=false) {
+module switch_socket(borders=[1,1,1,1], rotate_column=false) {
     difference() {
-        key_socket_base(borders);
-        key_socket_cutouts(borders, rotate_column);
+        switch_socket_base(borders);
+        switch_socket_cutout(borders, rotate_column);
     }
 }
 
-module key_socket_base(borders=[1,1,1,1]) {
+module switch_socket_base(borders=[1,1,1,1]) {
     translate([h_unit/2,-v_unit/2,0]) union() {
         cube([socket_size, socket_size, pcb_thickness], center=true);
         translate([0,0,border_z_offset * 1])
@@ -23,17 +23,17 @@ module key_socket_base(borders=[1,1,1,1]) {
     }
 }
 
-module key_socket_cutouts(borders=[1,1,1,1], rotate_column=false) {
+module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
     if (switch_type == "mx") {
-        mx_socket_cutouts(borders, rotate_column);
+        mx_socket_cutout(borders, rotate_column);
     } else if (switch_type == "choc") {
-        choc_socket_cutouts(borders, rotate_column);
+        choc_socket_cutout(borders, rotate_column);
     } else {
         assert(false, "switch_type is invalid");
     }
 }
 
-module mx_socket_cutouts(borders=[1,1,1,1], rotate_column=false) {
+module mx_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
     render() translate([h_unit/2,-v_unit/2,0]) rotate([0,0,switch_rotation])
         intersection() {
             union() {
@@ -89,7 +89,7 @@ module mx_socket_cutouts(borders=[1,1,1,1], rotate_column=false) {
         }
 }
 
-module choc_socket_cutouts(borders=[1,1,1,1], rotate_column=false) {
+module choc_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
     render() translate([h_unit/2,-v_unit/2,0]) rotate([0,0,switch_rotation])
         intersection() {
             union() {
@@ -144,7 +144,7 @@ module choc_socket_cutouts(borders=[1,1,1,1], rotate_column=false) {
         }
 }
 
-module key_plate_base(borders=[1,1,1,1], thickness=plate_thickness) {
+module switch_plate_base(borders=[1,1,1,1], thickness=plate_thickness) {
     translate([h_unit/2,-v_unit/2,0])
         border(
             [socket_size,socket_size], 
@@ -155,11 +155,11 @@ module key_plate_base(borders=[1,1,1,1], thickness=plate_thickness) {
         );
 }
 
-module key_plate_cutout(thickness=plate_thickness) {
+module switch_plate_cutout(thickness=plate_thickness) {
     translate([h_unit/2,-v_unit/2,0]) {
         cube([plate_cutout_size, plate_cutout_size, thickness+1],center=true);
     }
 }
 
 
-key_socket();
+switch_socket();

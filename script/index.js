@@ -20,18 +20,16 @@ var formatted_keys = keyboard.keys.map(
         return [
             [
                 [key.x, key.y],
+                key.width,
                 [-key.rotation_angle, key.rotation_x, key.rotation_y]
             ],
             [
-                key.width,
-                [
-                    1,
-                    1,
-                    side_border ? "1+" + side_border.toString() + "*unit*mm" : 1,
-                    side_border ? "1+" + side_border.toString() + "*unit*mm" : 1,
-                ],
-                false
-            ]
+                1,
+                1,
+                side_border ? "1+" + side_border.toString() + "*unit*mm" : 1,
+                side_border ? "1+" + side_border.toString() + "*unit*mm" : 1,
+            ],
+            false
         ];
     }
 )
@@ -42,22 +40,27 @@ var file_content =
 /* [Layout Values] */
 /* Layout Format (each key):
     [
-        [
+        [                                       // Location Data
             [x_location, y_location],
-            [rotation, rotation_x, rotation_y]
-        ],
-        [
             key_size,
-            [top_border, bottom_border, left_border, right_border],
-            rotate_column
-        ]
+            [rotation, rotation_x, rotation_y],
+        ],
+        [                                       // Borders
+            top_border,
+            bottom_border,
+            left_border,
+            right_border
+        ],
+        extra_data                              // Extra data (depending on component type)
     ]
 */
+
 // Keyswitch Layout
+//     (extra_data = rotate_column)
 `
 file_content += formatted_keys.reduce(
     (total, key) => total + "  " + JSON.stringify(key).replace(/"/g, "") + ",\n",
-    "base_layout = [\n"
+    "base_switch_layout = [\n"
 );
 file_content +=
 `];
@@ -69,6 +72,7 @@ base_mcu_layout = [];
 base_trrs_layout = [];
 
 // Standoff hole layout
+//     (extra_data = [standoff_integration_override, standoff_attachment_override])
 base_standoff_layout = [];
 
 // Whether to flip the layout

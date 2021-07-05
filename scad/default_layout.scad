@@ -20,7 +20,7 @@ include <parameters.scad>
 
 // Keyswitch Layout 
 //     (extra_data = rotate_column)
-base_key_layout = [
+base_switch_layout = [
     [[[0,0.125]],[0,1,0,2]],
     [[[0,1.125]],[1,1,0,1]],
     [[[0,2.125]],[1,1,0,1]],

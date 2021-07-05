@@ -6,11 +6,11 @@ use <mcu.scad>
 use <trrs.scad>
 use <standoff.scad>
 
-module pcb(key_layout, mcu_layout, trrs_layout, standoff_layout) {
+module pcb(switch_layout, mcu_layout, trrs_layout, standoff_layout) {
     difference() {
         union() {
-            layout_pattern(key_layout) {
-                key_socket_base($borders);
+            layout_pattern(switch_layout) {
+                switch_socket_base($borders);
             }
             layout_pattern(mcu_layout) {
                 mcu($borders);
@@ -22,8 +22,8 @@ module pcb(key_layout, mcu_layout, trrs_layout, standoff_layout) {
                 pcb_standoff($extra_data);
             }
         }
-        layout_pattern(key_layout) {
-            key_socket_cutouts($borders, $extra_data);
+        layout_pattern(switch_layout) {
+            switch_socket_cutout($borders, $extra_data);
         }
         layout_pattern(standoff_layout) {
             pcb_standoff_hole($extra_data);
@@ -31,4 +31,4 @@ module pcb(key_layout, mcu_layout, trrs_layout, standoff_layout) {
     }
 }
 
-pcb(key_layout_final, mcu_layout_final, trrs_layout_final, standoff_layout_final);
+pcb(switch_layout_final, mcu_layout_final, trrs_layout_final, standoff_layout_final);

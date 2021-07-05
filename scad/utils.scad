@@ -4,9 +4,9 @@ include <layout.scad>
 
 
 // Determine whether to invert the layout
-key_layout_final = invert_layout_flag 
-    ? invert_layout(set_defaults(base_key_layout, false)) 
-    : set_defaults(base_key_layout, false);
+switch_layout_final = invert_layout_flag 
+    ? invert_layout(set_defaults(base_switch_layout, false)) 
+    : set_defaults(base_switch_layout, false);
 mcu_layout_final = invert_layout_flag 
     ? invert_layout(set_defaults(base_mcu_layout)) 
     : set_defaults(base_mcu_layout);
