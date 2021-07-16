@@ -27,7 +27,7 @@ mcu_row_count = 2;  // Unused
 mcu_pin_count = 24;
 mcu_pin_pitch = 2.54;
 mcu_pin_offset = 0;  // Offset from the rear of the PCB
-mcu_connector_width = 10;  // Width of the connector (for plate cutout)
+mcu_connector_width = 12;  // Width of the connector (for plate cutout)
 mcu_connector_length = 4;  // Distance the connector extends onto the MCU (for plate cutout)
 mcu_pcb_thickness = 1.6;
 mcu_socket_width = mcu_width+4;
@@ -52,12 +52,23 @@ trrs_nub_offset = 1.5;  // Distance from the front of the socket (not including 
 standoff_integration_default = "plate";  // [plate, backplate, pcb, separate, none]
 // Component the standoff is screwed to
 standoff_attachment_default = "pcb";  // [plate, backplate, pcb, plate_backplate, none]
+// Intermediate shape variable to pass around
+standoff_config_default = [
+    standoff_integration_default,
+    standoff_attachment_default
+];
 // Diameter of integrated standoffs
 standoff_diameter = 4;
 // Diameter of standoff clearance hole
 standoff_clearance_hole_diameter = 2.5;
 // Diameter of standoff pilot hole
 standoff_pilot_hole_diameter = 1.6;
+
+
+/* Via Parameters */
+via_width = 5;
+via_length = 15;
+via_shape = [via_width, via_length];
 
 
 /* Backplate Parameters */

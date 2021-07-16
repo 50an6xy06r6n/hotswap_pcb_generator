@@ -40,6 +40,8 @@ By default, the plates are generated with a 5mm margin around the PCB, but this 
 
 The `base_standoff_layout` parameter is used to add standoffs and clearance holes for mounting the PCB, plate, and backplate together (or to mount the PCB to a separate case). Standoffs can be attached to either the plate or PCB, or be completely separated using the `standoff_integration_default` parameter. The `standoff_attachment_default` parameter specifies what component standoffs are screwed to. These two values can be overridden on a per-standoff basis via the `extra_data` field in each layout entry. Default standoff size is for M2 screws. You may need to tweak the `fit_tolerance` parameter a little bit if you find that the PCB and plate are too far apart due to print tolerances.
 
+The `base_via_layout` parameter is used to add holes in the PCB (i.e. vias) to allow the wires (i.e. traces) to be routed to the other side of the board (i.e. if you have an MCU mounted).
+
 If you want to use Kailh Choc switches, just change the `switch_type` parameter. You can also use custom horizontal and vertical key spacings (to eliminate gaps between Choc keycaps, for example) using the `h_unit` and `v_unit` parameters. Switches are south-facing by default, but you can flip them using `switch_orientation`.
 
 ### Additional Context

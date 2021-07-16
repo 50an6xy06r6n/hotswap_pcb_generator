@@ -69,6 +69,12 @@
 | `standoff_clearance_hole_diameter` | Defines the size of through holes for standoff screws. Default value is set for M2 screws. | `parameters.scad` |
 | `standoff_pilot_hole_diameter` | Defines the size of pilot holes for standoff screws. This diameter should be sized such that the screw can cut threads into the plastic. Default value is set for M2 screws. | `parameters.scad` |
 
+### Via Parameters:
+| Name | Description | Location |
+| ---- | ----------- | -------- |
+| `via_width` | Width of the via (also the diameter of the rounded end). This can be overridden for an individual standoff via `extra_data`. | `parameters.scad` |
+| `via_length` | Total length of the via (including the rounded ends). This can be overridden for an individual standoff via `extra_data`. | `parameters.scad` |
+
 ### Backplate Parameters:
 | Name | Description | Location |
 | ---- | ----------- | -------- |

@@ -5,8 +5,9 @@ use <switch.scad>
 use <mcu.scad>
 use <trrs.scad>
 use <standoff.scad>
+use <via.scad>
 
-module pcb(switch_layout, mcu_layout, trrs_layout, standoff_layout) {
+module pcb(switch_layout, mcu_layout, trrs_layout, standoff_layout, via_layout) {
     difference() {
         union() {
             layout_pattern(switch_layout) {
@@ -28,7 +29,10 @@ module pcb(switch_layout, mcu_layout, trrs_layout, standoff_layout) {
         layout_pattern(standoff_layout) {
             pcb_standoff_hole($extra_data);
         }
+        layout_pattern(via_layout) {
+            via($extra_data);
+        }
     }
 }
 
-pcb(switch_layout_final, mcu_layout_final, trrs_layout_final, standoff_layout_final);
+pcb(switch_layout_final, mcu_layout_final, trrs_layout_final, standoff_layout_final, via_layout_final);

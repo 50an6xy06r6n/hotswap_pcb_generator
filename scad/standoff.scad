@@ -14,7 +14,7 @@ module standoff_screw_hole(depth) {
 }
 
 module standoff_through_hole(depth) {
-    translate([h_unit/2,-v_unit/2,0]) cylinder(h=depth,d=standoff_diameter+0.25,center=true);
+    translate([h_unit/2,-v_unit/2,0]) cylinder(h=depth,d=standoff_diameter+1,center=true);
 }
 
 module pcb_standoff(standoff_config) {
@@ -128,3 +128,5 @@ module backplate_standoff_hole(standoff_config) {
         standoff_screw_hole(pcb_thickness+1);
     } 
 }
+
+standoff(10);

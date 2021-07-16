@@ -59,7 +59,7 @@ base_trrs_layout = [
 ];
 
 // Standoff layout 
-//     (extra_data = [standoff_integration_override, standoff_attachment_override])
+//     (extra_data = [standoff_integration, standoff_attachment])
 base_standoff_layout = [
     [[[0.5,0.125]]],
     [[[0.5,3]]],
@@ -75,6 +75,12 @@ base_standoff_layout = [
     [[[6.5,3]],[0,0,0,0],["plate", "backplate"]],
     [[[7,0]],[0,0,0,0],["plate", "backplate"]],
     [[[5.5,-0.125]],[0,0,0,0],["plate", "backplate"]],
+];
+
+// Via layout 
+//     (extra_data = [via_diameter, via_length])
+base_via_layout = [
+    [[[5.5,3]]]
 ];
 
 // Whether to flip the layout

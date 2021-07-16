@@ -14,12 +14,11 @@ trrs_layout_final = invert_layout_flag
     ? invert_layout(set_defaults(base_trrs_layout)) 
     : set_defaults(base_trrs_layout);
 standoff_layout_final = invert_layout_flag 
-    ? invert_layout(set_defaults(
-        base_standoff_layout, 
-        [standoff_integration_default,standoff_attachment_default])) 
-    : set_defaults(
-        base_standoff_layout, 
-        [standoff_integration_default,standoff_attachment_default]);
+    ? invert_layout(set_defaults(base_standoff_layout, standoff_config_default)) 
+    : set_defaults(base_standoff_layout, standoff_config_default);
+via_layout_final = invert_layout_flag 
+    ? invert_layout(set_defaults(base_via_layout, via_shape)) 
+    : set_defaults(base_via_layout, via_shape);
 
 // Moves the flat part to the top if layout is row-staggered so column wires 
 // can be routed. PCB should be printed upside down in this case.
