@@ -60,6 +60,7 @@
 | `trrs_nub_height` | Height of the little plastic locating nubs at the bottom of the socket in mm. Default value of 1 works for the popular PJ-320A socket. | `parameters.scad` |
 | `trrs_nub_spacing` | Space between the little plastic locating nubs at the bottom of the socket in mm. Default value of 7 works for the popular PJ-320A socket. | `parameters.scad` |
 | `trrs_nub_offset` | Offset between the front of the socket and the closest locating nub in mm. Default value of 1.5 works for the popular PJ-320A socket. | `parameters.scad` |
+| `trrs_plug_width` | Width of the TRRS plug being used, for plate clearance. | `parameters.scad` |
 
 ### Standoff Parameters:
 | Name | Description | Location |

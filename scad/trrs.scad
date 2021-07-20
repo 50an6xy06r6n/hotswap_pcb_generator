@@ -77,14 +77,37 @@ module trrs_plate_base(borders=[0,0,0,0], thickness=plate_thickness) {
 
 module trrs_plate_cutout(thickness=plate_thickness) {
     if (switch_type == "mx") {
-        // MX spacing is sufficient to fit the TRRS socket with no cutout
+        // MX spacing is sufficient to fit the TRRS socket with no cutout, so we just need plug clearance
+        translate([h_unit/2,-socket_length/2]) {
+            border(
+                [socket_width,socket_length], 
+                [
+                    1000,
+                    -socket_length,
+                    (trrs_plug_width-socket_width)/2,
+                    (trrs_plug_width-socket_width)/2
+                ], 
+                thickness+1
+            );
+        }
     } else if (switch_type == "choc") {
-        translate([h_unit/2,-socket_length/2])
-                border(
-                    [socket_width,socket_length], 
-                    [1000,0,0,0], 
-                    thickness+1
-                );
+        translate([h_unit/2,-socket_length/2]) {
+            border(
+                [socket_width,socket_length], 
+                [1000,0,0,0], 
+                thickness+1
+            );
+            border(
+                [socket_width,socket_length], 
+                [
+                    1000,
+                    -socket_length,
+                    (trrs_plug_width-socket_width)/2,
+                    (trrs_plug_width-socket_width)/2
+                ], 
+                thickness+1
+            );
+        }
     } else {
         assert(false, "switch_type is invalid");
     }
