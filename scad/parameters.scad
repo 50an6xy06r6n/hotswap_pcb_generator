@@ -4,6 +4,8 @@ wire_diameter = 2.15;
 // Upward angle of switch pin in contact with diode anode (gives more reliable
 // connections but slightly deforms pin)
 diode_pin_angle = 5;  // [0:15]
+// Amount the diode folds over
+diode_foldover = 4;
 // Overall thickness of PCB
 pcb_thickness = 4;  // [4:0.1:10]
 
@@ -12,6 +14,8 @@ pcb_thickness = 4;  // [4:0.1:10]
 switch_type = "mx";  // [mx, choc]
 // Switch orientation (based on LED location)
 switch_orientation = "south";  // [north, south]
+// Whether to use experimental diode leg contact
+use_folded_contact = true;
 
 
 /* MCU Parameters (Default values for Pro Micro) */
