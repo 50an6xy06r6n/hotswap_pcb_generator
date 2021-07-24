@@ -12,7 +12,7 @@ plate_margin = 5;
 plate_outer_fillet = 2.5;
 // Radius of inner fillets
 plate_inner_fillet = 50;
-// Setting this lowerr can help fix geometry issues when using custom plate shapes
+// Setting this lower can help fix geometry issues when using custom plate shapes
 // (i.e. two components that don't meet at exactly the same point can cause offset issues)
 plate_precision = 1/100;
 // What kind of housing to generate
@@ -98,7 +98,7 @@ pcb_backplate_spacing = 4;
 // Increase this if your standoffs are a bit too long due to printing tolerances
 fit_tolerance = 0;
 // Resolution of holes (affects render times)
-$fn=120;
+$fn=12;
 
 
 /* Advanced Parameters (related to switch size) */

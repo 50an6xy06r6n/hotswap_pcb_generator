@@ -12,10 +12,10 @@ module case(switch_layout, mcu_layout, trrs_layout, plate_layout, standoff_layou
     difference() {
         union() {
             translate([0,0,-height+plate_thickness/2]) difference() {
-                linear_extrude(height) 
+                linear_extrude(height, convexity=10) 
                     plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout);
                 translate([0,0,-1]) 
-                linear_extrude(height-plate_thickness+1) 
+                linear_extrude(height-plate_thickness+1, convexity=10) 
                     offset(-case_wall_thickness) 
                     plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout);
             }

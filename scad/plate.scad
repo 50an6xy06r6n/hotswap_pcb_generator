@@ -64,7 +64,7 @@ module plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout) {
 }
 
 module plate_base(switch_layout, mcu_layout, trrs_layout, plate_layout, thickness=plate_thickness, offset=0) {
-    linear_extrude(thickness, center=true)
+    linear_extrude(thickness, center=true, convexity=10)
         offset(offset) plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout);
 }
 
