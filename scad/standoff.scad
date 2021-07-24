@@ -1,12 +1,18 @@
 include <parameters.scad>
 include <utils.scad>
 
-module standoff(height) {
-    translate([h_unit/2,-v_unit/2,0]) 
-        difference() {
+module standoff(height, solid=false) {
+    difference() {
+        translate([h_unit/2,-v_unit/2,0]) 
             cylinder(h=height,d=standoff_diameter,center=true);
-            cylinder(h=height+1,d=standoff_pilot_hole_diameter,center=true);
-        }
+        if (!solid) 
+            standoff_hole(height+1);
+    }
+}
+
+module standoff_hole(height) {
+    translate([h_unit/2,-v_unit/2,0]) 
+        cylinder(h=height,d=standoff_pilot_hole_diameter,center=true);
 }
 
 module standoff_screw_hole(depth) {
@@ -17,7 +23,7 @@ module standoff_through_hole(depth) {
     translate([h_unit/2,-v_unit/2,0]) cylinder(h=depth,d=standoff_diameter+1,center=true);
 }
 
-module pcb_standoff(standoff_config) {
+module pcb_standoff(standoff_config, solid=false) {
     standoff_integration = standoff_config[0];
     standoff_attachment = standoff_config[1];
     
@@ -34,11 +40,11 @@ module pcb_standoff(standoff_config) {
                 : assert(false, str("standoff_config ", standoff_config," is invalid"));
         
         translate([0,0,standoff_offset]) 
-            standoff(height);
+            standoff(height, solid);
     }
 }
 
-module plate_standoff(standoff_config) {
+module plate_standoff(standoff_config, solid=false) {
     standoff_integration = standoff_config[0];
     standoff_attachment = standoff_config[1];
     
@@ -53,11 +59,11 @@ module plate_standoff(standoff_config) {
             : assert(false, str("standoff_config ", standoff_config," is invalid"));
         
         translate([0,0,standoff_offset]) 
-            standoff(height);
+            standoff(height, solid);
     }
 }
 
-module backplate_standoff(standoff_config) {
+module backplate_standoff(standoff_config, solid=false) {
     standoff_integration = standoff_config[0];
     standoff_attachment = standoff_config[1];
     
@@ -73,7 +79,7 @@ module backplate_standoff(standoff_config) {
             : assert(false, str("standoff_config ", standoff_config," is invalid"));
         
         translate([0,0,standoff_offset]) 
-            standoff(height);
+            standoff(height, solid);
     }
 }
 
@@ -125,7 +131,21 @@ module backplate_standoff_hole(standoff_config) {
         (standoff_integration == "separate" && standoff_attachment == "plate_backplate")
     ) {
         // Standoff screwed into PCB
-        standoff_screw_hole(pcb_thickness+1);
+        standoff_screw_hole(backplate_thickness+1);
+    } 
+} 
+
+module case_standoff_hole(standoff_config) {
+    standoff_integration = standoff_config[0];
+    standoff_attachment = standoff_config[1];
+       
+    if (
+        (standoff_integration == "plate" && standoff_attachment == "pcb") || 
+        (standoff_integration == "plate" && standoff_attachment == "backplate") 
+    ) {
+        height = pcb_plate_spacing + pcb_thickness + pcb_backplate_spacing + backplate_thickness;
+        translate([0,0,-(height+plate_thickness)/2])
+            standoff_hole(height);
     } 
 }
 

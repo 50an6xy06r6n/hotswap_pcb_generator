@@ -144,22 +144,30 @@ module choc_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
         }
 }
 
-module switch_plate_base(borders=[1,1,1,1], thickness=plate_thickness) {
+module switch_plate_footprint(borders=[1,1,1,1]) {
     translate([h_unit/2,-v_unit/2,0])
-        border(
+        border_footprint(
             [socket_size,socket_size], 
             borders, 
-            thickness, 
             h_border_width, 
             v_border_width
         );
 }
 
-module switch_plate_cutout(thickness=plate_thickness) {
+module switch_plate_cutout_footprint() {
     translate([h_unit/2,-v_unit/2,0]) {
-        cube([plate_cutout_size, plate_cutout_size, thickness+1],center=true);
+        square([plate_cutout_size, plate_cutout_size],center=true);
     }
 }
 
+module switch_plate_base(borders=[1,1,1,1], thickness=plate_thickness) {
+    linear_extrude(thickness, center=true)
+        switch_plate_footprint(borders);
+}
+
+module switch_plate_cutout(thickness=plate_thickness) {
+    linear_extrude(thickness+1, center=true)
+        switch_plate_cutout_footprint();
+}
 
 switch_socket();

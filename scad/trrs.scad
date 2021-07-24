@@ -66,46 +66,42 @@ module pj320a_trrs(borders=[0,0,0,0]) {
     }
 }
 
-module trrs_plate_base(borders=[0,0,0,0], thickness=plate_thickness) {
+module trrs_plate_footprint(borders=[0,0,0,0]) {
     translate([h_unit/2,-v_unit/2,0])
-        border(
+        border_footprint(
             [h_unit,v_unit], 
-            borders, 
-            thickness
+            borders
         );
 }
 
-module trrs_plate_cutout(thickness=plate_thickness) {
+module trrs_plate_cutout_footprint() {
     if (switch_type == "mx") {
         // MX spacing is sufficient to fit the TRRS socket with no cutout, so we just need plug clearance
         translate([h_unit/2,-socket_length/2]) {
-            border(
+            border_footprint(
                 [socket_width,socket_length], 
                 [
                     1000,
                     -socket_length,
                     (trrs_plug_width-socket_width)/2,
                     (trrs_plug_width-socket_width)/2
-                ], 
-                thickness+1
+                ]
             );
         }
     } else if (switch_type == "choc") {
         translate([h_unit/2,-socket_length/2]) {
-            border(
+            border_footprint(
                 [socket_width,socket_length], 
-                [1000,0,0,0], 
-                thickness+1
+                [1000,0,0,0]
             );
-            border(
+            border_footprint(
                 [socket_width,socket_length], 
                 [
                     1000,
                     -socket_length,
                     (trrs_plug_width-socket_width)/2,
                     (trrs_plug_width-socket_width)/2
-                ], 
-                thickness+1
+                ]
             );
         }
     } else {
@@ -113,4 +109,27 @@ module trrs_plate_cutout(thickness=plate_thickness) {
     }
 }
 
+module trrs_plate_base(borders=[0,0,0,0], thickness=plate_thickness) {
+    linear_extrude(thickness, center=true)
+        trrs_plate_footprint(borders);
+}
+
+module trrs_plate_cutout(thickness=plate_thickness) {
+    linear_extrude(thickness+1, center=true)
+        trrs_plate_cutout_footprint();
+}
+
+module trrs_case_cutout() {
+    translate([
+        h_unit/2,
+        0,
+        plate_thickness/2-pcb_plate_spacing+trrs_flange_diameter/2-2
+    ]) rotate([-90,0,0]) {
+        cylinder(h=1000, d=trrs_plug_width);
+        translate([-trrs_plug_width/2,-trrs_plug_width,0])
+            cube([trrs_plug_width, trrs_plug_width, 1000]);
+    }
+}
+
 trrs();
+#trrs_case_cutout();

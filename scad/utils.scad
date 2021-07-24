@@ -7,6 +7,12 @@ include <layout.scad>
 switch_layout_final = invert_layout_flag 
     ? invert_layout(set_defaults(base_switch_layout, false)) 
     : set_defaults(base_switch_layout, false);
+plate_layout_final = [
+    for (group = base_plate_layout) 
+        invert_layout_flag 
+            ? invert_layout(set_defaults(group, "switch")) 
+            : set_defaults(group, "switch")
+];
 mcu_layout_final = invert_layout_flag 
     ? invert_layout(set_defaults(base_mcu_layout)) 
     : set_defaults(base_mcu_layout);
@@ -120,15 +126,19 @@ module layout_pattern(layout) {
 }
 
 module border(base_size, borders, thickness, h_unit=1, v_unit=1) {
+    linear_extrude(thickness, center=true)
+        border_footprint(base_size, borders, h_unit, v_unit);
+}
+
+module border_footprint(base_size, borders, h_unit=1, v_unit=1) {
     translate([
         h_unit/2 * (borders[3] - borders[2]),
         v_unit/2 * (borders[0] - borders[1]),
         0
     ]) {
-        cube([
+        square([
             base_size[0]+h_unit*(borders[2]+borders[3])+0.001,
-            base_size[1]+v_unit*(borders[0]+borders[1])+0.001,
-            thickness
+            base_size[1]+v_unit*(borders[0]+borders[1])+0.001
         ], center=true);
     }
 }

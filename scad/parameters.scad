@@ -8,6 +8,17 @@ diode_pin_angle = 5;  // [0:15]
 pcb_thickness = 4;  // [4:0.1:10]
 // Distance the plate sticks out past the PCB
 plate_margin = 5;
+// Radius of outer fillets
+plate_outer_fillet = 2.5;
+// Radius of inner fillets
+plate_inner_fillet = 50;
+// Setting this lowerr can help fix geometry issues when using custom plate shapes
+// (i.e. two components that don't meet at exactly the same point can cause offset issues)
+plate_precision = 1/100;
+// What kind of housing to generate
+housing_type = "plate_case";  // [sandwich, plate_case, backplate_case]
+// Thickness of case walls
+case_wall_thickness = 2; 
 
 
 /* Switch Parameters */
@@ -27,8 +38,10 @@ mcu_row_count = 2;  // Unused
 mcu_pin_count = 24;
 mcu_pin_pitch = 2.54;
 mcu_pin_offset = 0;  // Offset from the rear of the PCB
-mcu_connector_width = 12;  // Width of the connector (for plate cutout)
+mcu_connector_width = 13;  // Width of the connector (for plate cutout)
 mcu_connector_length = 4;  // Distance the connector extends onto the MCU (for plate cutout)
+mcu_connector_height = 7;  // Height of the plug housing
+mcu_connector_offset = 2; // Vertical offset of plug center from PCB center
 mcu_pcb_thickness = 1.6;
 mcu_socket_width = mcu_width+4;
 mcu_socket_length = mcu_length+4;
@@ -75,6 +88,8 @@ via_shape = [via_width, via_length];
 /* Backplate Parameters */
 // Thickness of the backplate        
 backplate_thickness = 2;
+// Thickness of flange around backplate if using an integrated-plate case
+backplate_case_flange = 1;
 // Spacing between the bottom of the PCB and the top of the backplate
 pcb_backplate_spacing = 4;
 
@@ -83,7 +98,7 @@ pcb_backplate_spacing = 4;
 // Increase this if your standoffs are a bit too long due to printing tolerances
 fit_tolerance = 0;
 // Resolution of holes (affects render times)
-$fn=12;
+$fn=120;
 
 
 /* Advanced Parameters (related to switch size) */
@@ -145,4 +160,13 @@ mcu_unit_resolution = .5;  // Grid size to snap to (as fractional unit)
 mcu_h_unit_size = ceil(mcu_socket_width/mcu_unit_resolution/h_unit) * mcu_unit_resolution;
 mcu_v_unit_size = ceil(mcu_socket_length/mcu_unit_resolution/v_unit) * mcu_unit_resolution;
 
-
+// Useful for manipulating layout elements
+function slice(array, bounds) = [
+    let(
+        lower = bounds[0] >= 0 ? bounds[0] : max(len(array)+bounds[0], 0),
+        upper = bounds[1] > 0 ? min(bounds[1], len(array)) : len(array)+bounds[1],
+        step = len(bounds) == 3 ? bounds[2] : 1
+    )
+    for (i = [lower:step:upper-1])
+       array[i]
+];

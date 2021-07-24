@@ -138,39 +138,36 @@ module bare_mcu(borders=[0,0,0,0]) {
     }
 }
 
-module mcu_plate_base(borders=[0,0,0,0], thickness=plate_thickness) {
+module mcu_plate_footprint(borders=[0,0,0,0]) {
     translate([h_unit/2,-mcu_v_unit_size*v_unit/2,0]) {
-        border(
+        border_footprint(
             [mcu_h_unit_size*h_unit,mcu_v_unit_size*v_unit], 
-            borders, 
-            thickness
+            borders
         );
     }
 }
 
-module mcu_plate_cutout(thickness=plate_thickness) {
+module mcu_plate_cutout_footprint() {
     if (mcu_type == "bare") {
         translate([h_unit/2,-mcu_v_unit_size*v_unit/2,0]) {
             if (switch_type == "mx") {
                 // Only connector will interfere, so limit cutout to that.
                 // If mid-mounted this cutout can be eliminated with 
                 // mcu_connector_length = 0
-                border(
+                border_footprint(
                     [mcu_width,mcu_length], 
                     [
                         1000,
                         mcu_connector_length-mcu_length,
                         (mcu_connector_width-mcu_width)/2,
                         (mcu_connector_width-mcu_width)/2
-                    ], 
-                    thickness+1
+                    ]
                 );
             } else if (switch_type == "choc") {
                 // The whole socket is too thick for choc plate spacing
-                border(
+                border_footprint(
                     [mcu_socket_width,mcu_socket_length], 
-                    [1000,0,0,0], 
-                    thickness+1
+                    [1000,0,0,0]
                 );
             } else {
                 assert(false, "switch_type is invalid");
@@ -180,10 +177,9 @@ module mcu_plate_cutout(thickness=plate_thickness) {
         // Will interfere with plate, so cutout must fit the whole MCU. 
         // Extend cutout above for connector
         translate([h_unit/2,-mcu_v_unit_size*v_unit/2,0]) {
-            border(
+            border_footprint(
                 [mcu_width,mcu_length], 
-                [1000,0,0,0], 
-                thickness+1
+                [1000,0,0,0]
             );
         }
     } else {
@@ -191,4 +187,28 @@ module mcu_plate_cutout(thickness=plate_thickness) {
     }
 }
 
+module mcu_plate_base(borders=[0,0,0,0], thickness=plate_thickness) {
+    linear_extrude(thickness, center=true)
+        mcu_plate_footprint(borders);
+}
+
+module mcu_plate_cutout(thickness=plate_thickness) {
+    linear_extrude(thickness+1, center=true)
+        mcu_plate_cutout_footprint();
+}
+
+module mcu_case_cutout() {
+    translate([
+        h_unit/2,
+        0,
+        plate_thickness/2-pcb_plate_spacing+mcu_pcb_thickness/2+mcu_connector_offset
+    ]) rotate([-90,0,0]) {
+        hull() {
+            for (i=[-1,1]) translate([i*(mcu_connector_width-mcu_connector_height)/2,0,-mcu_connector_length])
+                cylinder(h=1000, d=mcu_connector_height);
+        }
+    }
+}
+
 mcu();
+#mcu_case_cutout();
