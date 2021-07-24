@@ -14,12 +14,12 @@ translate([
     -plate_thickness/2 + pcb_plate_spacing + pcb_thickness 
         + pcb_backplate_spacing + backplate_thickness
 ])
-    if (housing_type == "sandwich" || housing_type == "backplate_case") {
+    if (case_type == "sandwich" || case_type == "backplate_case") {
         plate(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final, standoff_layout_final);
-    } else if (housing_type == "plate_case") {
+    } else if (case_type == "plate_case") {
         case(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final, standoff_layout_final);
     } else {
-        assert(false, "housing_type parameter is invalid");
+        assert(false, "case_type parameter is invalid");
     }
 
 translate([
@@ -34,10 +34,10 @@ translate([
     0, 
     backplate_thickness/2
 ])
-    if (housing_type == "sandwich" || housing_type == "plate_case") {
+    if (case_type == "sandwich" || case_type == "plate_case") {
         backplate(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final, standoff_layout_final);
-    } else if (housing_type == "backplate_case") {
+    } else if (case_type == "backplate_case") {
         // Not implemented
     } else {
-        assert(false, "housing_type parameter is invalid");
+        assert(false, "case_type parameter is invalid");
     }

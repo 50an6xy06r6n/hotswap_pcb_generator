@@ -10,9 +10,9 @@ use <plate.scad>
 module backplate(switch_layout, mcu_layout, trrs_layout, plate_layout, standoff_layout) {
     difference() {
         union() {
-            if (housing_type == "sandwich") {
+            if (case_type == "sandwich") {
                 plate_base(switch_layout, mcu_layout, trrs_layout, plate_layout, backplate_thickness);
-            } else if (housing_type == "plate_case") {
+            } else if (case_type == "plate_case") {
                 plate_base(switch_layout, mcu_layout, trrs_layout, plate_layout, backplate_thickness, -case_wall_thickness-0.2);
                 translate([0,0,(backplate_case_flange-backplate_thickness)/2])
                     plate_base(switch_layout, mcu_layout, trrs_layout, plate_layout, backplate_case_flange);
