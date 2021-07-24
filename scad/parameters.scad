@@ -6,6 +6,8 @@ wire_diameter = 2.15;
 diode_pin_angle = 5;  // [0:15]
 // Overall thickness of PCB
 pcb_thickness = 4;  // [4:0.1:10]
+
+/* Plate/Case Parameters */
 // Distance the plate sticks out past the PCB
 plate_margin = 5;
 // Radius of outer fillets
@@ -16,9 +18,18 @@ plate_inner_fillet = 50;
 // (i.e. two components that don't meet at exactly the same point can cause offset issues)
 plate_precision = 1/100;
 // What kind of housing to generate
-housing_type = "plate_case";  // [sandwich, plate_case, backplate_case]
+case_type = "plate_case";  // [sandwich, plate_case, backplate_case]
 // Thickness of case walls
 case_wall_thickness = 2; 
+
+
+/* Backplate Parameters */
+// Thickness of the backplate        
+backplate_thickness = 2;
+// Thickness of flange around backplate if using an integrated-plate case
+backplate_case_flange = 1;
+// Spacing between the bottom of the PCB and the top of the backplate
+pcb_backplate_spacing = 4;
 
 
 /* Switch Parameters */
@@ -40,7 +51,7 @@ mcu_pin_pitch = 2.54;
 mcu_pin_offset = 0;  // Offset from the rear of the PCB
 mcu_connector_width = 13;  // Width of the connector (for plate cutout)
 mcu_connector_length = 4;  // Distance the connector extends onto the MCU (for plate cutout)
-mcu_connector_height = 7;  // Height of the plug housing
+mcu_connector_height = 8;  // Height of the plug housing
 mcu_connector_offset = 2; // Vertical offset of plug center from PCB center
 mcu_pcb_thickness = 1.6;
 mcu_socket_width = mcu_width+4;
@@ -83,15 +94,6 @@ standoff_pilot_hole_diameter = 1.6;
 via_width = 5;
 via_length = 15;
 via_shape = [via_width, via_length];
-
-
-/* Backplate Parameters */
-// Thickness of the backplate        
-backplate_thickness = 2;
-// Thickness of flange around backplate if using an integrated-plate case
-backplate_case_flange = 1;
-// Spacing between the bottom of the PCB and the top of the backplate
-pcb_backplate_spacing = 4;
 
 
 /* Misc Parameters */

@@ -11,6 +11,8 @@
 | `base_switch_layout` | Defines position, orientation, and size of each key socket, as well as the size of the border that connects each socket to adjacent ones. For each key, the layout looks like this: <pre>[<br/>&nbsp;&nbsp;[<br/>&nbsp;&nbsp;&nbsp;&nbsp;[x_location, y_location],<br/>&nbsp;&nbsp;&nbsp;&nbsp;key_size,<br/>&nbsp;&nbsp;&nbsp;&nbsp;[rotation, rotation_x, rotation_y]<br/>&nbsp;&nbsp;],<br/>&nbsp;&nbsp;[top_border, bottom_border, left_border, right_border],<br/>&nbsp;&nbsp;extra_data<br/>]</pre>All variables besides `x_location` and `y_location` are optional, though within each grouping values must be defined in order. For switches, border values define multiples of `border_width`, which is calculated from the difference between `socket_size` and `unit`. If you want to define the size of the border in mm, multiply by the `mm` variable, which does the conversion. If you have different vertical and horizontal spacing, use `h_mm` and `v_mm` instead. `extra_data` corresponds to the `rotate_column` parameter in the switch modules, which allows you to rotate the column wire channels for easier routing for things like thumb clusters. | `layout.scad` |
 | `base_mcu_layout` | Defines the position of an (optional) microcontroller daughterboard. Data format is identical to that of `base_switch_layout`, though `key_size` should be set to `mcu_h_unit_size`, which is the socket's width in key units calculated from `mcu_width` and `mcu_unit_resolution`. Border values are defined in mm. No `extra_data` is defined. | `layout.scad` |
 | `base_trrs_layout` | Defines the position of an (optional) TRRS socket for a split layout. Data format is identical to that of `base_switch_layout`, with the socket pointing upwards. This allows the socket to be properly rotated when using the `invert_layout_flag`. Border values are defined in mm. No `extra_data` is defined. | `layout.scad` |
+| `base_plate_layout` | Optional parameter that allows greater control when defining the shape of the plate and case. Unlike the other layout parameters, this is actually a vector of layouts in the `base_switch_layout` format. <br/><br/>If `use_plate_layout_only` is `false`, all elements in this parameter will be flattened and added to the hull used to define the plate shape (before the offset is applied). In this mode, it can be used to refine the overall shape of the plate, such as adding more room for longer modifier keys or squaring up the plate profile. <br/><br/>If `use_plate_layout_only` is `true`, then the plate shape is completely defined by `base_plate_layout`. In this mode, each layout within the vector is hulled individually, and the resulting shapes are unioned before the plate offset and fillets are applied. This mode can be used to create concave plate shapes not possible with simple hulling operations. `extra_data` for each element is either "switch", "mcu", or "trrs", depending on what kind of element it is. "switch" is the default. Since this mode requires all key positions to be copied, I've provided a `slice()` helper that can be used to partially copy the existing switch layout. See `default_layout.scad` for an example of this usage mode. | `layout.scad` |
+| `use_plate_layout_only` | Changes the way the plate profile is generated. For more details, see `base_plate_layout`. | `layout.scad` |
 | `base_standoff_layout` | Defines the position of each (optional) standoff. Data format is identical to that of `base_switch_layout`, with the standoff placed at the center of the key unit. This makes it means that you can place a standoff in between two keys by just averaging their positions. By default, standoffs are configured according to the `standoff_integration_default` and `standoff_attachment_default` parameters defined in `parameters.scad`, but these can be overridden on a per-standoff basis using the `extra_data` parameter. | `layout.scad` |
 | `invert_layout_flag` | If set to true, the layout will be inverted when generating the PCB and plate. This is handy for split layouts with identical left and right hands, as it saves you the trouble of copying over any changes you make to the borders and standoff positions. | `layout.scad` |
 | `layout_type` | This can be set to either `column` or `row` (depending on the layout stagger), and affects which side the recessed grid is printed on, which is necessary for routing matrix wires that don't run in a straight line. For row-staggered layouts, the grid will be on the bottom (column-side) of the PCB, so it will be easier to print upside down. | `layout.scad` |
@@ -22,6 +24,23 @@
 | `diode_pin_angle` | This changes the angle of the channel that forms the bottom switch pin socket. The bottom switch pin makes contact the diode anode leg, and the connection can sometimes be a bit flaky. Slightly angling the channel upwards forces the switch pin into the diode leg as it's inserted, and makes for a more robust connection. This can put a slight bend in the switch pin that can be easily bent back (the bottom pin tends to be the sturdier of the two), but if you don't want that you can set the angle to 0. | `parameters.scad` |
 | `pcb_thickness` | Defines the overall thickness of the PCB. This must be at least 4mm, which is the minimum needed to fit both row and column wires. Can be increased if you want a sturdier PCB. | `parameters.scad` |
 | `plate_margin` | Defines how far the plate sticks out beyond the PCB. If you wish to have more granular control over the plate shape, you can set this to 0 and generate a separate layout for the plate and edit the borders directly. | `parameters.scad` |
+
+### Plate/Case Parameters:
+| Name | Description | Location |
+| ---- | ----------- | -------- |
+| `plate_margin` | Defines how far the plate sticks out beyond the PCB. If you wish to have more granular control over the plate shape, you can set this to 0 and generate a separate layout for the plate and edit the borders directly. | `parameters.scad` |
+| `plate_outer_fillet` | Radius of outer fillets on the plate. | `parameters.scad` |
+| `plate_inner_fillet` | Radius of inner fillets on the plate. Can be set large for nice curves on thumb cluster connections, for example. | `parameters.scad` |
+| `plate_precision` | Approximate point precision (in mm) of the basic plate outline. This setting allows vertices placed near enough each other to be merged when using the plate layout override. Since not all the elements are hulled, adjacent elements that are angled with each other and meet at a point (such as in a thumb cluster) may not meet exactly at a point, creating a weird jagged edge when the plate offset is applied. The default layout has an example of this where the thumb cluster meets the footprint of the TRRS socket. The default value of 1/100 is a good balance of usability and precision, but if you're having trouble getting rid of the jagged edges you can lower it. | `parameters.scad` |
+| `case_type` | This can be set to `sandwich`, `plate_case`, or `backplate_case`, and defines the structure of the optional case. `sandwich` is the most basic, and consists of a switch plate, PCB, and backplate connected by standoffs. `plate_case` is an integrated-plate case, where the sides are enclosed by a wall connected to the plate. The backplate is slightly inset into the case. `backplate_case` is currently unimplemented, but will likely be some kind of tray-mount case. | `parameters.scad` |
+| `case_wall_thickness` | Thickness of the case wall, if applicable. Default value of 2 is probably the minimum recommended thickness. | `parameters.scad` |
+
+### Backplate Parameters:
+| Name | Description | Location |
+| ---- | ----------- | -------- |
+| `backplate_thickness` | Defines the thickness of the backplate. | `parameters.scad` |
+| `backplate_case_flange` | If using the `plate_case` case type, this defines the thickness of the flange that forms the bottom surface of the case. | `parameters.scad` |
+| `pcb_backplate_spacing` | Defines the distance between the bottom of the PCB and the top of the backplate. Can be decreased for a lower profile or increased for more room to route wires. | `parameters.scad` |
 
 ### Switch Parameters:
 | Name | Description | Location |
@@ -41,7 +60,9 @@
 | `mcu_pin_count` | Total number of pins on the daughterboard. Default value of 24 works for Pro Micro footprint. | `parameters.scad` |
 | `mcu_pin_pitch` | Center-to-center distance between adjacent pins in mm. Default value of 2.54 (0.1 inches) is pretty standard and works for Pro Micro footprint. | `parameters.scad` |
 | `mcu_pin_offset` | Offset from the rear of the daughterboard to the boundary of the nearest pin. Default of value of 0 works for Pro Micro footprint. | `parameters.scad` |
-| `mcu_connector_width` | Width of the daughterboard connector (for making plate cutouts) in mm. Default value of 10 works for Micro-USB and USB-C connectors. May not be necessary for mid-mount connectors that don't stick very far above the board (i.e. Elite-C). | `parameters.scad` |
+| `mcu_connector_width` | Width of the daughterboard connector (for making plate cutouts) in mm. Default value of 13 works for Micro-USB and USB-C connectors. May not be necessary for mid-mount connectors that don't stick very far above the board (i.e. Elite-C). | `parameters.scad` |
+| `mcu_connector_height` | Height of the connector plug you intend to use in mm, for plate/case cutouts. Default value of 8 should cover most Micro-USB and USB-C cables. | `parameters.scad` |
+| `mcu_connector_offset` | Distance between the center plane of the daughterboard connector and the center plane of the daughterboard PCB in mm, used for making accurate case cutouts. Default value of 2 works for Pro Micro. | `parameters.scad` |
 | `mcu_connector_length` | Length that the daughterboard connector extends into the board (for making plate cutouts) in mm. Default value of 4 works for Micro-USB and USB-C connectors. May not be necessary for mid-mount connectors that don't stick very far above the board (i.e. Elite-C). | `parameters.scad` |
 | `mcu_pcb_thickness` | Thickness of the daughterboard PCB. Default value of 1.6 is pretty standard. | `parameters.scad` |
 | `mcu_socket_width` | Width of the socket holding the MCU. Default value of `mcu_width + 4` works pretty well. | `parameters.scad` |
@@ -60,7 +81,7 @@
 | `trrs_nub_height` | Height of the little plastic locating nubs at the bottom of the socket in mm. Default value of 1 works for the popular PJ-320A socket. | `parameters.scad` |
 | `trrs_nub_spacing` | Space between the little plastic locating nubs at the bottom of the socket in mm. Default value of 7 works for the popular PJ-320A socket. | `parameters.scad` |
 | `trrs_nub_offset` | Offset between the front of the socket and the closest locating nub in mm. Default value of 1.5 works for the popular PJ-320A socket. | `parameters.scad` |
-| `trrs_plug_width` | Width of the TRRS plug being used, for plate clearance. | `parameters.scad` |
+| `trrs_plug_width` | Width of the TRRS plug being used, for plate/case cutouts. | `parameters.scad` |
 
 ### Standoff Parameters:
 | Name | Description | Location |
@@ -75,12 +96,6 @@
 | ---- | ----------- | -------- |
 | `via_width` | Width of the via (also the diameter of the rounded end). This can be overridden for an individual standoff via `extra_data`. | `parameters.scad` |
 | `via_length` | Total length of the via (including the rounded ends). This can be overridden for an individual standoff via `extra_data`. | `parameters.scad` |
-
-### Backplate Parameters:
-| Name | Description | Location |
-| ---- | ----------- | -------- |
-| `backplate_thickness` | Defines the thickness of the backplate. | `parameters.scad` |
-| `pcb_backplate_spacing` | Defines the distance between the bottom of the PCB and the top of the backplate. Can be decreased for a lower profile or increased for more room to route wires. | `parameters.scad` |
 
 ### Misc Parameters:
 | Name | Description | Location |

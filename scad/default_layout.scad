@@ -73,6 +73,8 @@ base_plate_layout = [
         [[[4.875,5.625],1.5,[60,4.875,4.625]],[1,0,1+0.25*unit*mm,17.11*mm]],
     ]
 ];
+// Whether to only use base_plate_layout to generate the plate footprint
+use_plate_layout_only = true;
 
 // Standoff layout 
 //     (extra_data = [standoff_integration, standoff_attachment])
@@ -105,5 +107,3 @@ invert_layout_flag = false;
 // Whether the layout is staggered-row or staggered-column
 layout_type = "column";  // [column, row]
 
-// Whether to only use base_plate_layout to generate the plate footprint
-use_plate_layout_only = true;
