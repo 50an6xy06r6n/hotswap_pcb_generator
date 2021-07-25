@@ -25,6 +25,23 @@
 | `diode_pin_angle` | This changes the angle of the channel that forms the bottom switch pin socket. The bottom switch pin makes contact the diode anode leg, and the connection can sometimes be a bit flaky. Slightly angling the channel upwards forces the switch pin into the diode leg as it's inserted, and makes for a more robust connection. This can put a slight bend in the switch pin that can be easily bent back (the bottom pin tends to be the sturdier of the two), but if you don't want that you can set the angle to 0. | `parameters.scad` |
 | `pcb_thickness` | Defines the overall thickness of the PCB. This must be at least 4mm, which is the minimum needed to fit both row and column wires. Can be increased if you want a sturdier PCB. | `parameters.scad` |
 
+### Plate/Case Parameters:
+| Name | Description | Location |
+| ---- | ----------- | -------- |
+| `plate_margin` | Defines how far the plate sticks out beyond the PCB. If you wish to have more granular control over the plate shape, you can set this to 0 and generate a separate layout for the plate and edit the borders directly. | `parameters.scad` |
+| `plate_outer_fillet` | Radius of outer fillets on the plate. | `parameters.scad` |
+| `plate_inner_fillet` | Radius of inner fillets on the plate. Can be set large for nice curves on thumb cluster connections, for example. | `parameters.scad` |
+| `plate_precision` | Approximate point precision (in mm) of the basic plate outline. This setting allows vertices placed near enough each other to be merged when using the plate layout override. Since not all the elements are hulled, adjacent elements that are angled with each other and meet at a point (such as in a thumb cluster) may not meet exactly at a point, creating a weird jagged edge when the plate offset is applied. The default layout has an example of this where the thumb cluster meets the footprint of the TRRS socket. The default value of 1/100 is a good balance of usability and precision, but if you're having trouble getting rid of the jagged edges you can lower it. | `parameters.scad` |
+| `case_type` | This can be set to `sandwich`, `plate_case`, or `backplate_case`, and defines the structure of the optional case. `sandwich` is the most basic, and consists of a switch plate, PCB, and backplate connected by standoffs. `plate_case` is an integrated-plate case, where the sides are enclosed by a wall connected to the plate. The backplate is slightly inset into the case. `backplate_case` is currently unimplemented, but will likely be some kind of tray-mount case. | `parameters.scad` |
+| `case_wall_thickness` | Thickness of the case wall, if applicable. Default value of 2 is probably the minimum recommended thickness. | `parameters.scad` |
+
+### Backplate Parameters:
+| Name | Description | Location |
+| ---- | ----------- | -------- |
+| `backplate_thickness` | Defines the thickness of the backplate. | `parameters.scad` |
+| `backplate_case_flange` | If using the `plate_case` case type, this defines the thickness of the flange that forms the bottom surface of the case. | `parameters.scad` |
+| `pcb_backplate_spacing` | Defines the distance between the bottom of the PCB and the top of the backplate. Can be decreased for a lower profile or increased for more room to route wires. | `parameters.scad` |
+
 ### Switch Parameters:
 | Name | Description | Location |
 | ---- | ----------- | -------- |

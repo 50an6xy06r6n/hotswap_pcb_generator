@@ -73,6 +73,8 @@ base_plate_layout = [
         [[[4.875,5.625],1.5,[60,4.875,4.625]],[1,0,0.25*unit*mm,17.11*mm]],
     ]
 ];
+// Whether to only use base_plate_layout to generate the plate footprint
+use_plate_layout_only = true;
 
 // Whether to only use base_plate_layout to generate the plate footprint
 use_plate_layout_only = true;

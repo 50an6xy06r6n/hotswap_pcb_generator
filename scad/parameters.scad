@@ -7,6 +7,15 @@ diode_pin_angle = 5;  // [0:15]
 // Overall thickness of PCB
 pcb_thickness = 4;  // [4:0.1:10]
 
+/* Backplate Parameters */
+// Thickness of the backplate
+backplate_thickness = 2;
+// Thickness of flange around backplate if using an integrated-plate case
+backplate_case_flange = 1;
+// Spacing between the bottom of the PCB and the top of the backplate
+pcb_backplate_spacing = 4;
+
+
 /* Switch Parameters */
 // Switch type
 switch_type = "mx";  // [mx, choc]
@@ -16,7 +25,7 @@ switch_orientation = "south";  // [north, south]
 
 /* MCU Parameters (Default values for Pro Micro) */
 mcu_type = "bare";  // [bare, socketed]
-mcu_width = 18;  
+mcu_width = 18;
 mcu_length = 33;
 mcu_height = 4.25;  // Distance to top of PCB
 mcu_row_spacing = 15.24;
@@ -35,7 +44,7 @@ mcu_socket_length = mcu_length+4;
 
 /* TRRS Socket Parameters */
 trrs_width = 6;
-trrs_length = 12.1; 
+trrs_length = 12.1;
 trrs_height = 5;
 trrs_flange_length = 2;
 trrs_flange_diameter = 5;
@@ -57,7 +66,7 @@ via_shape = [via_width, via_length];
 // Type of case to generate
 case_type = "plate_case";  // [sandwich, plate_case, backplate_case]
 // Thickness of case walls
-case_wall_thickness = 2; 
+case_wall_thickness = 2;
 // Fit tolerance between interlocking case parts
 case_fit_tolerance = 0.2;
 
@@ -75,7 +84,7 @@ plate_precision = 1/100;
 
 
 /* Backplate Parameters */
-// Thickness of the backplate        
+// Thickness of the backplate
 backplate_thickness = 2;
 // Thickness of flange around backplate if using an integrated-plate case
 backplate_case_flange = 1;
@@ -118,7 +127,7 @@ v_unit = unit;
 // Spacing of grid for MX pins
 grid = 1.27;
 // Size of socket body
-socket_size = 
+socket_size =
     switch_type == "mx"
     ? 14
     : switch_type == "choc"
@@ -127,21 +136,21 @@ socket_size =
 // Depth of the socket holes
 socket_depth = 3.5;
 // Thickness of the plate
-plate_thickness = 
+plate_thickness =
     switch_type == "mx"
     ? 1.5
     : switch_type == "choc"
         ? 1.3
         : assert(false, "switch_type is invalid");
 // Size of the plate cutout
-plate_cutout_size = 
+plate_cutout_size =
     switch_type == "mx"
     ? 14
     : switch_type == "choc"
         ? 13.8
         : assert(false, "switch_type is invalid");
 // Spacing between the top of the PCB and top of the plate
-pcb_plate_spacing = 
+pcb_plate_spacing =
     switch_type == "mx"
     ? 5
     : switch_type == "choc"
@@ -149,7 +158,7 @@ pcb_plate_spacing =
         : assert(false, "switch_type is invalid");
 
 // Total assembly thickness (for reference)
-total_thickness = 
+total_thickness =
     pcb_plate_spacing + pcb_thickness + pcb_backplate_spacing + backplate_thickness;
 
 // Width of a border unit around the socket (for joining adjacent sockets)
