@@ -7,31 +7,6 @@ diode_pin_angle = 5;  // [0:15]
 // Overall thickness of PCB
 pcb_thickness = 4;  // [4:0.1:10]
 
-/* Plate/Case Parameters */
-// Distance the plate sticks out past the PCB
-plate_margin = 5;
-// Radius of outer fillets
-plate_outer_fillet = 2.5;
-// Radius of inner fillets
-plate_inner_fillet = 50;
-// Setting this lower can help fix geometry issues when using custom plate shapes
-// (i.e. two components that don't meet at exactly the same point can cause offset issues)
-plate_precision = 1/100;
-// What kind of housing to generate
-case_type = "plate_case";  // [sandwich, plate_case, backplate_case]
-// Thickness of case walls
-case_wall_thickness = 2; 
-
-
-/* Backplate Parameters */
-// Thickness of the backplate        
-backplate_thickness = 2;
-// Thickness of flange around backplate if using an integrated-plate case
-backplate_case_flange = 1;
-// Spacing between the bottom of the PCB and the top of the backplate
-pcb_backplate_spacing = 4;
-
-
 /* Switch Parameters */
 // Switch type
 switch_type = "mx";  // [mx, choc]
@@ -65,11 +40,47 @@ trrs_height = 5;
 trrs_flange_length = 2;
 trrs_flange_diameter = 5;
 trrs_pin_spacing = 4.4;
-trrs_nub_diameter = 1;  // Little locating nubs on the bottom of the socket
+trrs_nub_diameter = 1.5;  // Little locating nubs on the bottom of the socket
 trrs_nub_height = 1;
 trrs_nub_spacing = 7;
 trrs_nub_offset = 1.5;  // Distance from the front of the socket (not including flange)
 trrs_plug_width = 10;  // Width of a plug for plate clearance
+
+
+/* Via Parameters */
+via_width = 5;
+via_length = 15;
+via_shape = [via_width, via_length];
+
+
+/* Case Parameters */
+// Type of case to generate
+case_type = "plate_case";  // [sandwich, plate_case, backplate_case]
+// Thickness of case walls
+case_wall_thickness = 2; 
+// Fit tolerance between interlocking case parts
+case_fit_tolerance = 0.2;
+
+
+/* Plate Parameters */
+// Distance the plate sticks out past the PCB
+plate_margin = 5;
+// Radius of outer fillets
+plate_outer_fillet = 2.5;
+// Radius of inner fillets
+plate_inner_fillet = 50;
+// Setting this lower can help fix geometry issues when using custom plate shapes
+// (i.e. two components that don't meet at exactly the same point can cause offset issues)
+plate_precision = 1/100;
+
+
+/* Backplate Parameters */
+// Thickness of the backplate        
+backplate_thickness = 2;
+// Thickness of flange around backplate if using an integrated-plate case
+backplate_case_flange = 1;
+// Spacing between the bottom of the PCB and the top of the backplate
+pcb_backplate_spacing = 4;
 
 
 /* Standoff Parameters */
@@ -88,12 +99,6 @@ standoff_diameter = 4.5;
 standoff_clearance_hole_diameter = 2.5;
 // Diameter of standoff pilot hole
 standoff_pilot_hole_diameter = 1.6;
-
-
-/* Via Parameters */
-via_width = 5;
-via_length = 15;
-via_shape = [via_width, via_length];
 
 
 /* Misc Parameters */

@@ -73,6 +73,7 @@ base_plate_layout = [
         [[[4.875,5.625],1.5,[60,4.875,4.625]],[1,0,0.25*unit*mm,17.11*mm]],
     ]
 ];
+
 // Whether to only use base_plate_layout to generate the plate footprint
 use_plate_layout_only = true;
 
@@ -96,7 +97,7 @@ base_standoff_layout = [
 ];
 
 // Via layout 
-//     (extra_data = [via_diameter, via_length])
+//     (extra_data = [via_width, via_length])
 base_via_layout = [
     [[[5.5,3]]]
 ];

@@ -69,9 +69,20 @@ base_mcu_layout = [];
 // TRRS Position(s)
 base_trrs_layout = [];
 
+// Plate Layout (if different than PCB)
+//     (extra_data = component_type)
+base_plate_layout = [];
+
+// Whether to only use base_plate_layout to generate the plate footprint
+use_plate_layout_only = false;
+
 // Standoff hole layout
 //     (extra_data = [standoff_integration_override, standoff_attachment_override])
 base_standoff_layout = [];
+
+// Via layout
+//     (extra_data = [via_width, via_length])
+base_via_layout = [];
 
 // Whether to flip the layout
 invert_layout_flag = false;
