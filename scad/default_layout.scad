@@ -76,9 +76,6 @@ base_plate_layout = [
 // Whether to only use base_plate_layout to generate the plate footprint
 use_plate_layout_only = true;
 
-// Whether to only use base_plate_layout to generate the plate footprint
-use_plate_layout_only = true;
-
 // Standoff layout 
 //     (extra_data = [standoff_integration, standoff_attachment])
 base_standoff_layout = [

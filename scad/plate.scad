@@ -26,7 +26,7 @@ module plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout) {
     scale(1/scale_factor) 
     {
         if (use_plate_layout_only) {
-            // Hull each group and then union separately
+            // Hull each group and then union separately, which allows for concavity
             union() for (group = plate_layout) {
                 hull() {
                     layout_pattern(group) {
@@ -92,4 +92,3 @@ module plate(switch_layout, mcu_layout, trrs_layout, plate_layout, standoff_layo
 }
 
 plate(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final, standoff_layout_final);
-//plate_footprint(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final);

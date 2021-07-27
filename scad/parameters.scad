@@ -7,15 +7,6 @@ diode_pin_angle = 5;  // [0:15]
 // Overall thickness of PCB
 pcb_thickness = 4;  // [4:0.1:10]
 
-/* Backplate Parameters */
-// Thickness of the backplate
-backplate_thickness = 2;
-// Thickness of flange around backplate if using an integrated-plate case
-backplate_case_flange = 1;
-// Spacing between the bottom of the PCB and the top of the backplate
-pcb_backplate_spacing = 4;
-
-
 /* Switch Parameters */
 // Switch type
 switch_type = "mx";  // [mx, choc]
@@ -40,6 +31,9 @@ mcu_connector_offset = 2; // Vertical offset of plug center from PCB center
 mcu_pcb_thickness = 1.6;
 mcu_socket_width = mcu_width+4;
 mcu_socket_length = mcu_length+4;
+expose_mcu = false;
+grid_size = 8;
+grid_spacing = 1.6;
 
 
 /* TRRS Socket Parameters */
@@ -67,6 +61,15 @@ via_shape = [via_width, via_length];
 case_type = "plate_case";  // [sandwich, plate_case, backplate_case]
 // Thickness of case walls
 case_wall_thickness = 2;
+// Case wall draft angle
+case_wall_draft_angle = 15;
+// Width of the case chamfer (convex cases only)
+case_chamfer_width = 1;
+// Angle of the case chamfer (convex cases only)
+case_chamfer_angle = 45;
+// Height of the vertical portion at the bottom of the case 
+// (not including backplate flange)
+case_base_height = 2;
 // Fit tolerance between interlocking case parts
 case_fit_tolerance = 0.2;
 

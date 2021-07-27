@@ -1,6 +1,7 @@
 include <parameters.scad>
 include <utils.scad>
 
+use <grid_patterns.scad>
 
 module mcu(borders=[0,0,0,0]) {
     translate([
@@ -198,14 +199,28 @@ module mcu_plate_cutout(thickness=plate_thickness) {
 }
 
 module mcu_case_cutout() {
+    // Connector plug cutout
     translate([
         h_unit/2,
         0,
         plate_thickness/2-pcb_plate_spacing+mcu_pcb_thickness/2+mcu_connector_offset
     ]) rotate([-90,0,0]) {
         hull() {
-            for (i=[-1,1]) translate([i*(mcu_connector_width-mcu_connector_height)/2,0,-mcu_connector_length])
+            for (i=[-1,1]) translate([i*(mcu_connector_width-mcu_connector_height)/2,0,-mcu_connector_length-2])
                 cylinder(h=1000, d=mcu_connector_height);
+        }
+    }
+
+    // Cut out case above MCU
+    if (expose_mcu) {
+        linear_extrude(10,center=true) {
+            difference() {
+                translate([h_unit/2,-mcu_v_unit_size*v_unit/2,0]) {
+                    rotate([0,0,0]) 
+                        grid_pattern(grid_size, grid_spacing, mcu_width, mcu_length);
+                }
+                offset(delta=grid_spacing) mcu_plate_cutout_footprint();
+            }
         }
     }
 }
