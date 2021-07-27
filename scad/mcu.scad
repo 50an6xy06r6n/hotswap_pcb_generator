@@ -226,4 +226,3 @@ module mcu_case_cutout() {
 }
 
 mcu();
-#mcu_case_cutout();
