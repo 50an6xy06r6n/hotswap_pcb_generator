@@ -26,7 +26,7 @@ module switch_socket_base(borders=[1,1,1,1]) {
 module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
     if (switch_type == "mx") {
         if (use_folded_contact) {
-            mx_socket_cutout_folded(borders, rotate_column);
+            mx_improved_socket_cutout(borders, rotate_column);
         } else {
             mx_socket_cutout(borders, rotate_column);
         }
@@ -37,7 +37,7 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
     }
 }
 
-module mx_socket_cutout_folded(borders=[1,1,1,1], rotate_column=false) {
+module mx_improved_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
     render() translate([h_unit/2,-v_unit/2,0]) rotate([0,0,switch_rotation])
         intersection() {
             union() {

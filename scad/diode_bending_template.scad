@@ -1,6 +1,6 @@
 include <parameters.scad>
 
-module mx_diode_template_folded() {
+module mx_improved_diode_template() {
     difference() {
         translate([0,0,-diode_foldover/2-0.5])
             cube([socket_size, socket_size, pcb_thickness+diode_foldover], center=true);
@@ -92,7 +92,7 @@ module choc_diode_template() {
 
 if (switch_type == "mx") {
     if (use_folded_contact) {
-        mx_diode_template_folded();
+        mx_improved_diode_template();
     } else {
         mx_diode_template();
     }        
