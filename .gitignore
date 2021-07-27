@@ -1,4 +1,5 @@
 *.stl
 !stl/**/*.stl
+img/original
 node_modules/
 scad/layout.scad
