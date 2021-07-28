@@ -129,7 +129,7 @@ standoff_pilot_hole_diameter = 1.6;
 // Increase this if your standoffs are a bit too long due to printing tolerances
 fit_tolerance = 0;
 // Resolution of holes (affects render times)
-$fn=120;
+$fn=12;
 
 
 /* Advanced Parameters (related to switch size) */

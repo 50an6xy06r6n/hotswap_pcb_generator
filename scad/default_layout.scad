@@ -75,7 +75,7 @@ base_plate_layout = [
     ]
 ];
 // Whether to only use base_plate_layout to generate the plate footprint
-use_plate_layout_only = false;
+use_plate_layout_only = true;
 
 // Stabilizer layout
 //     (extra_data = [key_size, left_offset, right_offset, switch_offset=0])
