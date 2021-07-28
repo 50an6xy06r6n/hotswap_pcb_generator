@@ -88,7 +88,7 @@ After you have all your wires cut you should attach them to the MCU. For each wi
 ### Diodes
 <p align="center"><img src="../img/guide/14_diodes.JPG" width="750px"></p>
 
-The diodes get their own section because they are the most tedious part of the build. I would highly recommend printing the diode bending guide, which makes the pre-bending step much faster and much more repeatable. The first step for each diode is to make a 90-degree bend in the diode's anode leg (the leg further from the black stripe) as close to the housing as possible. This will allow you to place the diode in the bending jig, and from there you just bend both legs down at a 90-degree angle. Repeat this step for each diode.
+The diodes get their own section because they are the most tedious part of the build. I would highly recommend 3D-printing the diode bending guide, which makes the pre-bending step much faster and much more repeatable. The first step for each diode is to make a 90-degree bend in the diode's anode leg (the leg further from the black stripe) as close to the housing as possible. This will allow you to place the diode in the bending jig, and from there you just bend both legs down at a 90-degree angle. Repeat this step for each diode.
 <p align="center">
     <img src="../img/guide/17_diode_template_placement.JPG" width="400px" style="padding: 10px">
     <img src="../img/guide/18_diode_leg_bends.JPG" width="400px" style="padding: 10px">
@@ -105,6 +105,8 @@ The anode leg of each diode goes through the same hole in the socket as the bott
 
 On each switch socket, use the utility knife to cut a slit in the row wire insulation where the top switch pin will be inserted. This isn't strictly necessary, but helps improve ease of installation and reduce the incidence of bent switch pins.
 <p align="center"><img src="../img/guide/24_diodes_front.JPG" width="750px" style="padding: 10px"></p>
+
+Note that either diode orientation will work, as long as you're consistent. The orientation described here corresponds to a `ROW2COL` diode direction in QMK.
 
 ### Testing
 Before you assemble, it's a good idea to do a test fit of all the switches you want to use and test the switch matrix, as it's much easier to fix electrical problems before you have everything cased up. This will also slightly bend the diode and switch legs, making them easier to insert later. I use VIA to test the matrix, though if your firmware isn't VIA-enabled you can still just test every key and make sure the keyboard outputs the right values. See the [Firmware Guide](./firmware_guide.md) for instructions on how to create a VIA-enabled firmware and corresponding JSON file.

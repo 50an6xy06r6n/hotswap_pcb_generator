@@ -22,48 +22,6 @@ use_folded_contact = false;
 stabilizer_type = "pcb";  // [pcb, plate]
 
 
-/* MCU Parameters (Default values for Pro Micro) */
-mcu_type = "bare";  // [bare, socketed]
-mcu_width = 18;
-mcu_length = 33;
-mcu_height = 4.25;  // Distance to top of PCB
-mcu_row_spacing = 15.24;
-mcu_row_count = 2;  // Unused
-mcu_pin_count = 24;
-mcu_pin_pitch = 2.54;
-mcu_pin_offset = 0;  // Offset from the rear of the PCB
-mcu_connector_width = 13;  // Width of the connector (for plate cutout)
-mcu_connector_length = 4;  // Distance the connector extends onto the MCU (for plate cutout)
-mcu_connector_height = 8;  // Height of the plug housing
-mcu_connector_offset = 2; // Vertical offset of plug center from PCB center
-mcu_pcb_thickness = 1.6;
-mcu_socket_width = mcu_width+4;
-mcu_socket_length = mcu_length+4;
-expose_mcu = false;
-grid_size = 8;
-grid_spacing = 1.6;
-
-
-/* TRRS Socket Parameters */
-trrs_width = 6;
-trrs_length = 12.1;
-trrs_height = 5;
-trrs_flange_length = 2;
-trrs_flange_diameter = 5;
-trrs_pin_spacing = 4.4;
-trrs_nub_diameter = 1.5;  // Little locating nubs on the bottom of the socket
-trrs_nub_height = 1;
-trrs_nub_spacing = 7;
-trrs_nub_offset = 1.5;  // Distance from the front of the socket (not including flange)
-trrs_plug_width = 10;  // Width of a plug for plate clearance
-
-
-/* Via Parameters */
-via_width = 5;
-via_length = 15;
-via_shape = [via_width, via_length];
-
-
 /* Case Parameters */
 // Type of case to generate
 case_type = "plate_case";  // [sandwich, plate_case, backplate_case]
@@ -105,6 +63,48 @@ backplate_thickness = 2;
 backplate_case_flange = 1;
 // Spacing between the bottom of the PCB and the top of the backplate
 pcb_backplate_spacing = 4;
+
+
+/* MCU Parameters (Default values for Pro Micro) */
+mcu_type = "bare";  // [bare, socketed]
+mcu_width = 18;
+mcu_length = 33;
+mcu_height = 4.25;  // Distance to top of PCB
+mcu_row_spacing = 15.24;
+mcu_row_count = 2;  // Unused
+mcu_pin_count = 24;
+mcu_pin_pitch = 2.54;
+mcu_pin_offset = 0;  // Offset from the rear of the PCB
+mcu_connector_width = 13;  // Width of the connector (for plate cutout)
+mcu_connector_length = 4;  // Distance the connector extends onto the MCU (for plate cutout)
+mcu_connector_height = 8;  // Height of the plug housing
+mcu_connector_offset = 2; // Vertical offset of plug center from PCB center
+mcu_pcb_thickness = 1.6;
+mcu_socket_width = mcu_width+4;
+mcu_socket_length = mcu_length+4;
+expose_mcu = false;
+grid_size = 8;
+grid_spacing = 1.6;
+
+
+/* TRRS Socket Parameters */
+trrs_width = 6;
+trrs_length = 12.1;
+trrs_height = 5;
+trrs_flange_length = 2;
+trrs_flange_diameter = 5;
+trrs_pin_spacing = 4.4;
+trrs_nub_diameter = 1.5;  // Little locating nubs on the bottom of the socket
+trrs_nub_height = 1;
+trrs_nub_spacing = 7;
+trrs_nub_offset = 1.5;  // Distance from the front of the socket (not including flange)
+trrs_plug_width = 10;  // Width of a plug for plate clearance
+
+
+/* Via Parameters */
+via_width = 5;
+via_length = 15;
+via_shape = [via_width, via_length];
 
 
 /* Standoff Parameters */

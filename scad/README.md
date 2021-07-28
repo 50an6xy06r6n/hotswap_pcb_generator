@@ -24,17 +24,41 @@
 | ---- | ----------- | -------- |
 | `wire_diameter` | The diameter of wire (in mm) used for the matrix. The default value of 2.15 works for 22AWG silicone-sleeved wire, which is what I used, but it can be tweaked based on your fit preferences or a different kind of wire. | `parameters.scad` |
 | `diode_pin_angle` | This changes the angle of the channel that forms the bottom switch pin socket. The bottom switch pin makes contact the diode anode leg, and the connection can sometimes be a bit flaky. Slightly angling the channel upwards forces the switch pin into the diode leg as it's inserted, and makes for a more robust connection. This can put a slight bend in the switch pin that can be easily bent back (the bottom pin tends to be the sturdier of the two), but if you don't want that you can set the angle to 0. | `parameters.scad` |
+| `diode_foldover` | Length that the diode folds over on the back of the PCB. Only applies when `use_folded_contact = true` | `parameters.scad` |
 | `pcb_thickness` | Defines the overall thickness of the PCB. This must be at least 4mm, which is the minimum needed to fit both row and column wires. Can be increased if you want a sturdier PCB. | `parameters.scad` |
 
-### Plate/Case Parameters:
+### Switch Parameters:
+| Name | Description | Location |
+| ---- | ----------- | -------- |
+| `switch_type` | This can be set to either `mx` or `choc`, depending on the type of switch you plan to use. This changes the PCB cutouts, as well as the plate thickness and spacing used for standoffs. Support for other switch types is possible if I'm able to obtain them. | `parameters.scad` |
+| `switch_orientation` | This can be set to either `north` or `south`, and defines the LED orientation of the switch. South-facing offers better compatibility with Cherry-profile keycaps, while north-facing may result in better illumination of shine-through legends (though there is not yet support for LEDs). | `parameters.scad` |
+| `use_folded_contact` | This generates an experimental socket for MX switches that provides more robust hotswap contacts at the expense of more complexity when bending diodes. | `parameters.scad` |
+
+### Stabilizer Parameters:
+| Name | Description | Location |
+| ---- | ----------- | -------- |
+| `stabilizer_type` | This can be set to either `pcb` or `plate`. The plate cutouts for both are the same, and the only difference is that `pcb` adds holes in the PCB, so I recommend just always using `pcb`. | `parameters.scad` |
+
+### Case Parameters:
+| Name | Description | Location |
+| ---- | ----------- | -------- |
+| `case_type` | This can be set to `sandwich`, `plate_case`, or `backplate_case`, and defines the structure of the optional case. `sandwich` is the most basic, and consists of a switch plate, PCB, and backplate connected by standoffs. `plate_case` is an integrated-plate case, where the sides are enclosed by a wall connected to the plate. The backplate is slightly inset into the case. `backplate_case` is currently unimplemented, but will likely be some kind of tray-mount case. | `parameters.scad` |
+| `case_wall_thickness` | Thickness of the case wall, if applicable. Default value of 2 is probably the minimum recommended thickness. | `parameters.scad` |
+| `case_wall_draft_angle` | Angle at which the case walls slope outwards. Only used when `use_plate_layout_only = false`, as the technique used only works on convex profiles. | `parameters.scad` |
+| `case_chamfer_width` | Width of the chamfer on the top of the case. Only used when `use_plate_layout_only = false`, as the technique used only works on convex profiles. | `parameters.scad` |
+| `case_chamfer_angle` | Angle (from horizontal) of the chamfer on the top of the case. Only used when `use_plate_layout_only = false`, and the technique used only works on convex profiles. | `parameters.scad` |
+| `case_base_height` | Height of the vertical portion of the case wall at its base. Only applies when a draft angle is applied to the case wall. Does not include the height of the backplate flange. | `parameters.scad` |
+| `case_fit_tolerance` | Fit tolerance between interlocking case parts (e.g. an integrated-plate case and its backplate), so that they can be easily taken apart when unscrewed. Default value of 0.2 creates a pretty snug fit that doesn't get stuck. | `parameters.scad` |
+| `tent_angle_x` | Angle at which the keyboard is tilted around the x-axis. Currently unimplemented. | `parameters.scad` |
+| `tent_angle_y` | Angle at which the keyboard is tilted around the y-axis. Currently unimplemented. | `parameters.scad` |
+
+### Plate Parameters:
 | Name | Description | Location |
 | ---- | ----------- | -------- |
 | `plate_margin` | Defines how far the plate sticks out beyond the PCB. If you wish to have more granular control over the plate shape, you can set this to 0 and generate a separate layout for the plate and edit the borders directly. | `parameters.scad` |
 | `plate_outer_fillet` | Radius of outer fillets on the plate. | `parameters.scad` |
 | `plate_inner_fillet` | Radius of inner fillets on the plate. Can be set large for nice curves on thumb cluster connections, for example. | `parameters.scad` |
 | `plate_precision` | Approximate point precision (in mm) of the basic plate outline. This setting allows vertices placed near enough each other to be merged when using the plate layout override. Since not all the elements are hulled, adjacent elements that are angled with each other and meet at a point (such as in a thumb cluster) may not meet exactly at a point, creating a weird jagged edge when the plate offset is applied. The default layout has an example of this where the thumb cluster meets the footprint of the TRRS socket. The default value of 1/100 is a good balance of usability and precision, but if you're having trouble getting rid of the jagged edges you can lower it. | `parameters.scad` |
-| `case_type` | This can be set to `sandwich`, `plate_case`, or `backplate_case`, and defines the structure of the optional case. `sandwich` is the most basic, and consists of a switch plate, PCB, and backplate connected by standoffs. `plate_case` is an integrated-plate case, where the sides are enclosed by a wall connected to the plate. The backplate is slightly inset into the case. `backplate_case` is currently unimplemented, but will likely be some kind of tray-mount case. | `parameters.scad` |
-| `case_wall_thickness` | Thickness of the case wall, if applicable. Default value of 2 is probably the minimum recommended thickness. | `parameters.scad` |
 
 ### Backplate Parameters:
 | Name | Description | Location |
@@ -42,12 +66,6 @@
 | `backplate_thickness` | Defines the thickness of the backplate. | `parameters.scad` |
 | `backplate_case_flange` | If using the `plate_case` case type, this defines the thickness of the flange that forms the bottom surface of the case. | `parameters.scad` |
 | `pcb_backplate_spacing` | Defines the distance between the bottom of the PCB and the top of the backplate. Can be decreased for a lower profile or increased for more room to route wires. | `parameters.scad` |
-
-### Switch Parameters:
-| Name | Description | Location |
-| ---- | ----------- | -------- |
-| `switch_type` | This can be set to either `mx` or `choc`, depending on the type of switch you plan to use. This changes the PCB cutouts, as well as the plate thickness and spacing used for standoffs. Support for other switch types is possible if I'm able to obtain them. | `parameters.scad` |
-| `switch_orientation` | This can be set to either `north` or `south`, and defines the LED orientation of the switch. South-facing offers better compatibility with Cherry-profile keycaps, while north-facing may result in better illumination of shine-through legends (though there is not yet support for LEDs). | `parameters.scad` |
 
 ### MCU Parameters:
 | Name | Description | Location |
@@ -68,6 +86,9 @@
 | `mcu_pcb_thickness` | Thickness of the daughterboard PCB. Default value of 1.6 is pretty standard. | `parameters.scad` |
 | `mcu_socket_width` | Width of the socket holding the MCU. Default value of `mcu_width + 4` works pretty well. | `parameters.scad` |
 | `mcu_socket_length` | Length of the socket holding the MCU. Default value of `mcu_length + 4` works pretty well. | `parameters.scad` |
+| `expose_mcu` | Experimental feature to create a cutout in the plate above the MCU, to allow status lights to be seen and/or pins to be accessed. Also looks cool maybe? | `parameters.scad` |
+| `grid_size` | Size of the holes in the grid cutout pattern. What that means exactly depends on the pattern. | `parameters.scad` |
+| `grid_spacing` | Space between holes in the grid cutout pattern. Can also be thought of as the width of the lines in the mesh. | `parameters.scad` |
 
 ### TRRS Parameters:
 | Name | Description | Location |
@@ -89,28 +110,6 @@
 | ---- | ----------- | -------- |
 | `via_width` | Width of the via (also the diameter of the rounded end). This can be overridden for an individual via via `extra_data`. | `parameters.scad` |
 | `via_length` | Total length of the via (including the rounded ends). This can be overridden for an individual via via `extra_data`. | `parameters.scad` |
-
-### Case Parameters:
-| Name | Description | Location |
-| ---- | ----------- | -------- |
-| `case_type` | This can be set to `sandwich`, `plate_case`, or `backplate_case`, and defines the structure of the optional case. `sandwich` is the most basic, and consists of a switch plate, PCB, and backplate connected by standoffs. `plate_case` is an integrated-plate case, where the sides are enclosed by a wall connected to the plate. The backplate is slightly inset into the case. `backplate_case` is currently unimplemented, but will likely be some kind of tray-mount case. | `parameters.scad` |
-| `case_wall_thickness` | Thickness of the case wall, if applicable. Default value of 2 is probably the minimum recommended thickness. | `parameters.scad` |
-| `case_fit_tolerance` | Fit tolerance between interlocking case parts (e.g. an integrated-plate case and its backplate). Default value of 0.2 creates a pretty snug fit that doesn't get stuck. | `parameters.scad` |
-
-### Plate Parameters:
-| Name | Description | Location |
-| ---- | ----------- | -------- |
-| `plate_margin` | Defines how far the plate sticks out beyond the PCB. If you wish to have direct control over the plate shape, you can set this to 0 and use `base_plate_layout` to edit the shape directly. | `parameters.scad` |
-| `plate_outer_fillet` | Radius of outer fillets on the plate. | `parameters.scad` |
-| `plate_inner_fillet` | Radius of inner fillets on the plate. Can be set high for nice curves on thumb cluster connections, for example. | `parameters.scad` |
-| `plate_precision` | Approximate point precision (in mm) of the basic plate outline. This setting allows vertices placed near enough each other to be merged when using `use_plate_layout_only` is set to `true`. Since not all the elements are hulled, adjacent elements that are angled with each other and meet at a point (such as in a thumb cluster) may not meet exactly at a point, creating a weird jagged edge when the plate offset is applied. The default layout has an example of this where the thumb cluster meets the footprint of the TRRS socket. The default value of 1/100 is a good balance of usability and precision, but if you're having trouble getting rid of the jagged edges you can lower it. | `parameters.scad` |
-
-### Backplate Parameters:
-| Name | Description | Location |
-| ---- | ----------- | -------- |
-| `backplate_thickness` | Defines the overall thickness of the backplate. | `parameters.scad` |
-| `backplate_case_flange` | If using the `plate_case` case type, this defines the thickness of the flange that forms the bottom surface of the case. | `parameters.scad` |
-| `pcb_backplate_spacing` | Defines the distance between the bottom of the PCB and the top of the backplate. Can be decreased for a lower profile or increased for more room to route wires. | `parameters.scad` |
 
 ### Standoff Parameters:
 | Name | Description | Location |

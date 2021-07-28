@@ -57,7 +57,6 @@ module stabilizer_pcb_cutout(spacing=2u) {
     module pcb_mount_cutout() {
         translate([0,-v_unit/2,-pcb_thickness/2]) {
             translate([0,6.985,0]) {
-//                cylinder(d=3.05, h=pcb_thickness+1);
                 cylinder(d=3.5, h=pcb_thickness+1);
                 translate([0,0,-2.5]) cylinder(d=4, h=pcb_thickness);
             }
@@ -135,5 +134,5 @@ module stabilizer_plate_cutout(spacing=2u, thickness=plate_thickness) {
         stabilizer_plate_cutout_footprint(spacing);
 }
 
-//stabilizer_pcb(2u);
-stabilizer_plate(2u);
+stabilizer_pcb(2u);
+//stabilizer_plate(2u);
