@@ -1,4 +1,5 @@
 include <parameters.scad>
+include <stabilizer_spacing.scad>
 
 /* [Layout Values] */
 /* Layout Format (each key):
@@ -76,6 +77,13 @@ base_plate_layout = [];
 // Whether to only use base_plate_layout to generate the plate footprint
 use_plate_layout_only = false;
 
+// Stabilizer layout
+//     (extra_data = [key_size, left_offset, right_offset, switch_offset=0])
+//     (see stabilizer_spacing.scad for presets)
+base_stab_layout = [
+  [[[3.25,3],6.25,[0,0,0]],[1,1,1,1],6_25u],
+];
+
 // Standoff hole layout
 //     (extra_data = [standoff_integration_override, standoff_attachment_override])
 base_standoff_layout = [];
@@ -88,4 +96,4 @@ base_via_layout = [];
 invert_layout_flag = false;
 
 // Whether the layout is staggered-row or staggered-column
-layout_type = "column";  // [column, row]
+layout_type = "row";  // [column, row]

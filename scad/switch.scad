@@ -87,8 +87,8 @@ module mx_improved_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                 -1
             ]) {
                 cube([
-                    socket_size+h_border_width*(borders[2]+borders[3]+2)+0.002,
-                    socket_size+v_border_width*(borders[0]+borders[1]+2)+0.002,
+                    socket_size+h_border_width*(borders[2]+borders[3])+0.02,
+                    socket_size+v_border_width*(borders[0]+borders[1])+0.02,
                     2*pcb_thickness
                 ], center=true);
             }
@@ -144,8 +144,8 @@ module mx_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                 -1
             ]) {
                 cube([
-                    socket_size+h_border_width*(borders[2]+borders[3]+2)+0.002,
-                    socket_size+v_border_width*(borders[0]+borders[1]+2)+0.002,
+                    socket_size+h_border_width*(borders[2]+borders[3])+0.02,
+                    socket_size+v_border_width*(borders[0]+borders[1])+0.02,
                     2*pcb_thickness
                 ], center=true);
             }
@@ -199,8 +199,8 @@ module choc_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                 -1
             ]) {
                 cube([
-                    socket_size+h_border_width*(borders[2]+borders[3]+2)+0.002,
-                    socket_size+v_border_width*(borders[0]+borders[1]+2)+0.002,
+                    socket_size+h_border_width*(borders[2]+borders[3])+0.02,
+                    socket_size+v_border_width*(borders[0]+borders[1])+0.02,
                     2*pcb_thickness
                 ], center=true);
             }

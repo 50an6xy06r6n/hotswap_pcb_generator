@@ -15,7 +15,11 @@ switch_type = "mx";  // [mx, choc]
 // Switch orientation (based on LED location)
 switch_orientation = "south";  // [north, south]
 // Whether to use experimental diode leg contact
-use_folded_contact = true;
+use_folded_contact = false;
+
+
+/* Stabilizer Parameters */
+stabilizer_type = "pcb";  // [pcb, plate]
 
 
 /* MCU Parameters (Default values for Pro Micro) */
@@ -76,6 +80,10 @@ case_chamfer_angle = 45;
 case_base_height = 2;
 // Fit tolerance between interlocking case parts
 case_fit_tolerance = 0.2;
+// Tenting angle around x-axis
+tent_angle_x = 0;
+// Tenting angle around y-axis (i.e. typing angle)
+tent_angle_y = 0;
 
 
 /* Plate Parameters */
@@ -121,7 +129,7 @@ standoff_pilot_hole_diameter = 1.6;
 // Increase this if your standoffs are a bit too long due to printing tolerances
 fit_tolerance = 0;
 // Resolution of holes (affects render times)
-$fn=12;
+$fn=120;
 
 
 /* Advanced Parameters (related to switch size) */

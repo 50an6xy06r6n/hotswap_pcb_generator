@@ -1,32 +1,36 @@
 include <parameters.scad>
 include <default_layout.scad>
 include <layout.scad>
+include <stabilizer_spacing.scad>
 
 
 // Determine whether to invert the layout
-switch_layout_final = invert_layout_flag 
-    ? invert_layout(set_defaults(base_switch_layout, false)) 
+switch_layout_final = invert_layout_flag
+    ? invert_layout(set_defaults(base_switch_layout, false))
     : set_defaults(base_switch_layout, false);
 plate_layout_final = [
-    for (group = base_plate_layout) 
-        invert_layout_flag 
-            ? invert_layout(set_defaults(group, "switch")) 
-            : set_defaults(group, "switch")
+    for (group = base_plate_layout)
+        invert_layout_flag
+            ? invert_layout(set_defaults(group, ["switch"]))
+            : set_defaults(group, ["switch"])
 ];
-mcu_layout_final = invert_layout_flag 
-    ? invert_layout(set_defaults(base_mcu_layout)) 
+mcu_layout_final = invert_layout_flag
+    ? invert_layout(set_defaults(base_mcu_layout))
     : set_defaults(base_mcu_layout);
-trrs_layout_final = invert_layout_flag 
-    ? invert_layout(set_defaults(base_trrs_layout)) 
+trrs_layout_final = invert_layout_flag
+    ? invert_layout(set_defaults(base_trrs_layout))
     : set_defaults(base_trrs_layout);
-standoff_layout_final = invert_layout_flag 
-    ? invert_layout(set_defaults(base_standoff_layout, standoff_config_default)) 
+stab_layout_final = invert_layout_flag
+    ? invert_layout(set_defaults(base_stab_layout))
+    : set_defaults(base_stab_layout, 2u);
+standoff_layout_final = invert_layout_flag
+    ? invert_layout(set_defaults(base_standoff_layout, standoff_config_default))
     : set_defaults(base_standoff_layout, standoff_config_default);
-via_layout_final = invert_layout_flag 
-    ? invert_layout(set_defaults(base_via_layout, via_shape)) 
+via_layout_final = invert_layout_flag
+    ? invert_layout(set_defaults(base_via_layout, via_shape))
     : set_defaults(base_via_layout, via_shape);
 
-// Moves the flat part to the top if layout is row-staggered so column wires 
+// Moves the flat part to the top if layout is row-staggered so column wires
 // can be routed. PCB should be printed upside down in this case.
 border_z_offset =
     layout_type == "column"
@@ -38,7 +42,8 @@ border_z_offset =
 // Tweaks to make wire channels connect properly depending on the key alignment
 row_cutout_length =
     layout_type == "column"
-    ? h_unit+1
+//    ? h_unit+1
+    ? 1000
     : layout_type == "row"
         ? 1000
         : assert(false, "layout_type parameter is invalid");
@@ -47,10 +52,10 @@ col_cutout_length =
     layout_type == "column"
     ? 1000
     : layout_type == "row"
-        ? v_unit+1
+        ? 1000
         : assert(false, "layout_type parameter is invalid");
 
-switch_rotation = 
+switch_rotation =
     switch_orientation == "south"
     ? 0
     : switch_orientation == "north"
@@ -61,16 +66,16 @@ switch_rotation =
 function set_defaults(layout, extra_data_default=[]) = [
     for (item = layout)
         let(
-            location = len(item[0]) == 3 
-                ? item[0] 
+            location = len(item[0]) == 3
+                ? item[0]
                 : len(item[0]) == 2
                     ? [item[0][0],item[0][1],[0,0,0]]
                     : [item[0][0],1,[0,0,0]],
-            borders = len(item) >= 2 
-                ? item[1] 
+            borders = len(item) >= 2
+                ? item[1]
                 : [1,1,1,1],
-            extra_data = len(item) == 3 
-                ? item[2] 
+            extra_data = len(item) == 3
+                ? item[2]
                 : extra_data_default
         )
         [
@@ -80,7 +85,7 @@ function set_defaults(layout, extra_data_default=[]) = [
         ]
 ];
 
-function invert_borders(borders, invert=true) = 
+function invert_borders(borders, invert=true) =
     invert
         ? [borders[0], borders[1], borders[3], borders[2]]
         : borders;
@@ -102,7 +107,7 @@ function invert_layout(layout) = [
             extra_data
         ]
 ];
-    
+
 module layout_pattern(layout) {
     union() {
         for (item = layout) {
