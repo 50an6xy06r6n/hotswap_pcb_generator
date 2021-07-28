@@ -1,4 +1,5 @@
 include <parameters.scad>
+include <stabilizer_spacing.scad>
 
 /* [Layout Values] */
 /* Layout Format (each key): 
@@ -64,8 +65,8 @@ base_plate_layout = [
     concat(
         slice(base_switch_layout, [0,-2]),
         [
-            [[[6,0.5],mcu_h_unit_size],[-2,0,3,0], "mcu"],
-            [[[6.5,2.5],1,[-90,7,3]],[0,0.5*h_unit,0,5.97], "trrs"]
+            [[[6,0.5],mcu_h_unit_size],[-2,0,3,0], ["mcu"]],
+            [[[6.5,2.5],1,[-90,7,3]],[0,0.5*h_unit,0,5.97], ["trrs"]]
         ]
     ),
     [
@@ -75,6 +76,11 @@ base_plate_layout = [
 ];
 // Whether to only use base_plate_layout to generate the plate footprint
 use_plate_layout_only = true;
+
+// Stabilizer layout
+//     (extra_data = [key_size, left_offset, right_offset, switch_offset=0])
+//     (see stabilizer_spacing.scad for presets)
+base_stab_layout = [];
 
 // Standoff layout 
 //     (extra_data = [standoff_integration, standoff_attachment])

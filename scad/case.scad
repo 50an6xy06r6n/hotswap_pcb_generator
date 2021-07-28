@@ -5,59 +5,60 @@ use <plate.scad>
 use <switch.scad>
 use <mcu.scad>
 use <trrs.scad>
+use <stabilizer.scad>
 use <standoff.scad>
 
-module case_shell(height, switch_layout, mcu_layout, trrs_layout, plate_layout) {
+module case_shell(height, switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout) {
     if (use_plate_layout_only) {
-        linear_extrude(height, convexity=10) 
-            plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout);
+        linear_extrude(height, convexity=10)
+            plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
     } else {
         bottom_offset = tan(case_wall_draft_angle) * (height-case_base_height);
         chamfer_offset = tan(case_wall_draft_angle)*tan(case_chamfer_angle)*case_chamfer_width / (1-tan(case_wall_draft_angle)*tan(case_chamfer_angle));
         chamfer_height = chamfer_offset/tan(case_wall_draft_angle);
-        
+
         eps = 0.001;
         intersection() {
             // Chamfer body
             hull() {
-                translate([0,0,-eps]) 
-                linear_extrude(eps) 
-                offset(height / tan(case_chamfer_angle) - case_chamfer_width) 
-                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout);
-                translate([0,0,height-eps]) 
-                linear_extrude(eps) 
-                offset(-case_chamfer_width) 
-                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout);
+                translate([0,0,-eps])
+                linear_extrude(eps)
+                offset(height / tan(case_chamfer_angle) - case_chamfer_width)
+                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+                translate([0,0,height-eps])
+                linear_extrude(eps)
+                offset(-case_chamfer_width)
+                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
             }
             // Main body
             hull() {
-                translate([0,0,-eps]) 
-                linear_extrude(case_base_height+eps) 
-                offset(bottom_offset) 
-                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout);
-                translate([0,0,height-eps]) 
-                linear_extrude(eps) 
-                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout);
-            } 
+                translate([0,0,-eps])
+                linear_extrude(case_base_height+eps)
+                offset(bottom_offset)
+                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+                translate([0,0,height-eps])
+                linear_extrude(eps)
+                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+            }
         }
     }
 }
 
-module case(switch_layout, mcu_layout, trrs_layout, plate_layout, standoff_layout) {
+module case(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, standoff_layout) {
     height = total_thickness - backplate_case_flange;
     intersection() {
         // Trim off any components that extend past the case (e.g. standoffs)
-        translate([0,0,-height+plate_thickness/2]) 
-            case_shell(height, switch_layout, mcu_layout, trrs_layout, plate_layout);
+        translate([0,0,-height+plate_thickness/2])
+            case_shell(height, switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
         difference() {
             union() {
                 // Hollow out inside of case
                 translate([0,0,-height+plate_thickness/2]) difference() {
-                    case_shell(height, switch_layout, mcu_layout, trrs_layout, plate_layout);
-                    translate([0,0,-1]) 
-                    linear_extrude(height-plate_thickness+1, convexity=10) 
-                        offset(-case_wall_thickness) 
-                        plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout);
+                    case_shell(height, switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+                    translate([0,0,-1])
+                    linear_extrude(height-plate_thickness+1, convexity=10)
+                        offset(-case_wall_thickness)
+                        plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
                 }
                 // Add undrilled standoffs
                 layout_pattern(standoff_layout) {
@@ -74,6 +75,9 @@ module case(switch_layout, mcu_layout, trrs_layout, plate_layout, standoff_layou
             layout_pattern(trrs_layout) {
                 trrs_case_cutout();
             }
+            layout_pattern(stab_layout) {
+                stabilizer_plate_cutout($extra_data);
+            }
             // Drill all standoff holes
             layout_pattern(standoff_layout) {
                 case_standoff_hole($extra_data);
@@ -85,4 +89,4 @@ module case(switch_layout, mcu_layout, trrs_layout, plate_layout, standoff_layou
     }
 }
 
-case(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final, standoff_layout_final);
+case(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final, stab_layout_final, standoff_layout_final);

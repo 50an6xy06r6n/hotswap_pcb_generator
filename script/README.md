@@ -9,6 +9,7 @@ Run script (defaults to using `layout.json` and outputs to `scad/layout.scad`):
 npm start -- <layout json file> <optional output filename>
 ```
 
+The script currently doesn't support keys that are not 1u in height. If you need a vertical key, make it as a horizontal key and rotate it 90 degrees.
 
 When running `npm start` for the first time, you may get this error:
 ```
