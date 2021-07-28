@@ -1,5 +1,5 @@
 # 3D-Printable Hotswap Keyboard PCB Generator
-![Example PCB](img/pcb_front.jpg)
+![Example PCB](img/gallery/pcb_front.jpg)
 
 This is an OpenSCAD script that can be used to generate 3D-printable hotswap "PCBs", plates, and cases for prototyping new keyboard layouts. I originally wrote this to help me prototype a split ergo layout without needing to solder/desolder all the switches every time. If you're only going to be building the keyboard once, this is probably a lot more work than just handwiring, but it might be useful if you're iterating on a design and want to reuse your switches easily. Currently supports MX and Kailh Choc v1 switches. If someone wants to send me low-profile Cherry switches, v2 Chocs, or Alps I can add those as well.
 
