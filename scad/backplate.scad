@@ -11,7 +11,9 @@ use <case.scad>
 
 module backplate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout) {
     case_height = total_thickness - backplate_case_flange;
-    bottom_offset = tan(case_wall_draft_angle) * (case_height-case_base_height);
+    bottom_offset = use_plate_layout_only
+        ? 0
+        : tan(case_wall_draft_angle) * (case_height-case_base_height);
     if (tent_angle_x == 0 && tent_angle_y == 0) {
         offset(bottom_offset)
             plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
