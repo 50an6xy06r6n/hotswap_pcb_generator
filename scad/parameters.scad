@@ -62,7 +62,7 @@ plate_precision = 1/100;
 // Thickness of the backplate
 backplate_thickness = 2;
 // Thickness of flange around backplate if using an integrated-plate case
-backplate_case_flange = 2;
+backplate_case_flange = 1;
 // Spacing between the bottom of the PCB and the top of the backplate
 pcb_backplate_spacing = 4;
 
