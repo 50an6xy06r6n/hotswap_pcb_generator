@@ -39,9 +39,11 @@ case_base_height = 2;
 // Fit tolerance between interlocking case parts
 case_fit_tolerance = 0.2;
 // Tenting angle around x-axis
-tent_angle_x = 0;
+tent_angle_x = 5;
 // Tenting angle around y-axis (i.e. typing angle)
-tent_angle_y = 0;
+tent_angle_y = 5;
+// Point around which keyboard is tented
+tent_point = [0,4.125*19.05];
 
 
 /* Plate Parameters */
@@ -123,6 +125,8 @@ standoff_diameter = 4.5;
 standoff_clearance_hole_diameter = 2.5;
 // Diameter of standoff pilot hole
 standoff_pilot_hole_diameter = 1.6;
+// Diameter of standoff screw head counterbores
+standoff_counterbore_diameter = 4.5;
 
 
 /* Misc Parameters */

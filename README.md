@@ -3,6 +3,14 @@
 
 This is an OpenSCAD script that can be used to generate 3D-printable hotswap "PCBs", plates, and cases for prototyping new keyboard layouts. I originally wrote this to help me prototype a split ergo layout without needing to solder/desolder all the switches every time. If you're only going to be building the keyboard once, this is probably a lot more work than just handwiring, but it might be useful if you're iterating on a design and want to reuse your switches easily. Currently supports MX and Kailh Choc v1 switches. If someone wants to send me low-profile Cherry switches, v2 Chocs, or Alps I can add those as well.
 
+### Features
+- Support for MX-style and Kailh Choc switches
+- Automatically generate plates from the same layout data
+- Generate cases with tenting options
+- Integrate microcontrollers and TRRS sockets for a fully-functional keyboard
+- Support for stabilizers
+- Support for non-standard grid spacings
+
 ### Usage
 The OpenSCAD script reads the layout data from the `layout.scad` header file, which you can either write by hand or generate from a KLE json file using the provided script (requires node.js 14+):
 ```
@@ -38,20 +46,23 @@ My original design was inspired by [stingray127's handwirehotswap project](https
 After that I got some requests to add a plate generation feature, and I went overboard from there.
 
 ### Gallery
-Completed keyboard v2
+Completed keyboard
 ![Completed keyboard v2](img/gallery/completed_keyboard_v2.jpg)
-
-Completed keyboard v1 (case designed in FreeCAD)
-![Completed keyboard v2](img/gallery/completed_keyboard_v1.jpg)
 
 Bare split PCB
 ![Bare split PCB](img/gallery/split_pcb.jpg)
 
-OpenSCAD output v1 (no MCU or TRRS)
-![OpenSCAD output](img/gallery/pcb_scad.png)
+Keyboard with tenting
+![Keyboard with tenting](img/gallery/completed_keyboard_v2_tented.jpg)
 
-Back of the PCB
+Completed keyboard (v1, case designed in FreeCAD)
+![Completed keyboard v2](img/gallery/completed_keyboard_v1.jpg)
+
+Back of the PCB (v1, disconnected thumb cluster)
 ![Back of the PCB](img/gallery/pcb_back.jpg)
+
+OpenSCAD output (v1, no MCU or TRRS)
+![OpenSCAD output](img/gallery/pcb_scad.png)
 
 Original design with separate sockets and no wire management
 ![Original design](img/gallery/pcb_individual.jpg)

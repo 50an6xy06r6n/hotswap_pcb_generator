@@ -16,11 +16,22 @@ module standoff_hole(height) {
 }
 
 module standoff_screw_hole(depth) {
-    translate([h_unit/2,-v_unit/2,0]) cylinder(h=depth,d=standoff_clearance_hole_diameter,center=true);
+    translate([h_unit/2,-v_unit/2,0]) 
+        cylinder(h=depth,d=standoff_clearance_hole_diameter,center=true);
 }
 
 module standoff_through_hole(depth) {
-    translate([h_unit/2,-v_unit/2,0]) cylinder(h=depth,d=standoff_diameter+1,center=true);
+    translate([h_unit/2,-v_unit/2,0]) 
+        cylinder(h=depth,d=standoff_diameter+1,center=true);
+}
+
+module standoff_counterbore(z_offset) {
+    mirror_vec = z_offset > 0
+        ? [0,0,0]
+        : [0,0,1];
+    mirror(mirror_vec)
+    translate([h_unit/2,-v_unit/2,abs(z_offset)]) 
+        cylinder(h=1000,d=standoff_counterbore_diameter);
 }
 
 module pcb_standoff(standoff_config, solid=false) {
@@ -132,6 +143,7 @@ module backplate_standoff_hole(standoff_config) {
     ) {
         // Standoff screwed into PCB
         standoff_screw_hole(backplate_thickness+1);
+        standoff_counterbore(-backplate_thickness/2);
     } 
 } 
 

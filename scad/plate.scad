@@ -31,7 +31,6 @@ module plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, sta
             union() for (group = plate_layout) {
                 hull() {
                     layout_pattern(group) {
-                                                        echo(group);
                         let(component_type = $extra_data[0]) {
                             if (component_type == "switch")
                                 switch_plate_footprint($borders);
