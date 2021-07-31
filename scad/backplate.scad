@@ -18,14 +18,21 @@ module backplate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout,
         offset(bottom_offset)
             plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
     } else {
-        projection()
-            case_shell(case_height, switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+        offset(bottom_offset)
+            plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
     }
 }
 
 module backplate_base(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, thickness=plate_thickness) {
-    linear_extrude(thickness, center=true, convexity=10)
-        backplate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+    difference() {
+        translate([0,0,-500])
+        linear_extrude(thickness+1000, center=true, convexity=10)
+            backplate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+        translate([tent_point[0]-plate_margin,plate_margin-tent_point[1],-thickness/2])
+        rotate([-tent_angle_x, tent_angle_y,0])
+        translate([-1000,-1000,-1000])
+            cube([2000,2000,1000]);
+    }
 }
 
 module backplate(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, standoff_layout) {

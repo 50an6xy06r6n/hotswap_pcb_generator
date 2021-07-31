@@ -6,7 +6,6 @@ module hex_grid_pattern(hex_width, spacing, width, height) {
     radius = hex_width / sqrt(3);
     x_instances = ceil(width / (hex_width + spacing));
     y_instances = 2*ceil(height / ((hex_width+spacing)*sqrt(3))) - 1;
-    echo(y_instances);
     module even_row() {
         x_even = floor(x_instances / 2) + 0.5;
         for (x=[-x_even:1:x_even]) {

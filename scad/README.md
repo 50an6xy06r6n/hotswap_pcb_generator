@@ -51,6 +51,7 @@
 | `case_fit_tolerance` | Fit tolerance between interlocking case parts (e.g. an integrated-plate case and its backplate), so that they can be easily taken apart when unscrewed. Default value of 0.2 creates a pretty snug fit that doesn't get stuck. | `parameters.scad` |
 | `tent_angle_x` | Angle at which the keyboard is tilted around the x-axis. Currently unimplemented. | `parameters.scad` |
 | `tent_angle_y` | Angle at which the keyboard is tilted around the y-axis. Currently unimplemented. | `parameters.scad` |
+| `tent_point` | Point around which the keyboard is tented. This is the point that will stay at 0 elevation above the desk. Useful for positive typing angles. | `parameters.scad` |
 
 ### Plate Parameters:
 | Name | Description | Location |
