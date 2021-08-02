@@ -107,3 +107,4 @@ module plate(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, 
 }
 
 plate(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final, stab_layout_final, standoff_layout_final);
+//plate_footprint(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final);

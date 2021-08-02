@@ -6,7 +6,7 @@ use <grid_patterns.scad>
 module mcu(borders=[0,0,0,0]) {
     translate([
         h_unit/2,
-        -(mcu_v_unit_size*v_unit+mcu_socket_length)/2+2,
+        -mcu_socket_length+2,
         0
     ]) rotate([0,layout_type == "row"?180:0,0]) translate([0,0,-pcb_thickness/2]) {
             if (mcu_type == "bare") {
@@ -27,7 +27,7 @@ module socketed_mcu(borders=[0,0,0,0]) {
             translate([-mcu_socket_width/2,-2,0]) 
                 cube([mcu_socket_width,mcu_socket_length,pcb_thickness]);
             // Border
-            translate([0,mcu_socket_length/2-2,pcb_thickness/2-1])
+            translate([0,mcu_socket_length-mcu_v_unit_size*v_unit/2-2,pcb_thickness/2-1])
                 border(
                     [mcu_h_unit_size*h_unit,mcu_v_unit_size*v_unit], 
                     borders, 
@@ -79,7 +79,7 @@ module bare_mcu(borders=[0,0,0,0]) {
             translate([-mcu_socket_width/2,-2,0]) 
                 cube([mcu_socket_width,mcu_socket_length,pcb_thickness+mcu_pcb_thickness]);
             // Border
-            translate([0,mcu_socket_length/2-2,pcb_thickness/2-1])
+            translate([0,mcu_socket_length-mcu_v_unit_size*v_unit/2-2,pcb_thickness/2-1])
                 border(
                     [mcu_h_unit_size*h_unit,mcu_v_unit_size*v_unit], 
                     borders, 
@@ -225,4 +225,6 @@ module mcu_case_cutout() {
     }
 }
 
+echo(str("MCU footprint length is ", mcu_v_unit_size, " units."));
+echo(str("MCU footprint width is ", mcu_h_unit_size, " units."));
 mcu();

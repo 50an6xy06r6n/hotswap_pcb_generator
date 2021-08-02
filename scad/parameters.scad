@@ -27,7 +27,7 @@ stabilizer_type = "pcb";  // [pcb, plate]
 case_type = "plate_case";  // [sandwich, plate_case, backplate_case]
 // Thickness of case walls
 case_wall_thickness = 2;
-// Case wall draft angle
+// Case wall draft angle (convex cases only)
 case_wall_draft_angle = 15;
 // Width of the case chamfer (convex cases only)
 case_chamfer_width = 1;
@@ -196,12 +196,14 @@ mcu_h_unit_size = ceil(mcu_socket_width/mcu_unit_resolution/h_unit) * mcu_unit_r
 mcu_v_unit_size = ceil(mcu_socket_length/mcu_unit_resolution/v_unit) * mcu_unit_resolution;
 
 // Useful for manipulating layout elements
-function slice(array, bounds) = [
+function slice(array, bounds, extra_data_override="") = [
     let(
         lower = bounds[0] >= 0 ? bounds[0] : max(len(array)+bounds[0], 0),
         upper = bounds[1] > 0 ? min(bounds[1], len(array)) : len(array)+bounds[1],
         step = len(bounds) == 3 ? bounds[2] : 1
     )
     for (i = [lower:step:upper-1])
-       array[i]
+       len(array[i]) >= 2 && extra_data_override != ""
+            ? [array[i][0], array[i][1], extra_data_override]
+            : array[i]
 ];

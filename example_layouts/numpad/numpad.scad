@@ -47,13 +47,6 @@ base_mcu_layout = [];
 // TRRS Position(s)
 base_trrs_layout = [];
 
-// Plate Layout (if different than PCB)
-//     (extra_data = component_type)
-base_plate_layout = [];
-
-// Whether to only use base_plate_layout to generate the plate footprint
-use_plate_layout_only = false;
-
 // Stabilizer layout
 //     (extra_data = [key_size, left_offset, right_offset, switch_offset=0])
 //     (see stabilizer_spacing.scad for presets)
@@ -63,13 +56,20 @@ base_stab_layout = [
   [[[4,3],2,[-90,4,3]],[1,1,1,1],2u],
 ];
 
-// Standoff hole layout
-//     (extra_data = [standoff_integration_override, standoff_attachment_override])
-base_standoff_layout = [];
-
 // Via layout
 //     (extra_data = [via_width, via_length])
 base_via_layout = [];
+
+// Plate Layout (if different than PCB)
+//     (extra_data = component_type)
+base_plate_layout = [];
+
+// Whether to only use base_plate_layout to generate the plate footprint
+use_plate_layout_only = false;
+
+// Standoff layout
+//     (extra_data = [standoff_integration_override, standoff_attachment_override])
+base_standoff_layout = [];
 
 // Whether to flip the layout
 invert_layout_flag = false;
