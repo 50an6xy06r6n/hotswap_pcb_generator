@@ -4,7 +4,7 @@
   "description": "Generate a 3d-printable solderless hotswap \"PCB\" given a KLE layout",
   "main": "index.js",
   "dependencies": {
-    "@ijprest/kle-serial": "github:kevin-wells/kle-serial#master"
+    "@ijprest/kle-serial": "github:mrzealot/kle-serial#master"
   },
   "devDependencies": {},
   "scripts": {
