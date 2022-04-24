@@ -46,7 +46,7 @@ Unless your printer is super dialed-in, you'll probably need to do some amount o
 
 As mentioned previously, elephant's foot can cause issues with the switch cutouts in the plate. If you notice this, use your utility knife to trim off the excess. If you find yourself needing to take off a lot of material, it may be faster to tweak your print settings and print it again.
 
-If any standoffs standoffs have their internal holes plugged up, the 1/16" drill bit is the exact size needed to create a good pilot hole that the screws can cut threads into.
+If any standoffs have their internal holes plugged up, the 1/16" drill bit is the exact size needed to create a good pilot hole that the screws can cut threads into.
 
 On the PCB, the two most common issues involve the small holes that hold the switch pins. On the top side, the holes that hold the small plastic pins can easily get clogged up or be a little misshapen, causing the switch to not fit nicely, as in the image below). You can clear these holes by gently drilling them out with the 1/16" bit for a near-perfect fit.
 <p align="center"><img src="../img/build_guide/02_socket_closeup.JPG" width="750px"></p>
