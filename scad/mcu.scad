@@ -37,11 +37,11 @@ module socketed_mcu(borders=[0,0,0,0]) {
         // Wire Channels
         for (row = [-1,1]) {
             for (pin = [0:mcu_pin_count/2-1]) {
-                translate([row*mcu_row_spacing/2,(pin+0.5)*mcu_pin_pitch,-wire_diameter/3]) 
+                translate([row*mcu_row_spacing/2,(pin+0.5)*mcu_pin_pitch+mcu_pin_offset,-wire_diameter/3]) 
                     cylinder(h=pcb_thickness,d=wire_diameter);
                 translate([
                     row*(mcu_row_spacing/2-1),
-                    (pin+0.5)*mcu_pin_pitch,
+                    (pin+0.5)*mcu_pin_pitch+mcu_pin_offset,
                     pcb_thickness-wire_diameter/3
                 ]) rotate([0,row*90,0])
                     cylinder(h=1000,d=wire_diameter);
@@ -92,7 +92,7 @@ module bare_mcu(borders=[0,0,0,0]) {
             for (pin = [0:mcu_pin_count/2-1]) {
                 translate([
                     row*(mcu_row_spacing/2-1),
-                    (pin+0.5)*mcu_pin_pitch,
+                    (pin+0.5)*mcu_pin_pitch+mcu_pin_offset,
                     pcb_thickness-wire_diameter/3
                 ]) rotate([0,row*90,0])
                     cylinder(h=1000,d=wire_diameter);
@@ -102,7 +102,7 @@ module bare_mcu(borders=[0,0,0,0]) {
         translate([-mcu_width/2,0,pcb_thickness]) 
             cube([mcu_width, mcu_length,mcu_pcb_thickness+1]);
         // Side cutout
-        translate([-(mcu_socket_width+2)/2,0,pcb_thickness]) 
+        translate([-(mcu_socket_width+2)/2,mcu_pin_offset,pcb_thickness]) 
             cube([mcu_socket_width+2,mcu_pin_count/2*mcu_pin_pitch,mcu_pcb_thickness+1]);
         // USB cutout
         translate([-mcu_connector_width/2,-3,pcb_thickness]) 
