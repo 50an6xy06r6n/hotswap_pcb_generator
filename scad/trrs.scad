@@ -17,6 +17,8 @@ module trrs(borders=[0,0,0,0]) {
                     pj320a_trrs(invert_borders(borders,layout_type == "row"));
                 } else if(trrs_type == "pj324m") {
                     pj324m_trs(invert_borders(borders,layout_type == "row"));
+                } else {
+                    assert(false, "trrs_type is invalid");
                 }
             }
 }
