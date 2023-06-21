@@ -94,6 +94,7 @@
 ### TRRS Parameters:
 | Name | Description | Location |
 | ---- | ----------- | -------- |
+| `trrs_type` | Type of TRRS or TRS socket used. supported values are `pj320a` for the popular TRRS PJ-320A socket, and `pj324m` for the PJ-324M TRS socket. | `parameters.scad` |
 | `trrs_width` | Width of the TRRS socket in mm. Default value of 6 works for the popular PJ-320A socket. | `parameters.scad` |
 | `trrs_length` | Length of the TRRS socket in mm (not including the round flange). Default value of 12.1 works for the popular PJ-320A socket. | `parameters.scad` |
 | `trrs_height` | Height of the TRRS socket in mm. Default value of 5 works for the popular PJ-320A socket. | `parameters.scad` |

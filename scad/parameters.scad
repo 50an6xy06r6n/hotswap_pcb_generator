@@ -103,6 +103,7 @@ trrs_nub_spacing = 7;
 trrs_nub_offset = 1.5;  // Distance from the front of the socket (not including flange)
 trrs_plug_width = 10;  // Width of a plug for plate clearance
 
+
 /* TRS Socket Parameters */
 //trrs_type = "pj324m";
 //trrs_width = 11.55;
@@ -116,6 +117,7 @@ trrs_plug_width = 10;  // Width of a plug for plate clearance
 //trrs_nub_spacing = 7;
 //trrs_nub_offset = 1.5;  // Distance from the front of the socket (not including flange)
 //trrs_plug_width = 10;  // Width of a plug for plate clearance
+
 
 /* Via Parameters */
 via_width = 5;
