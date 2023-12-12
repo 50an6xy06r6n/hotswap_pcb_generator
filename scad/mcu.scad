@@ -148,6 +148,17 @@ module mcu_plate_footprint(borders=[0,0,0,0]) {
     }
 }
 
+module mcu_plate_footprint_trim(borders=[0,0,0,0], trim=undef) {
+    if (trim)
+    translate([h_unit/2,-mcu_v_unit_size*v_unit/2,0]) {
+        border_trim(
+            [mcu_h_unit_size*h_unit,mcu_v_unit_size*v_unit], 
+            borders,
+            trim
+        );
+    }
+}
+
 module mcu_plate_cutout_footprint() {
     if (mcu_type == "bare") {
         translate([h_unit/2,-mcu_v_unit_size*v_unit/2,0]) {
@@ -203,7 +214,7 @@ module mcu_case_cutout() {
     translate([
         h_unit/2,
         0,
-        plate_thickness/2-pcb_plate_spacing+mcu_pcb_thickness/2+mcu_connector_offset
+        plate_thickness/2-pcb_plate_spacing+mcu_pcb_thickness/2+mcu_connector_offset+mcu_pcb_offset
     ]) rotate([-90,0,0]) {
         hull() {
             for (i=[-1,1]) translate([i*(mcu_connector_width-mcu_connector_height)/2,0,-mcu_connector_length-2])

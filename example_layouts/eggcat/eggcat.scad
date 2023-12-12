@@ -15,7 +15,13 @@ include <stabilizer_spacing.scad>
             left_border,
             right_border
         ],
-        extra_data                              // Extra data (depending on component type)
+        extra_data,                             // Extra data (depending on component type)
+        [                                       // Trim (optional)
+            top_border,
+            bottom_border,
+            left_border,
+            right_border
+        ],
     ]
 */
 
@@ -75,14 +81,14 @@ base_via_layout = [
 base_plate_layout = [
     concat(
         slice(base_switch_layout, [0,-2], ["switch"]),
-        [[[[6,0.5],mcu_h_unit_size],[-2,0,h_border_width,0], ["mcu"]]],
+        [[[[6,0.5],mcu_h_unit_size],[-2,0,h_border_width,0], ["mcu"], [false, false, false, true]]],
         slice(base_trrs_layout, [0,0], ["trrs"])
     ),
     slice(base_switch_layout, [-2,0], ["switch"])
 ];
 
 // Whether to only use base_plate_layout to generate the plate footprint
-use_plate_layout_only = false;
+use_plate_layout_only = true;
 
 // Standoff layout
 //     (extra_data = [standoff_integration_override, standoff_attachment_override])
@@ -94,15 +100,15 @@ base_standoff_layout = [
     [[[3.5,3]]],
     [[[4.5,0.25]]],
     [[[4.875,5.125],1.5,[60,4.875,4.625]], [0,0,0,0]],
-    [[[6,2.5]]],
     // PCB-Backplate standoffs
-    [[[-0.5,-0.375]],[0,0,0,0],["plate", "backplate"]],
+    [[[-0.5,-0.375+.05*mm]],[0,0,0,0],["plate", "backplate"]],
     [[[-0.5,3.625]],[0,0,0,0],["plate", "backplate"]],
-    [[[4,3.625]],[0,0,0,0],["plate", "backplate"]],
+    [[[3.5,3.75]],[0,0,0,0],["plate", "backplate"]],
+    [[[3,-0.53125]],[0,0,0,0],["plate", "backplate"]],
     [[[4.125,6.125],1.5,[60,4.875,4.625]],[0,0,0,0],["plate", "backplate"]],
     [[[6.5,3]],[0,0,0,0],["plate", "backplate"]],
     [[[5.5,-0.1875]],[0,0,0,0],["plate", "backplate"]],
-    [[[7,0]],[0,0,0,0],["plate", "backplate"]],
+    [[[7.125,0]],[0,0,0,0],["plate", "backplate"]],
 ];
 
 // Whether to flip the layout

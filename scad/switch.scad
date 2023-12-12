@@ -217,6 +217,18 @@ module switch_plate_footprint(borders=[1,1,1,1]) {
         );
 }
 
+module switch_plate_footprint_trim(borders=[1,1,1,1], trim=undef) {
+    if (trim)
+    translate([h_unit/2,-v_unit/2,0])
+        border_trim(
+            [socket_size,socket_size], 
+            borders,
+            trim,
+            h_border_width, 
+            v_border_width
+        );
+}
+
 module switch_plate_cutout_footprint() {
     translate([h_unit/2,-v_unit/2,0]) {
         square([plate_cutout_size, plate_cutout_size],center=true);

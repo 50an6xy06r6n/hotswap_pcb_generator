@@ -34,7 +34,7 @@ module pcb(switch_layout, mcu_layout, trrs_layout, stab_layout, standoff_layout,
             stabilizer_pcb_cutout($extra_data);
         }
         layout_pattern(standoff_layout) {
-            pcb_standoff_hole($extra_data);
+            #pcb_standoff_hole($extra_data);
         }
         layout_pattern(via_layout) {
             via($extra_data);

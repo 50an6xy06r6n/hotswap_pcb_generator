@@ -27,19 +27,35 @@ module plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, sta
     scale(1/scale_factor)
     {
         if (use_plate_layout_only) {
-            // Hull each group and then union separately, which allows for concavity
-            union() for (group = plate_layout) {
-                hull() {
+            // Hull each group and then union separately, which allows for concavity, and then trim external borders
+            difference() {
+                union() for (group = plate_layout) {
+                    hull() {
+                        layout_pattern(group) {
+                            let(component_type = $extra_data[0]) {
+                                if (component_type == "switch")
+                                    switch_plate_footprint($borders);
+                                else if (component_type == "mcu"){
+                                    mcu_plate_footprint($borders);}
+                                else if (component_type == "trrs")
+                                    trrs_plate_footprint($borders);
+                                else if (component_type == "stab")
+                                    stabilizer_plate_footprint($borders, $extra_data[1]);
+                            }
+                        }
+                    }
+                }
+                union() for (group = plate_layout) {
                     layout_pattern(group) {
                         let(component_type = $extra_data[0]) {
                             if (component_type == "switch")
-                                switch_plate_footprint($borders);
+                                switch_plate_footprint_trim($borders, $trim);
                             else if (component_type == "mcu"){
-                                mcu_plate_footprint($borders);}
+                                mcu_plate_footprint_trim($borders, $trim);}
                             else if (component_type == "trrs")
-                                trrs_plate_footprint($borders);
+                                trrs_plate_footprint_trim($borders, $trim);
                             else if (component_type == "stab")
-                                stabilizer_plate_footprint($borders, $extra_data[1]);
+                                stabilizer_plate_footprint_trim($borders, $extra_data[1], $trim);
                         }
                     }
                 }
@@ -106,5 +122,6 @@ module plate(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, 
     }
 }
 
-plate(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final, stab_layout_final, standoff_layout_final);
-//plate_footprint(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final);
+//plate(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final, stab_layout_final, standoff_layout_final);
+//plate_margin = 0;
+plate_footprint(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final);

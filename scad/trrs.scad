@@ -74,6 +74,15 @@ module trrs_plate_footprint(borders=[0,0,0,0]) {
         );
 }
 
+module trrs_plate_footprint_trim(borders=[0,0,0,0], trim=undef) {
+    if (trim) translate([h_unit/2,-v_unit/2,0])
+        border_trim(
+            [h_unit,v_unit], 
+            borders,
+            trim
+        );
+}
+
 module trrs_plate_cutout_footprint() {
     if (switch_type == "mx") {
         // MX spacing is sufficient to fit the TRRS socket with no cutout, so we just need plug clearance
@@ -123,7 +132,7 @@ module trrs_case_cutout() {
     translate([
         h_unit/2,
         0,
-        plate_thickness/2-pcb_plate_spacing+trrs_flange_diameter/2-2
+        plate_thickness/2-pcb_plate_spacing+trrs_flange_diameter/2-trrs_inset
     ]) rotate([-90,0,0]) {
         cylinder(h=1000, d=trrs_plug_width);
         translate([-trrs_plug_width/2,-trrs_plug_width,0])

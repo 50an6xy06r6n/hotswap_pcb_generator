@@ -7,7 +7,9 @@ diode_pin_angle = 5;  // [0:15]
 // Amount the diode folds over
 diode_foldover = 4;
 // Overall thickness of PCB
-pcb_thickness = 4;  // [4:0.1:10]
+pcb_thickness = 1.6;  // [1.6:0.1:10]
+// If using a traditional PCB, cases can still be generated
+pcb_type = "traditional";  // [printed, traditional]
 
 /* Switch Parameters */
 // Switch type
@@ -26,7 +28,7 @@ stabilizer_type = "pcb";  // [pcb, plate]
 // Type of case to generate
 case_type = "plate_case";  // [sandwich, plate_case, backplate_case]
 // Thickness of case walls
-case_wall_thickness = 2;
+case_wall_thickness = 4;
 // Case wall draft angle (convex cases only)
 case_wall_draft_angle = 15;
 // Width of the case chamfer (convex cases only)
@@ -60,11 +62,11 @@ plate_precision = 1/100;
 
 /* Backplate Parameters */
 // Thickness of the backplate
-backplate_thickness = 2;
+backplate_thickness = 3;
 // Thickness of flange around backplate if using an integrated-plate case
-backplate_case_flange = 1;
+backplate_case_flange = 2;
 // Spacing between the bottom of the PCB and the top of the backplate
-pcb_backplate_spacing = 4;
+pcb_backplate_spacing = 3;
 
 
 /* MCU Parameters (Default values for Pro Micro) */
@@ -80,8 +82,9 @@ mcu_pin_offset = 0;  // Offset from the rear of the PCB
 mcu_connector_width = 13;  // Width of the connector (for plate cutout)
 mcu_connector_length = 4;  // Distance the connector extends onto the MCU (for plate cutout)
 mcu_connector_height = 8;  // Height of the plug housing
-mcu_connector_offset = 2; // Vertical offset of plug center from PCB center
+mcu_connector_offset = 1.5; // Vertical offset of plug center from PCB center
 mcu_pcb_thickness = 1.6;
+mcu_pcb_offset = 2.54;
 mcu_socket_width = mcu_width+4;
 mcu_socket_length = mcu_length+4;
 expose_mcu = false;
@@ -133,7 +136,7 @@ standoff_counterbore_diameter = 4.5;
 // Increase this if your standoffs are a bit too long due to printing tolerances
 fit_tolerance = 0;
 // Resolution of holes (affects render times)
-$fn=12;
+$fn=120;
 
 
 /* Advanced Parameters (related to switch size) */
@@ -146,35 +149,32 @@ v_unit = unit;
 // Spacing of grid for MX pins
 grid = 1.27;
 // Size of socket body
+assert(
+    switch_type == "mx" || switch_type == "choc",
+    "switch_type is invalid"
+);
+
 socket_size =
-    switch_type == "mx"
-    ? 14
-    : switch_type == "choc"
-        ? 15
-        : assert(false, "switch_type is invalid");
+    switch_type == "mx" ? 14
+    : switch_type == "choc" ? 15
+    : undef;
 // Depth of the socket holes
 socket_depth = 3.5;
 // Thickness of the plate
 plate_thickness =
-    switch_type == "mx"
-    ? 1.5
-    : switch_type == "choc"
-        ? 1.3
-        : assert(false, "switch_type is invalid");
+    switch_type == "mx" ? 1.5
+    : switch_type == "choc" ? 1.3
+    : undef;
 // Size of the plate cutout
 plate_cutout_size =
-    switch_type == "mx"
-    ? 14
-    : switch_type == "choc"
-        ? 13.8
-        : assert(false, "switch_type is invalid");
+    switch_type == "mx" ? 14
+    : switch_type == "choc" ? 13.8
+    : undef;
 // Spacing between the top of the PCB and top of the plate
 pcb_plate_spacing =
-    switch_type == "mx"
-    ? 5
-    : switch_type == "choc"
-        ? 2.2
-        : assert(false, "switch_type is invalid");
+    switch_type == "mx" ? 5
+    : switch_type == "choc" ? 2.2
+    : undef;
 
 // Total assembly thickness (for reference)
 total_thickness =
@@ -203,7 +203,7 @@ function slice(array, bounds, extra_data_override="") = [
         step = len(bounds) == 3 ? bounds[2] : 1
     )
     for (i = [lower:step:upper-1])
-       len(array[i]) >= 2 && extra_data_override != ""
-            ? [array[i][0], array[i][1], extra_data_override]
+       (len(array[i]) >= 2 && extra_data_override != "")
+            ? [array[i][0], array[i][1], extra_data_override, array[i][3]]
             : array[i]
 ];

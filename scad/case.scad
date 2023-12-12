@@ -53,7 +53,8 @@ module case(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, s
         difference() {
             union() {
                 // Hollow out inside of case
-                translate([0,0,-height+plate_thickness/2]) difference() {
+                translate([0,0,-height+plate_thickness/2]) 
+                difference() {
                     case_shell(height, switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
                     translate([0,0,-1])
                     linear_extrude(height-plate_thickness+1, convexity=10)
@@ -71,6 +72,20 @@ module case(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, s
             }
             layout_pattern(mcu_layout) {
                 mcu_case_cutout();
+            }
+            linear_extrude(plate_thickness+1, center=true)
+            intersection() {
+                offset(-case_wall_thickness)
+                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+                layout_pattern(mcu_layout) {
+                    translate([h_unit/2,-mcu_v_unit_size*v_unit/2,0])
+                    offset(10,$fn=360)
+                    offset(delta=-10)
+                    border_footprint(
+                        [mcu_socket_width,mcu_v_unit_size*v_unit], 
+                        [1000,(unit+trrs_plug_width)/2,0,100]
+                    );
+                }
             }
             layout_pattern(trrs_layout) {
                 trrs_case_cutout();
