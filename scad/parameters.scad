@@ -16,6 +16,9 @@ pcb_type = "printed";  // [printed, traditional]
 switch_type = "mx";  // [mx, choc]
 // Switch orientation (based on LED location)
 switch_orientation = "south";  // [north, south]
+// Whether your switch has 5 pins (2 plastic, for stability) or just 3
+// (central plastic post, two metal). true fits all, false is cleaner.
+five_pin_switch = true;
 // Whether to use experimental diode leg contact
 use_folded_contact = false;
 
