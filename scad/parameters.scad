@@ -85,6 +85,7 @@ expose_mcu = false; // Opens up cutout grid above MCU footprint
 
 
 /* TRRS Socket Parameters */
+trrs_type = "pj320a";
 trrs_width = 6;
 trrs_length = 12.1;
 trrs_height = 5;
@@ -96,6 +97,21 @@ trrs_nub_height = 1;
 trrs_nub_spacing = 7;
 trrs_nub_offset = 1.5;  // Distance from the front of the socket (not including flange)
 trrs_plug_width = 10;  // Width of a plug for plate clearance
+
+
+/* TRS Socket Parameters */
+//trrs_type = "pj324m";
+//trrs_width = 11.55;
+//trrs_length = 14.25;
+//trrs_height = 6.3;
+//trrs_flange_length = 3.5;
+//trrs_flange_diameter = 6;
+//trrs_pin_spacing = 4.4;
+//trrs_nub_diameter = 1.5;  // Little locating nubs on the bottom of the socket
+//trrs_nub_height = 1;
+//trrs_nub_spacing = 7;
+//trrs_nub_offset = 1.5;  // Distance from the front of the socket (not including flange)
+//trrs_plug_width = 10;  // Width of a plug for plate clearance
 
 
 /* Via Parameters */

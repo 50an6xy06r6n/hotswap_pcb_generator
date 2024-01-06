@@ -1,0 +1,111 @@
+[
+  [
+    {
+      "f": 1
+    },
+    "\n\n`\n\n\n\n\n\n\n`",
+    "\n\n1\n\n\n\n\n\n\n1",
+    "\n\n2\n\n\n\n\n\n\n2",
+    "\n\n3\n\n\n\n\n\n\n3",
+    "\n\n4\n\n\n\n\n\n\n4",
+    "\n\n5\n\n\n\n\n\n\n5",
+    {
+      "x": 2
+    },
+    "\n\n6\n\n\n\n\n\n\n6",
+    "\n\n7\n\n\n\n\n\n\n7",
+    "\n\n8\n\n\n\n\n\n\n8",
+    "\n\n9\n\n\n\n\n\n\n9",
+    "\n\n0\n\n\n\n\n\n\n0",
+    {
+      "a": 7
+    },
+    "Bksp"
+  ],
+  [
+    {
+      "a": 4
+    },
+    "\n\n`\n\n\n\n\n\n\nTab",
+    "\n\n1\n\n\n\n\n\n\nQ",
+    "\n\n2\n\n\n\n\n\n\nW",
+    "\n\n3\n\n\n\n\n\n\nE",
+    "\n\n4\n\n\n\n\n\n\nR",
+    "\n\n5\n\n\n\n\n\n\nT",
+    {
+      "x": 2
+    },
+    "\n\n6\n\n\n\n\n\n\nY",
+    "\n\n7\n\n\n\n\n\n\nU",
+    "\n\n8\n\n\n\n\n\n\nI",
+    "\n\n9\n\n\n\n\n\n\nO",
+    "\n\n0\n\n\n\n\n\n\nP",
+    {
+      "a": 7
+    },
+    "Del"
+  ],
+  [
+    {
+      "a": 4
+    },
+    "\n\nDel\n\n\n\n\n\n\nEsc",
+    "\n\nF1\n\n\n\n\n\n\nA",
+    "\n\nF2\n\n\n\n\n\n\nS",
+    "\n\nF3\n\n\n\n\n\n\nD",
+    "\n\nF4\n\n\n\n\n\n\nF",
+    "\n\nF5\n\n\n\n\n\n\nG",
+    {
+      "x": 2
+    },
+    "\n\nF6\n\n\n\n\n\n\nH",
+    "\n\n-\n\n\n\n\n\n\nJ",
+    "\n\n=\n\n\n\n\n\n\nK",
+    "\n\n[\n\n\n\n\n\n\nL",
+    "\n\n]\n\n\n\n\n\n\n;",
+    "\n\n\\\n\n\n\n\n\n\n'"
+  ],
+  [
+    {
+      "a": 7
+    },
+    "Shift",
+    {
+      "a": 4
+    },
+    "\n\nF7\n\n\n\n\n\n\nZ",
+    "\n\nF8\n\n\n\n\n\n\nX",
+    "\n\nF9\n\n\n\n\n\n\nC",
+    "\n\nF10\n\n\n\n\n\n\nV",
+    "\n\nF11\n\n\n\n\n\n\nB",
+    {
+      "x": 2
+    },
+    "\n\nF12\n\n\n\n\n\n\nN",
+    "\n\nNUHS\n\n\n\n\n\n\nM",
+    "\n\nNUBS\n\n\n\n\n\n\n,",
+    "\n\nPgUp\n\n\n\n\n\n\n.",
+    "\n\nPgDn\n\n\n\n\n\n\n/",
+    {
+      "a": 7
+    },
+    "Entr"
+  ],
+  [
+    "Fn",
+    "Ctrl",
+    "Alt",
+    "Super",
+    "&dArr;",
+    "",
+    {
+      "x": 2
+    },
+    "",
+    "&uArr;",
+    "&larr;",
+    "&darr;",
+    "&uarr;",
+    "&rarr;"
+  ]
+]
