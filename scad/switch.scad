@@ -1,5 +1,6 @@
 include <parameters.scad>
 include <param_processing.scad>
+use <teardrop.scad>
 
 // TODO angle portion of top wire guide that goes past switch, so that the
 // switch pin makes contact on an angle with the wire strands, rather than
@@ -124,17 +125,17 @@ module wire_channels(
     translate([0,
             row_channel_y_offset,
             pcb_thickness/2-wire_diameter/3
-    ]) rotate([0,90,0])
-        cylinder(h=row_cutout_length,d=wire_diameter,center=true);
+    ]) rotate([upsidedown_switch?-90:90,0,90])
+        teardrop(row_cutout_length,wire_diameter/2, center=true);
     // Column wire
     translate([
             col_channel_xy.x,
             col_channel_xy.y,
             -(pcb_thickness/2-wire_diameter/3)
     ]) 
-        rotate([90,0,rotate_column?90:0])
+        rotate([upsidedown_switch?-90:90,0,rotate_column?90:0])
         translate([0,0,-4*grid])
-        cylinder(h=col_cutout_length,d=wire_diameter,center=true);
+        teardrop(col_cutout_length,wire_diameter/2, center=true);
 }
 
 module socket_cleanup_cube(borders){
