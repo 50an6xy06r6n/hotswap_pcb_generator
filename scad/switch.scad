@@ -47,36 +47,11 @@ module mx_improved_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
     render() translate([h_unit/2,-v_unit/2,0]) rotate([0,0,switch_rotation])
         intersection() {
             union() {
-                // Central pin
-                translate([0,0,pcb_thickness/2-socket_depth])
-                    cylinder(h=pcb_thickness+1,r=2.1);
-                // Side pins
-                if (five_pin_switch){
-                    for (x = [-4,4]) {
-                        translate([x*grid,0,pcb_thickness/2-socket_depth])
-                            cylinder(h=pcb_thickness+1,r=1.05);
-                    }
-                }
-                // Top switch pin
-                translate([2*grid,4*grid,pcb_thickness/2-socket_depth])
-                    cylinder(h=pcb_thickness+1,r=1);
+                mx_socket_cutout_shared(rotate_column);
                 // Bottom switch pin
                 translate([-3*grid,2*grid,-(pcb_thickness+1)/2]) {
                     translate([-.625,-0.75,0]) cube([1.25,1.5,pcb_thickness+1]);
                 }
-                // Diode cathode cutout
-                translate([3*grid,-4*grid,0])
-                    cylinder(h=pcb_thickness+1,r=.7,center=true);
-
-                // Wire Channels
-                // Row wire
-                translate([0,4*grid,pcb_thickness/2-wire_diameter/3]) rotate([0,90,0])
-                    cylinder(h=row_cutout_length,d=wire_diameter,center=true);
-                // Column wire
-                translate([3*grid,-4*grid,-(pcb_thickness/2-wire_diameter/3)]) 
-                    rotate([90,0,rotate_column?90:0])
-                        translate([0,0,-4*grid])
-                        cylinder(h=col_cutout_length,d=wire_diameter,center=true);
 
                 // Diode Channel
                 translate([-3*grid,-1*grid-.25,pcb_thickness/2])
@@ -89,17 +64,7 @@ module mx_improved_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                     cube([5*grid,1,2],center=true);
             }
 
-            translate([
-                h_border_width/2 * (borders[3] - borders[2]),
-                v_border_width/2 * (borders[0] - borders[1]),
-                -1
-            ]) {
-                cube([
-                    socket_size+h_border_width*(borders[2]+borders[3])+0.02,
-                    socket_size+v_border_width*(borders[0]+borders[1])+0.02,
-                    2*pcb_thickness
-                ], center=true);
-            }
+            socket_cleanup_cube(borders);
         }
 }
 
@@ -108,36 +73,11 @@ module mx_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
     render() translate([h_unit/2,-v_unit/2,0]) rotate([0,0,switch_rotation])
         intersection() {
             union() {
-                // Central pin
-                translate([0,0,pcb_thickness/2-socket_depth])
-                    cylinder(h=pcb_thickness+1,r=2.1);
-                // Side pins
-                if (five_pin_switch){
-                    for (x = [-4,4]) {
-                        translate([x*grid,0,pcb_thickness/2-socket_depth])
-                            cylinder(h=pcb_thickness+1,r=1.05);
-                    }
-                }
-                // Top switch pin
-                translate([2*grid,4*grid,pcb_thickness/2-socket_depth])
-                    cylinder(h=pcb_thickness+1,r=1);
+                mx_socket_cutout_shared(rotate_column);
                 // Bottom switch pin
                 translate([-3*grid,2*grid,(pcb_thickness+1)/2])
                     rotate([180+diode_pin_angle,0,0])
                         cylinder(h=pcb_thickness+1,r=.7);
-                // Diode cathode cutout
-                translate([3*grid,-4*grid,0])
-                    cylinder(h=pcb_thickness+1,r=.7,center=true);
-
-                // Wire Channels
-                // Row wire
-                translate([0,4*grid,pcb_thickness/2-wire_diameter/3]) rotate([0,90,0])
-                    cylinder(h=row_cutout_length,d=wire_diameter,center=true);
-                // Column wire
-                translate([3*grid,-4*grid,-(pcb_thickness/2-wire_diameter/3)]) 
-                    rotate([90,0,rotate_column?90:0])
-                        translate([0,0,-4*grid])
-                        cylinder(h=col_cutout_length,d=wire_diameter,center=true);
 
                 // Diode Channel
                 translate([-3*grid,-1*grid-.25,pcb_thickness/2])
@@ -148,18 +88,53 @@ module mx_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                     cube([4*grid,2,3],center=true);
             }
 
-            translate([
-                h_border_width/2 * (borders[3] - borders[2]),
-                v_border_width/2 * (borders[0] - borders[1]),
-                -1
-            ]) {
-                cube([
-                    socket_size+h_border_width*(borders[2]+borders[3])+0.02,
-                    socket_size+v_border_width*(borders[0]+borders[1])+0.02,
-                    2*pcb_thickness
-                ], center=true);
-            }
+            socket_cleanup_cube(borders);
         }
+}
+
+module mx_socket_cutout_shared(rotate_column){
+    // Central pin
+    translate([0,0,pcb_thickness/2-socket_depth])
+        cylinder(h=pcb_thickness+1,r=2.1);
+    // Side pins
+    if (five_pin_switch){
+        for (x = [-4,4]) {
+            translate([x*grid,0,pcb_thickness/2-socket_depth])
+                cylinder(h=pcb_thickness+1,r=1.05);
+        }
+    }
+    // Top switch pin
+    translate([2*grid,4*grid,pcb_thickness/2-socket_depth])
+        cylinder(h=pcb_thickness+1,r=1);
+
+    // Diode cathode cutout
+    translate([3*grid,-4*grid,0])
+        cylinder(h=pcb_thickness+1,r=.7,center=true);
+
+    // Wire Channels
+    // Row wire
+    translate([0,4*grid,pcb_thickness/2-wire_diameter/3]) rotate([0,90,0])
+        cylinder(h=row_cutout_length,d=wire_diameter,center=true);
+
+    // Column wire
+    translate([3*grid,-4*grid,-(pcb_thickness/2-wire_diameter/3)]) 
+        rotate([90,0,rotate_column?90:0])
+        translate([0,0,-4*grid])
+        cylinder(h=col_cutout_length,d=wire_diameter,center=true);
+}
+
+module socket_cleanup_cube(borders){
+    translate([
+            h_border_width/2 * (borders[3] - borders[2]),
+            v_border_width/2 * (borders[0] - borders[1]),
+            -1
+    ]) {
+        cube([
+                socket_size+h_border_width*(borders[2]+borders[3])+0.02,
+                socket_size+v_border_width*(borders[0]+borders[1])+0.02,
+                2*pcb_thickness
+        ], center=true);
+    }
 }
 
 module choc_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
@@ -205,17 +180,7 @@ module choc_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                     cube([2,5,3.5],center=true);
             }
 
-            translate([
-                h_border_width/2 * (borders[3] - borders[2]),
-                v_border_width/2 * (borders[0] - borders[1]),
-                -1
-            ]) {
-                cube([
-                    socket_size+h_border_width*(borders[2]+borders[3])+0.02,
-                    socket_size+v_border_width*(borders[0]+borders[1])+0.02,
-                    2*pcb_thickness
-                ], center=true);
-            }
+            socket_cleanup_cube(borders);
         }
 }
 
