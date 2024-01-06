@@ -47,6 +47,16 @@ assert(
     "switch_orientation is invalid"
 );
 
+// Channels are modelled as a teardrop to print the overhang better.
+// Since changing the row/column layout flips the switch print
+// orientation, we also need to flip the teardrop.
+upsidedown_switch = 
+    layout_type == "column"
+    ? false 
+    : layout_type == "row"
+        ? true 
+        : assert(false, "layout_type parameter is invalid");
+
 // Moves the flat part to the top if layout is row-staggered so column wires
 // can be routed. PCB should be printed upside down in this case.
 border_z_offset =
