@@ -1,6 +1,12 @@
 include <parameters.scad>
 include <param_processing.scad>
 
+// TODO angle portion of top wire guide that goes past switch, so that the
+// switch pin makes contact on an angle with the wire strands, rather than
+// passing fully through. Make the angle customisable.
+// TODO convert bottom channel into teardrop shape, to reduce issues with
+// overhang printing. (parameterisable?)
+// TODO Make 5 pin optional
 
 module switch_socket(borders=[1,1,1,1], rotate_column=false) {
     difference() {
@@ -45,9 +51,11 @@ module mx_improved_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                 translate([0,0,pcb_thickness/2-socket_depth])
                     cylinder(h=pcb_thickness+1,r=2.1);
                 // Side pins
-                for (x = [-4,4]) {
-                    translate([x*grid,0,pcb_thickness/2-socket_depth])
-                        cylinder(h=pcb_thickness+1,r=1.05);
+                if (five_pin_switch){
+                    for (x = [-4,4]) {
+                        translate([x*grid,0,pcb_thickness/2-socket_depth])
+                            cylinder(h=pcb_thickness+1,r=1.05);
+                    }
                 }
                 // Top switch pin
                 translate([2*grid,4*grid,pcb_thickness/2-socket_depth])
@@ -104,9 +112,11 @@ module mx_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                 translate([0,0,pcb_thickness/2-socket_depth])
                     cylinder(h=pcb_thickness+1,r=2.1);
                 // Side pins
-                for (x = [-4,4]) {
-                    translate([x*grid,0,pcb_thickness/2-socket_depth])
-                        cylinder(h=pcb_thickness+1,r=1.05);
+                if (five_pin_switch){
+                    for (x = [-4,4]) {
+                        translate([x*grid,0,pcb_thickness/2-socket_depth])
+                            cylinder(h=pcb_thickness+1,r=1.05);
+                    }
                 }
                 // Top switch pin
                 translate([2*grid,4*grid,pcb_thickness/2-socket_depth])
@@ -160,9 +170,11 @@ module choc_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                 translate([0,0,pcb_thickness/2-socket_depth])
                     cylinder(h=pcb_thickness+1,d=3.5);
                 // Side pins
-                for (x = [-5.5,5.5]) {
-                    translate([x,0,pcb_thickness/2-socket_depth])
-                        cylinder(h=pcb_thickness+1,r=1.05);
+                if (five_pin_switch){
+                    for (x = [-5.5,5.5]) {
+                        translate([x,0,pcb_thickness/2-socket_depth])
+                            cylinder(h=pcb_thickness+1,r=1.05);
+                    }
                 }
                 // Top switch pin
                 translate([0,5.9,pcb_thickness/2-socket_depth])
