@@ -1,6 +1,8 @@
 include <parameters.scad>
 include <stabilizer_spacing.scad>
 
+use <utils.scad>
+
 /* [Layout Values] */
 /* Layout Format (each key):
     [
@@ -16,7 +18,7 @@ include <stabilizer_spacing.scad>
             right_border
         ],
         extra_data,                             // Extra data (depending on component type)
-        [                                       // Trim (optional)
+        [                                       // Trim (optional booleans)
             top_border,
             bottom_border,
             left_border,
@@ -51,8 +53,8 @@ base_switch_layout = [
     [[[5,0.25],1,[0,0,0]],[0,1,2,0],false],
     [[[5,1.25],1,[0,0,0]],[1,1,2,0],false],
     [[[5,2.25],1,[0,0,0]],[1,1+15*mm,2,0],false],
-    [[[4.875,4.625],1.5,[60,4.875,4.625]],[30*mm,1,0.25*unit*mm,17.11*mm],true],
-    [[[4.875,5.625],1.5,[60,4.875,4.625]],[1,0,0.25*unit*mm,17.11*mm],true],
+    [[[4.875,4.625],1.5,[60,4.875,4.625]],[30*mm,1,0.25*unit*mm,20*mm],true],
+    [[[4.875,5.625],1.5,[60,4.875,4.625]],[1,0,0.25*unit*mm,20*mm],true, [false, true, false, false]],
 ];
 
 // MCU Position(s)
@@ -62,7 +64,7 @@ base_mcu_layout = [
 
 // TRRS Position(s)
 base_trrs_layout = [
-    [[[6.5,2.5],1,[-90,7,3]],[0,h_unit/2+h_border_width,0,5.97]],
+    [[[6.5,2.5],1,[-90,7,3]],[0,h_unit/2+h_border_width,0,20*mm]],
 ];
 
 // Stabilizer layout
@@ -86,6 +88,26 @@ base_plate_layout = [
     ),
     slice(base_switch_layout, [-2,0], ["switch"])
 ];
+
+module additional_plate_cutouts() {
+    position_item(
+        invert_layout_item(
+            set_item_defaults(base_mcu_layout[0]),
+            invert_layout_flag
+        )
+    ) {
+        translate([h_unit/2,-mcu_v_unit_size*v_unit/2,0])
+        offset(10,$fn=360)
+        offset(delta=-10)
+        border_footprint(
+            [mcu_socket_width,mcu_v_unit_size*v_unit], 
+            invert_borders(
+                [1000,(unit+trrs_plug_width)/2,0,100],
+                invert_layout_flag
+            )
+        );
+    }
+}
 
 // Whether to only use base_plate_layout to generate the plate footprint
 use_plate_layout_only = true;
@@ -116,3 +138,11 @@ invert_layout_flag = false;
 
 // Whether the layout is staggered-row or staggered-column
 layout_type = "column";  // [column, row]
+
+// Tenting
+// Angle around y-axis (i.e. typing angle)
+tent_angle_y = 5;
+// Angle around x-axis
+tent_angle_x = 5;
+// Point around which keyboard is tented
+tent_point = [0,4.125*19.05];

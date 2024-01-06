@@ -1,5 +1,5 @@
 include <parameters.scad>
-include <utils.scad>
+include <param_processing.scad>
 
 use <grid_patterns.scad>
 
@@ -207,6 +207,19 @@ module mcu_plate_base(borders=[0,0,0,0], thickness=plate_thickness) {
 module mcu_plate_cutout(thickness=plate_thickness) {
     linear_extrude(thickness+1, center=true)
         mcu_plate_cutout_footprint();
+            
+    // Cut out case above MCU
+    if (expose_mcu) {
+        linear_extrude(10,center=true) {
+            difference() {
+                translate([h_unit/2,-mcu_v_unit_size*v_unit/2,0]) {
+                    rotate([0,0,0]) 
+                        grid_pattern(cutout_grid_size, cutout_grid_spacing, mcu_width, mcu_length);
+                }
+                offset(delta=cutout_grid_spacing) mcu_plate_cutout_footprint();
+            }
+        }
+    }
 }
 
 module mcu_case_cutout() {
@@ -228,9 +241,9 @@ module mcu_case_cutout() {
             difference() {
                 translate([h_unit/2,-mcu_v_unit_size*v_unit/2,0]) {
                     rotate([0,0,0]) 
-                        grid_pattern(grid_size, grid_spacing, mcu_width, mcu_length);
+                        grid_pattern(cutout_grid_size, cutout_grid_spacing, mcu_width, mcu_length);
                 }
-                offset(delta=grid_spacing) mcu_plate_cutout_footprint();
+                offset(delta=cutout_grid_spacing) mcu_plate_cutout_footprint();
             }
         }
     }

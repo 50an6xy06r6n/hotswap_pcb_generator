@@ -1,5 +1,5 @@
 include <parameters.scad>
-include <utils.scad>
+include <param_processing.scad>
 
 use <plate.scad>
 use <switch.scad>
@@ -73,26 +73,13 @@ module case(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, s
             layout_pattern(mcu_layout) {
                 mcu_case_cutout();
             }
-            linear_extrude(plate_thickness+1, center=true)
-            intersection() {
-                offset(-case_wall_thickness)
-                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
-                layout_pattern(mcu_layout) {
-                    translate([h_unit/2,-mcu_v_unit_size*v_unit/2,0])
-                    offset(10,$fn=360)
-                    offset(delta=-10)
-                    border_footprint(
-                        [mcu_socket_width,mcu_v_unit_size*v_unit], 
-                        [1000,(unit+trrs_plug_width)/2,0,100]
-                    );
-                }
-            }
             layout_pattern(trrs_layout) {
                 trrs_case_cutout();
             }
             layout_pattern(stab_layout) {
                 stabilizer_plate_cutout($extra_data);
             }
+
             // Drill all standoff holes
             layout_pattern(standoff_layout) {
                 case_standoff_hole($extra_data);
@@ -100,8 +87,24 @@ module case(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, s
                 translate([0,0,plate_thickness/2-pcb_plate_spacing-pcb_thickness-pcb_backplate_spacing-backplate_thickness/2-0.5])
                     backplate_standoff_hole($extra_data);
             }
+
+            // Additional user-defined cutouts
+            linear_extrude(plate_thickness+1, center=true)
+            intersection() {
+                // Make sure it doesn't cut into the case walls by intersecting with the inner plate profile
+                offset(-case_wall_thickness)
+                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+                additional_plate_cutouts(); 
+            }
         }
     }
 }
 
-case(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final, stab_layout_final, standoff_layout_final);
+case(
+    switch_layout_final,
+    mcu_layout_final,
+    trrs_layout_final,
+    plate_layout_final,
+    stab_layout_final,
+    standoff_layout_final
+);

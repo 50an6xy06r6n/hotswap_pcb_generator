@@ -88,8 +88,8 @@
 | `mcu_socket_width` | Width of the socket holding the MCU. Default value of `mcu_width + 4` works pretty well. | `parameters.scad` |
 | `mcu_socket_length` | Length of the socket holding the MCU. Default value of `mcu_length + 4` works pretty well. | `parameters.scad` |
 | `expose_mcu` | Experimental feature to create a cutout in the plate above the MCU, to allow status lights to be seen and/or pins to be accessed. Also looks cool maybe? | `parameters.scad` |
-| `grid_size` | Size of the holes in the grid cutout pattern. What that means exactly depends on the pattern. | `parameters.scad` |
-| `grid_spacing` | Space between holes in the grid cutout pattern. Can also be thought of as the width of the lines in the mesh. | `parameters.scad` |
+| `cutout_grid_size` | Size of the holes in the grid cutout pattern. What that means exactly depends on the pattern. | `parameters.scad` |
+| `cutout_grid_spacing` | Space between holes in the grid cutout pattern. Can also be thought of as the width of the lines in the mesh. | `parameters.scad` |
 
 ### TRRS Parameters:
 | Name | Description | Location |

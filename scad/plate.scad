@@ -1,5 +1,5 @@
 include <parameters.scad>
-include <utils.scad>
+include <param_processing.scad>
 
 use <switch.scad>
 use <mcu.scad>
@@ -104,6 +104,8 @@ module plate(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, 
                 plate_standoff($extra_data);
             }
         }
+
+        // Add component cutouts
         layout_pattern(switch_layout) {
             switch_plate_cutout();
         }
@@ -119,9 +121,17 @@ module plate(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, 
         layout_pattern(standoff_layout) {
             plate_standoff_hole($extra_data);
         }
+
+        // Additional user-defined cutouts
+        linear_extrude(plate_thickness+1, center=true)
+        intersection() {
+            // Make sure it doesn't cut into the case walls by intersecting with the inner plate profile
+            offset(-case_wall_thickness)
+                plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+            additional_plate_cutouts(); 
+        }
     }
 }
 
-//plate(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final, stab_layout_final, standoff_layout_final);
-//plate_margin = 0;
-plate_footprint(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final);
+plate(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final, stab_layout_final, standoff_layout_final);
+// plate_footprint(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final);

@@ -1,5 +1,5 @@
 include <parameters.scad>
-include <utils.scad>
+include <param_processing.scad>
 
 socket_length = trrs_length+4;
 socket_width = trrs_width+4;

@@ -1,5 +1,3 @@
-include <parameters.scad>
-include <stabilizer_spacing.scad>
 
 /* [Layout Values] */
 /* Layout Format (each key):
@@ -21,43 +19,13 @@ include <stabilizer_spacing.scad>
 
 // Keyswitch Layout
 //     (extra_data = rotate_column)
-base_switch_layout = [
-    [[[0,0.125],1,[0,0,0]],[0,1,0,2],false],
-    [[[0,1.125],1,[0,0,0]],[1,1,0,1],false],
-    [[[0,2.125],1,[0,0,0]],[1,1,0,1],false],
-    [[[0,3.125],1,[0,0,0]],[1,0,0,0],false],
-    [[[1,0],1,[0,0,0]],[0,1,0,0],false],
-    [[[1,1],1,[0,0,0]],[1,1,1,1],false],
-    [[[1,2],1,[0,0,0]],[1,1,1,1],false],
-    [[[1,3],1,[0,0,0]],[1,0,2,2],false],
-    [[[2,0.125],1,[0,0,0]],[0,1,2,2],false],
-    [[[2,1.125],1,[0,0,0]],[1,1,1,1],false],
-    [[[2,2.125],1,[0,0,0]],[1,1,1,1],false],
-    [[[2,3.125],1,[0,0,0]],[1,0,0,0],false],
-    [[[3,0],1,[0,0,0]],[0,1,0,0],false],
-    [[[3,1],1,[0,0,0]],[1,1,1,1],false],
-    [[[3,2],1,[0,0,0]],[1,1,1,1],false],
-    [[[3,3],1,[0,0,0]],[1,0,2,2],false],
-    [[[4,0.125],1,[0,0,0]],[0,1,2,0],false],
-    [[[4,1.125],1,[0,0,0]],[1,1,1,1],false],
-    [[[4,2.125],1,[0,0,0]],[1,1,1,0],false],
-    [[[4,3.125],1,[0,0,0]],[1,0,0,0],false],
-    [[[5,0.25],1,[0,0,0]],[0,1,2,0],false],
-    [[[5,1.25],1,[0,0,0]],[1,1,2,0],false],
-    [[[5,2.25],1,[0,0,0]],[1,1+15*mm,2,0],false],
-    [[[4.875,4.625],1.5,[60,4.875,4.625]],[30*mm,1,0.25*unit*mm,17.11*mm],true],
-    [[[4.875,5.625],1.5,[60,4.875,4.625]],[1,0,0.25*unit*mm,17.11*mm],true],
-];
+base_switch_layout = [];
 
 // MCU Position(s)
-base_mcu_layout = [
-    [[[6,0.5],mcu_h_unit_size],[0,0,h_border_width,0]],
-];
+base_mcu_layout = [];
 
 // TRRS Position(s)
-base_trrs_layout = [
-    [[[6.5,2.5],1,[-90,7,3]],[0,h_unit/2+h_border_width,0,5.97]],
-];
+base_trrs_layout = [];
 
 // Stabilizer layout
 //     (extra_data = [key_size, left_offset, right_offset, switch_offset=0])
@@ -66,44 +34,22 @@ base_stab_layout = [];
 
 // Via layout
 //     (extra_data = [via_width, via_length])
-base_via_layout = [
-    [[[5.5,3]]]
-];
+base_via_layout = [];
 
 // Plate Layout (if different than PCB)
 //     (extra_data = component_type)
-base_plate_layout = [
-    concat(
-        slice(base_switch_layout, [0,-2], ["switch"]),
-        [[[[6,0.5],mcu_h_unit_size],[-2,0,h_border_width,0], ["mcu"]]],
-        slice(base_trrs_layout, [0,0], ["trrs"])
-    ),
-    slice(base_switch_layout, [-2,0], ["switch"])
-];
+base_plate_layout = [];
+
+module additional_plate_cutouts() { // Initialize module so it doesn't break
+    square(0); // Dummy geometry to fix preview bug
+} 
 
 // Whether to only use base_plate_layout to generate the plate footprint
 use_plate_layout_only = false;
 
 // Standoff layout
 //     (extra_data = [standoff_integration_override, standoff_attachment_override])
-base_standoff_layout = [
-    // PCB-Plate standoffs
-    [[[0.5,0.125]]],
-    [[[0.5,3]]],
-    [[[2.5,1.5]]],
-    [[[3.5,3]]],
-    [[[4.5,0.25]]],
-    [[[4.875,5.125],1.5,[60,4.875,4.625]], [0,0,0,0]],
-    [[[6,2.5]]],
-    // PCB-Backplate standoffs
-    [[[-0.5,-0.375]],[0,0,0,0],["plate", "backplate"]],
-    [[[-0.5,3.625]],[0,0,0,0],["plate", "backplate"]],
-    [[[4,3.625]],[0,0,0,0],["plate", "backplate"]],
-    [[[4.125,6.125],1.5,[60,4.875,4.625]],[0,0,0,0],["plate", "backplate"]],
-    [[[6.5,3]],[0,0,0,0],["plate", "backplate"]],
-    [[[5.5,-0.1875]],[0,0,0,0],["plate", "backplate"]],
-    [[[7,0]],[0,0,0,0],["plate", "backplate"]],
-];
+base_standoff_layout = [];
 
 // Whether to flip the layout
 invert_layout_flag = false;

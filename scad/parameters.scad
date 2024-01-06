@@ -7,9 +7,9 @@ diode_pin_angle = 5;  // [0:15]
 // Amount the diode folds over
 diode_foldover = 4;
 // Overall thickness of PCB
-pcb_thickness = 1.6;  // [1.6:0.1:10]
+pcb_thickness = 4;  // [1.6:0.1:10]
 // If using a traditional PCB, cases can still be generated
-pcb_type = "traditional";  // [printed, traditional]
+pcb_type = "printed";  // [printed, traditional]
 
 /* Switch Parameters */
 // Switch type
@@ -40,12 +40,6 @@ case_chamfer_angle = 45;
 case_base_height = 2;
 // Fit tolerance between interlocking case parts
 case_fit_tolerance = 0.2;
-// Tenting angle around x-axis
-tent_angle_x = 5;
-// Tenting angle around y-axis (i.e. typing angle)
-tent_angle_y = 5;
-// Point around which keyboard is tented
-tent_point = [0,4.125*19.05];
 
 
 /* Plate Parameters */
@@ -84,12 +78,10 @@ mcu_connector_length = 4;  // Distance the connector extends onto the MCU (for p
 mcu_connector_height = 8;  // Height of the plug housing
 mcu_connector_offset = 1.5; // Vertical offset of plug center from PCB center
 mcu_pcb_thickness = 1.6;
-mcu_pcb_offset = 2.54;
+mcu_pcb_offset = 0; // Vertical offset of MCU from PCB (useful for traditional PCBs)
 mcu_socket_width = mcu_width+4;
 mcu_socket_length = mcu_length+4;
-expose_mcu = false;
-grid_size = 8;
-grid_spacing = 1.6;
+expose_mcu = false; // Opens up cutout grid above MCU footprint
 
 
 /* TRRS Socket Parameters */
@@ -132,11 +124,16 @@ standoff_pilot_hole_diameter = 1.6;
 standoff_counterbore_diameter = 4.5;
 
 
+// Cutout Grid Parameters
+cutout_grid_size = 8;
+cutout_grid_spacing = 1.6;
+
+
 /* Misc Parameters */
 // Increase this if your standoffs are a bit too long due to printing tolerances
 fit_tolerance = 0;
 // Resolution of holes (affects render times)
-$fn=120;
+$fn= $preview ? 12 : 36;
 
 
 /* Advanced Parameters (related to switch size) */
