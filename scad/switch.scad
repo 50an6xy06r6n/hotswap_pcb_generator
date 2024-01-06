@@ -111,13 +111,27 @@ module mx_socket_cutout_shared(rotate_column){
     translate([3*grid,-4*grid,0])
         cylinder(h=pcb_thickness+1,r=.7,center=true);
 
+    wire_channels(4*grid, [3*grid,-4*grid], rotate_column);
+}
+
+module wire_channels(
+        row_channel_y_offset,
+        col_channel_xy,
+        rotate_column
+        ){
     // Wire Channels
     // Row wire
-    translate([0,4*grid,pcb_thickness/2-wire_diameter/3]) rotate([0,90,0])
+    translate([0,
+            row_channel_y_offset,
+            pcb_thickness/2-wire_diameter/3
+    ]) rotate([0,90,0])
         cylinder(h=row_cutout_length,d=wire_diameter,center=true);
-
     // Column wire
-    translate([3*grid,-4*grid,-(pcb_thickness/2-wire_diameter/3)]) 
+    translate([
+            col_channel_xy.x,
+            col_channel_xy.y,
+            -(pcb_thickness/2-wire_diameter/3)
+    ]) 
         rotate([90,0,rotate_column?90:0])
         translate([0,0,-4*grid])
         cylinder(h=col_cutout_length,d=wire_diameter,center=true);
@@ -162,14 +176,11 @@ module choc_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                 translate([-3.125,-3.8,0])
                     cylinder(h=pcb_thickness+1,r=.7,center=true);
 
-                // Wire Channels
-                // Row wire
-                translate([0,5.9,pcb_thickness/2-wire_diameter/3]) rotate([0,90,0])
-                    cylinder(h=row_cutout_length,d=wire_diameter,center=true);
-                // Column wire
-                translate([-3.125,-3.8,-(pcb_thickness/2-wire_diameter/3)]) 
-                    rotate([90,0,rotate_column?90:0])
-                        cylinder(h=col_cutout_length,d=wire_diameter,center=true);
+                wire_channels(5.9, [-3.125,-3.8], rotate_column);
+                // // Column wire
+                // translate([-3.125,-3.8,-(pcb_thickness/2-wire_diameter/3)]) 
+                //     rotate([90,0,rotate_column?90:0])
+                //         cylinder(h=col_cutout_length,d=wire_diameter,center=true);
 
                 // Diode Channel
                 translate([-3.125,0,pcb_thickness/2])

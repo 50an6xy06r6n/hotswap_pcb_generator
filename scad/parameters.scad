@@ -147,7 +147,12 @@ h_unit = unit;
 // Vertical unit size (17mm for choc keycaps)
 v_unit = unit;
 // Spacing of grid for MX pins
-grid = 1.27;
+grid =
+    switch_type == "mx"
+    ? 1.27
+    : switch_type == "choc"
+        ? 0
+        : assert(false, "switch_type is invalid");
 // Size of socket body
 assert(
     switch_type == "mx" || switch_type == "choc",
