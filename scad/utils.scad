@@ -1,5 +1,18 @@
 include <parameters.scad>
 
+// Useful for manipulating layout elements
+function slice(array, bounds, extra_data_override="") = [
+    let(
+        lower = bounds[0] >= 0 ? bounds[0] : max(len(array)+bounds[0], 0),
+        upper = bounds[1] > 0 ? min(bounds[1], len(array)) : len(array)+bounds[1],
+        step = len(bounds) == 3 ? bounds[2] : 1
+    )
+    for (i = [lower:step:upper-1])
+       (len(array[i]) >= 2 && extra_data_override != "")
+            ? [array[i][0], array[i][1], extra_data_override, array[i][3]]
+            : array[i]
+];
+
 function set_defaults(layout, extra_data_default=[]) = [
     for (item = layout)
         set_item_defaults(item, extra_data_default)

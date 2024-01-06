@@ -14,6 +14,12 @@
             right_border
         ],
         extra_data                              // Extra data (depending on component type)
+        [                                       // Trim (optional booleans)
+            top_border,
+            bottom_border,
+            left_border,
+            right_border
+        ],
     ]
 */
 
@@ -51,8 +57,16 @@ use_plate_layout_only = false;
 //     (extra_data = [standoff_integration_override, standoff_attachment_override])
 base_standoff_layout = [];
 
-// Whether to flip the layout
+// Whether to flip the layout (useful for split boards)
 invert_layout_flag = false;
 
 // Whether the layout is staggered-row or staggered-column
 layout_type = "column";  // [column, row]
+
+// Tenting
+// Angle around y-axis (i.e. typing angle)
+tent_angle_y = 0;
+// Angle around x-axis
+tent_angle_x = 0;
+// Point around which keyboard is tented
+tent_point = [0, 0, 0];

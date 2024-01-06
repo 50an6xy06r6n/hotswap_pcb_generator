@@ -133,7 +133,7 @@ cutout_grid_spacing = 1.6;
 // Increase this if your standoffs are a bit too long due to printing tolerances
 fit_tolerance = 0;
 // Resolution of holes (affects render times)
-$fn= $preview ? 12 : 36;
+$fn= $preview ? 12 : 60;
 
 
 /* Advanced Parameters (related to switch size) */
@@ -173,6 +173,11 @@ pcb_plate_spacing =
     : switch_type == "choc" ? 2.2
     : undef;
 
+// Align mcu to a unit
+mcu_unit_resolution = .5;  // Grid size to snap to (as fractional unit)
+mcu_h_unit_size = ceil(mcu_socket_width/mcu_unit_resolution/h_unit) * mcu_unit_resolution;
+mcu_v_unit_size = ceil(mcu_socket_length/mcu_unit_resolution/v_unit) * mcu_unit_resolution;
+
 // Total assembly thickness (for reference)
 total_thickness =
     pcb_plate_spacing + pcb_thickness + pcb_backplate_spacing + backplate_thickness;
@@ -186,21 +191,3 @@ v_border_width = (v_unit - socket_size)/2;
 mm = 1/border_width;
 h_mm = 1/h_border_width;
 v_mm = 1/v_border_width;
-
-// Align mcu to a unit
-mcu_unit_resolution = .5;  // Grid size to snap to (as fractional unit)
-mcu_h_unit_size = ceil(mcu_socket_width/mcu_unit_resolution/h_unit) * mcu_unit_resolution;
-mcu_v_unit_size = ceil(mcu_socket_length/mcu_unit_resolution/v_unit) * mcu_unit_resolution;
-
-// Useful for manipulating layout elements
-function slice(array, bounds, extra_data_override="") = [
-    let(
-        lower = bounds[0] >= 0 ? bounds[0] : max(len(array)+bounds[0], 0),
-        upper = bounds[1] > 0 ? min(bounds[1], len(array)) : len(array)+bounds[1],
-        step = len(bounds) == 3 ? bounds[2] : 1
-    )
-    for (i = [lower:step:upper-1])
-       (len(array[i]) >= 2 && extra_data_override != "")
-            ? [array[i][0], array[i][1], extra_data_override, array[i][3]]
-            : array[i]
-];
