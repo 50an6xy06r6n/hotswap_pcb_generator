@@ -22,7 +22,6 @@ module teardrop2d(radius){
  * Intended as a drop-in replacement for a basic cylinder().
  * */
 module teardrop(length, radius, center=false){
-	translate([0,0,center ? -length/2 : 0])
-		linear_extrude(height=length)
+	linear_extrude(height=length, center=center)
 		teardrop2d(radius);
 }
