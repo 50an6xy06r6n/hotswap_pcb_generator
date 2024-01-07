@@ -74,7 +74,7 @@ base_trrs_layout = [];
 //     (extra_data = [key_size, left_offset, right_offset, switch_offset=0])
 //     (see stabilizer_spacing.scad for presets)
 base_stab_layout = [
-  [[[3.25,3],6.25,[0,0,0]],[1,1,1,1],6_25u],
+  [[[3.25,3],6.25,[0,0,0]],[1,1,1,1],stab_6_25u],
 ];
 
 // Via layout
