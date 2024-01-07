@@ -1,5 +1,42 @@
 include <parameters.scad>
 
+/* Creates a flat 2D teardrop on the XY plane,
+ * where no angle in the positive y direction is greater than 45º. */
+module teardrop2d(radius){
+	// Find tangents on the circle at 45 degrees
+	// Radius is triangle hypotenuse
+	function tangent_point(circle_r, angle) = [
+		circle_r * cos(angle),
+				 circle_r * sin(angle),
+	];
+	teardrop_point = [0,
+	tangent_point(radius, 45).y + tangent_point(radius, 45).x];
+	circle(radius);
+	polygon([
+		tangent_point(radius, 45),
+		tangent_point(radius, 135),
+		teardrop_point
+	]);
+}
+
+// Skews the child geometry.
+// xy: Angle towards X along Y axis.
+// xz: Angle towards X along Z axis.
+// yx: Angle towards Y along X axis.
+// yz: Angle towards Y along Z axis.
+// zx: Angle towards Z along X axis.
+// zy: Angle towards Z along Y axis.
+module skew(xy = 0, xz = 0, yx = 0, yz = 0, zx = 0, zy = 0) {
+	matrix = [
+		[ 1, tan(xy), tan(xz), 0 ],
+		[ tan(yx), 1, tan(yz), 0 ],
+		[ tan(zx), tan(zy), 1, 0 ],
+		[ 0, 0, 0, 1 ]
+	];
+	multmatrix(matrix)
+	children();
+}
+
 // Useful for manipulating layout elements
 function slice(array, bounds, extra_data_override="") = [
     let(
