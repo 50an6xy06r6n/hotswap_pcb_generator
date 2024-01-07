@@ -16,15 +16,11 @@ pcb_type = "printed";  // [printed, traditional]
 switch_type = "mx";  // [mx, choc]
 // Switch orientation (based on LED location)
 switch_orientation = "south";  // [north, south]
-// Whether your switch has 5 pins (2 plastic, for stability) or just 3
-// (central plastic post, two metal). true fits all, false is cleaner.
+// Whether or not to print the side holes (for the extra two pins of a 5-pin switch).
 five_pin_switch = true;
 // Whether to use experimental diode leg contact
 use_folded_contact = false;
-
-// Cross over the top switch pin at an angle, to improve contact between
-// the sharp pin and the wires. Probably best not to go above 30 or below
-// -35, unless you don't mind holes in walls.
+// Angle the column wire crosses the top switch pin
 top_pin_wire_kink_angle = 15;
 
 /* Stabilizer Parameters */
