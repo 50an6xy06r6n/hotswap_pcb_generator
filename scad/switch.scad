@@ -5,9 +5,6 @@ use <teardrop.scad>
 // TODO angle portion of top wire guide that goes past switch, so that the
 // switch pin makes contact on an angle with the wire strands, rather than
 // passing fully through. Make the angle customisable.
-// TODO convert bottom channel into teardrop shape, to reduce issues with
-// overhang printing. (parameterisable?)
-// TODO Make 5 pin optional
 
 module switch_socket(borders=[1,1,1,1], rotate_column=false) {
     difference() {
@@ -31,102 +28,116 @@ module switch_socket_base(borders=[1,1,1,1]) {
 }
 
 module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
-    if (switch_type == "mx") {
-        if (use_folded_contact) {
-            mx_improved_socket_cutout(borders, rotate_column);
-        } else {
-            mx_socket_cutout(borders, rotate_column);
-        }
-    } else if (switch_type == "choc") {
-        choc_socket_cutout(borders, rotate_column);
-    } else {
-        assert(false, "switch_type is invalid");
-    }
-}
+    // Pin positions within socket cutout
+    top_pin_xy =
+        switch_type == "mx" ? [2*grid,4*grid]
+        : switch_type == "choc" ? [0,5.9]
+        : undef;
+    bottom_pin_xy =
+        switch_type == "mx" ? [-3*grid,2*grid]  // No mx bottom pin
+        : switch_type == "choc" ? [5,3.8]
+        : undef;
+    // Side pin is +-
+    side_pin_x =
+        switch_type == "mx" ? 4
+        : switch_type == "choc" ? 5.5
+        : undef;
+    diode_cutout_xy =
+        switch_type == "mx" ? [3*grid,-4*grid]
+        : switch_type == "choc" ? [-3.125, -3.8]
+        : undef;
+    col_channel_xy =
+        switch_type == "mx" ? [3*grid,-4*grid]
+        : switch_type == "choc" ? [-3.125,-3.8]
+        : undef;
+    row_channel_y =
+        switch_type == "mx" ? 4*grid
+        : switch_type == "choc" ? 5.9
+        : undef;
+    central_pin_r =
+        switch_type == "mx" ? 2.1
+        : switch_type == "choc" ? 1.75
+        : undef;
 
-module mx_improved_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
     render() translate([h_unit/2,-v_unit/2,0]) rotate([0,0,switch_rotation])
         intersection() {
             union() {
-                mx_socket_cutout_shared(rotate_column);
-                // Bottom switch pin
-                translate([-3*grid,2*grid,-(pcb_thickness+1)/2]) {
-                    translate([-.625,-0.75,0]) cube([1.25,1.5,pcb_thickness+1]);
+                // Top switch pin
+                translate(top_pin_xy)
+                    cylinder(h=pcb_thickness+1,r=1);
+
+                // Central pin
+                translate([0,0,pcb_thickness/2-socket_depth])
+                    cylinder(h=pcb_thickness+1,r=central_pin_r);
+
+                // Side pins
+                if (five_pin_switch){
+                    for (x = [-side_pin_x, side_pin_x]) {
+                        translate([x*grid,0,pcb_thickness/2-socket_depth])
+                            cylinder(h=pcb_thickness+1,r=1.05);
+                    }
                 }
 
+
                 // Diode Channel
-                translate([-3*grid,-1*grid-.25,pcb_thickness/2])
-                    cube([1,6*grid+.5,2],center=true);
-                translate([0,-4*grid,pcb_thickness/2])
-                    cube([6*grid,1,2],center=true);
-                translate([-1*grid-.5,-4*grid,pcb_thickness/2])
-                    cube([4*grid,2,3],center=true);
-                translate([-0.5*grid,2*grid+0.25,pcb_thickness/2])
-                    cube([5*grid,1,2],center=true);
-            }
+                if (switch_type == "choc"){
+                    translate([-3.125,0,pcb_thickness/2])
+                        cube([1,7.6,2],center=true);
+                    translate([.75,3.8,pcb_thickness/2])
+                        cube([8.5,1,2],center=true);
+                    translate([-3.125,1.8,pcb_thickness/2])
+                        cube([2,5,3.5],center=true);
+                } else if (switch_type == "mx") {
+                    translate([-3*grid,-1*grid-.25,pcb_thickness/2])
+                        cube([1,6*grid+.5,2],center=true);
+                    translate([0,-4*grid,pcb_thickness/2])
+                        cube([6*grid,1,2],center=true);
+                    translate([-1*grid-.5,-4*grid,pcb_thickness/2])
+                        cube([4*grid,2,3],center=true);
+                } else {
+                    assert(false, "switch_type is invalid");
+                }
 
-            socket_cleanup_cube(borders);
-        }
-}
-
-
-module mx_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
-    render() translate([h_unit/2,-v_unit/2,0]) rotate([0,0,switch_rotation])
-        intersection() {
-            union() {
-                mx_socket_cutout_shared(rotate_column);
                 // Bottom switch pin
-                translate([-3*grid,2*grid,(pcb_thickness+1)/2])
-                    rotate([180+diode_pin_angle,0,0])
+                if (use_folded_contact){
+                    // Bottom switch pin
+                    translate([-3*grid,2*grid,-(pcb_thickness+1)/2]) {
+                        translate([-.625,-0.75,0]) cube([1.25,1.5,pcb_thickness+1]);
+                    }
+                    // Extra bit of diode channel for folded diode
+                    translate([-0.5*grid,2*grid+0.25,pcb_thickness/2])
+                        cube([5*grid,1,2],center=true);
+                } else {
+                    translate([bottom_pin_xy.x, bottom_pin_xy.y,(pcb_thickness+1)/2])
+                        rotate([180+diode_pin_angle,0,0])
                         cylinder(h=pcb_thickness+1,r=.7);
+                }
 
-                // Diode Channel
-                translate([-3*grid,-1*grid-.25,pcb_thickness/2])
-                    cube([1,6*grid+.5,2],center=true);
-                translate([0,-4*grid,pcb_thickness/2])
-                    cube([6*grid,1,2],center=true);
-                translate([-1*grid-.5,-4*grid,pcb_thickness/2])
-                    cube([4*grid,2,3],center=true);
+                // Diode cathode cutout
+                translate(diode_cutout_xy)
+                    cylinder(h=pcb_thickness+1,r=.7,center=true);
+
+                wire_channels(row_channel_y, col_channel_xy, rotate_column);
+
             }
-
             socket_cleanup_cube(borders);
         }
 }
 
-module mx_socket_cutout_shared(rotate_column){
-    // Central pin
-    translate([0,0,pcb_thickness/2-socket_depth])
-        cylinder(h=pcb_thickness+1,r=2.1);
-    // Side pins
-    if (five_pin_switch){
-        for (x = [-4,4]) {
-            translate([x*grid,0,pcb_thickness/2-socket_depth])
-                cylinder(h=pcb_thickness+1,r=1.05);
-        }
-    }
-    // Top switch pin
-    translate([2*grid,4*grid,pcb_thickness/2-socket_depth])
-        cylinder(h=pcb_thickness+1,r=1);
-
-    // Diode cathode cutout
-    translate([3*grid,-4*grid,0])
-        cylinder(h=pcb_thickness+1,r=.7,center=true);
-
-    wire_channels(4*grid, [3*grid,-4*grid], rotate_column);
-}
 
 module wire_channels(
         row_channel_y_offset,
         col_channel_xy,
         rotate_column
         ){
-    // Wire Channels
+
     // Row wire
     translate([0,
             row_channel_y_offset,
             pcb_thickness/2-wire_diameter/3
     ]) rotate([upsidedown_switch?-90:90,0,90])
         teardrop(row_cutout_length,wire_diameter/2, center=true);
+
     // Column wire
     translate([
             col_channel_xy.x,
@@ -156,43 +167,8 @@ module choc_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
     render() translate([h_unit/2,-v_unit/2,0]) rotate([0,0,switch_rotation])
         intersection() {
             union() {
-                // Central pin
-                translate([0,0,pcb_thickness/2-socket_depth])
-                    cylinder(h=pcb_thickness+1,d=3.5);
-                // Side pins
-                if (five_pin_switch){
-                    for (x = [-5.5,5.5]) {
-                        translate([x,0,pcb_thickness/2-socket_depth])
-                            cylinder(h=pcb_thickness+1,r=1.05);
-                    }
-                }
-                // Top switch pin
-                translate([0,5.9,pcb_thickness/2-socket_depth])
-                    cylinder(h=pcb_thickness+1,r=1);
-                // Bottom switch pin
-                translate([5,3.8,(pcb_thickness+1)/2])
-                    rotate([180+diode_pin_angle,0,0])
-                        cylinder(h=pcb_thickness+1,r=.7);
-                // Diode cathode cutout
-                translate([-3.125,-3.8,0])
-                    cylinder(h=pcb_thickness+1,r=.7,center=true);
 
-                wire_channels(5.9, [-3.125,-3.8], rotate_column);
-                // // Column wire
-                // translate([-3.125,-3.8,-(pcb_thickness/2-wire_diameter/3)]) 
-                //     rotate([90,0,rotate_column?90:0])
-                //         cylinder(h=col_cutout_length,d=wire_diameter,center=true);
-
-                // Diode Channel
-                translate([-3.125,0,pcb_thickness/2])
-                    cube([1,7.6,2],center=true);
-                translate([.75,3.8,pcb_thickness/2])
-                    cube([8.5,1,2],center=true);
-                translate([-3.125,1.8,pcb_thickness/2])
-                    cube([2,5,3.5],center=true);
             }
-
-            socket_cleanup_cube(borders);
         }
 }
 
