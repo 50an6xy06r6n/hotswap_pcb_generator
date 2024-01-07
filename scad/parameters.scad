@@ -20,7 +20,7 @@ switch_orientation = "south";  // [north, south]
 five_pin_switch = true;
 // Whether to use experimental diode leg contact
 use_folded_contact = false;
-// Angle the column wire crosses the top switch pin
+// Angle the wire crosses the top switch pin
 top_pin_wire_kink_angle = 15;
 
 /* Stabilizer Parameters */

@@ -122,7 +122,8 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                     translate([0,
                             row_channel_y-kink_deviation,
                             pcb_thickness/2-wire_diameter/3
-                    ]) rotate([upsidedown_switch?-90:90,0,90])
+                    ])
+                        rotate([upsidedown_switch?-90:90,0,90])
                         linear_extrude(row_cutout_length, center=true) teardrop2d(wire_diameter/2);
                     if (kink_angle != 0) {
                         // Block out some of the channel
@@ -143,13 +144,14 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                     // Other one is the diagonal channel crossing switch pin.
                     for (is_left = [1,0]){
                         x_correction = is_left * (-kink_width - kink_smoothing_width);
-                        // 1 if left, -1 otherwise
-                        skew_dir = (2*is_left - 1);
+                        // 1 if left, -1 otherwise; reversed for row layout.
+                        skew_dir = 2*is_left - 1;
                         translate([top_pin_xy.x + x_correction,
                                 top_pin_xy.y,
                                 pcb_thickness/2-wire_diameter/3
-                        ]) rotate([upsidedown_switch?-90:90,0,90])
-                            skew(xz=skew_dir * kink_angle)
+                        ])
+                            skew(yx=skew_dir * kink_angle)
+                            rotate([upsidedown_switch?-90:90,0,90])
                             linear_extrude(kink_width/1, center=true) teardrop2d(wire_diameter/2);
                     }
 
@@ -158,7 +160,8 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                     kink_width/2,
                             top_pin_xy.y + kink_deviation,
                             pcb_thickness/2-wire_diameter/3
-                    ]) rotate([upsidedown_switch?-90:90,0,90])
+                    ])
+                        rotate([upsidedown_switch?-90:90,0,90])
                         linear_extrude(kink_smoothing_width, center=true) teardrop2d(wire_diameter/2);
                 }
 
