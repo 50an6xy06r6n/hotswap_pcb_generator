@@ -1,11 +1,6 @@
 include <parameters.scad>
 include <param_processing.scad>
-use <teardrop.scad>
-use <skew.scad>
-
-// TODO angle portion of top wire guide that goes past switch, so that the
-// switch pin makes contact on an angle with the wire strands, rather than
-// passing fully through. Make the angle customisable.
+use <utils.scad>
 
 module switch_socket(borders=[1,1,1,1], rotate_column=false) {
     difference() {
@@ -80,6 +75,20 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                     }
                 }
 
+                // Bottom switch pin
+                if (use_folded_contact){
+                    // Bottom switch pin
+                    translate([-3*grid,2*grid,-(pcb_thickness+1)/2]) {
+                        translate([-.625,-0.75,0]) cube([1.25,1.5,pcb_thickness+1]);
+                    }
+                    // Extra bit of diode channel for folded diode
+                    translate([-0.5*grid,2*grid+0.25,pcb_thickness/2])
+                        cube([5*grid,1,2],center=true);
+                } else {
+                    translate([bottom_pin_xy.x, bottom_pin_xy.y,(pcb_thickness+1)/2])
+                        rotate([180+diode_pin_angle,0,0])
+                        cylinder(h=pcb_thickness+1,r=.7);
+                }
 
                 // Diode Channel
                 if (switch_type == "choc"){
@@ -100,72 +109,57 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                     assert(false, "switch_type is invalid");
                 }
 
-                // Bottom switch pin
-                if (use_folded_contact){
-                    // Bottom switch pin
-                    translate([-3*grid,2*grid,-(pcb_thickness+1)/2]) {
-                        translate([-.625,-0.75,0]) cube([1.25,1.5,pcb_thickness+1]);
-                    }
-                    // Extra bit of diode channel for folded diode
-                    translate([-0.5*grid,2*grid+0.25,pcb_thickness/2])
-                        cube([5*grid,1,2],center=true);
-                } else {
-                    translate([bottom_pin_xy.x, bottom_pin_xy.y,(pcb_thickness+1)/2])
-                        rotate([180+diode_pin_angle,0,0])
-                        cylinder(h=pcb_thickness+1,r=.7);
-                }
-
                 // Diode cathode cutout
                 translate(diode_cutout_xy)
                     cylinder(h=pcb_thickness+1,r=.7,center=true);
 
                 // Row wire
                 kink_angle = top_pin_wire_kink_angle;
+                kink_smoothing_width = 2.8;
                 kink_width = top_pin_cutout_r*2;
-                kink_recovery_width = 2;
                 kink_deviation = tan(kink_angle)*kink_width/2;
                 difference(){
                     translate([0,
                             row_channel_y-kink_deviation,
                             pcb_thickness/2-wire_diameter/3
                     ]) rotate([upsidedown_switch?-90:90,0,90])
-                        teardrop(row_cutout_length,wire_diameter/2, center=true);
+                        linear_extrude(row_cutout_length, center=true) teardrop2d(wire_diameter/2);
                     if (kink_angle != 0) {
                         // Block out some of the channel
                         translate([
-                                top_pin_xy.x - kink_recovery_width,
+                                top_pin_xy.x -
+                                kink_smoothing_width/2 - kink_width/2,
                                 top_pin_xy.y])
                             cube([
-                                    kink_width*2 + kink_recovery_width,
+                                    kink_width*2 + kink_smoothing_width,
                                     10,10], center=true);
                     }
                 }
 
+                // Kink the channel across the switch pin for better contact.
                 if (kink_angle != 0) {
-                    // Diagonal channel crossing switch pin
-                    translate([top_pin_xy.x,
-                            top_pin_xy.y,
-                            pcb_thickness/2-wire_diameter/3
-                    ]) rotate([upsidedown_switch?-90:90,0,90])
-                        skew(xz=-kink_angle)
-                        teardrop(kink_width,wire_diameter/2, center=true);
+                    // Left is diagonal channel back to main channel, so the rest of
+                    // the channel to the left lines up with other keys.
+                    // Other one is the diagonal channel crossing switch pin.
+                    for (is_left = [1,0]){
+                        x_correction = is_left * (-kink_width - kink_smoothing_width);
+                        // 1 if left, -1 otherwise
+                        skew_dir = (2*is_left - 1);
+                        translate([top_pin_xy.x + x_correction,
+                                top_pin_xy.y,
+                                pcb_thickness/2-wire_diameter/3
+                        ]) rotate([upsidedown_switch?-90:90,0,90])
+                            skew(xz=skew_dir * kink_angle)
+                            linear_extrude(kink_width/1, center=true) teardrop2d(wire_diameter/2);
+                    }
 
-                    //kink recovery
-                    translate([top_pin_xy.x - kink_recovery_width,
+                    // flat bit of channel to smooth kink return.
+                    translate([top_pin_xy.x - kink_smoothing_width/2 -
+                    kink_width/2,
                             top_pin_xy.y + kink_deviation,
                             pcb_thickness/2-wire_diameter/3
                     ]) rotate([upsidedown_switch?-90:90,0,90])
-                        teardrop(kink_recovery_width,wire_diameter/2, center=true);
-
-                    // Diagonal channel back to main channel, so the rest of
-                    // the channel to the left lines up with other keys.
-                    translate([top_pin_xy.x - kink_width -
-                            kink_recovery_width,
-                            top_pin_xy.y,
-                            pcb_thickness/2-wire_diameter/3
-                    ]) rotate([upsidedown_switch?-90:90,0,90])
-                        skew(xz=kink_angle)
-                        teardrop(kink_width,wire_diameter/2, center=true);
+                        linear_extrude(kink_smoothing_width, center=true) teardrop2d(wire_diameter/2);
                 }
 
                 // Column wire
@@ -176,7 +170,7 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                 ]) 
                     rotate([upsidedown_switch?-90:90,0,rotate_column?90:0])
                     translate([0,0,-4*grid])
-                    teardrop(col_cutout_length,wire_diameter/2, center=true);
+                    linear_extrude(col_cutout_length, center=true) teardrop2d(wire_diameter/2);
 
             }
             socket_cleanup_cube(borders);
