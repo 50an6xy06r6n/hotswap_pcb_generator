@@ -1,6 +1,7 @@
 include <parameters.scad>
 include <param_processing.scad>
 use <teardrop.scad>
+use <skew.scad>
 
 // TODO angle portion of top wire guide that goes past switch, so that the
 // switch pin makes contact on an angle with the wire strands, rather than
@@ -58,13 +59,14 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
         switch_type == "mx" ? 2.1
         : switch_type == "choc" ? 1.75
         : undef;
+    top_pin_cutout_r = 1;
 
     render() translate([h_unit/2,-v_unit/2,0]) rotate([0,0,switch_rotation])
         intersection() {
             union() {
                 // Top switch pin
                 translate(top_pin_xy)
-                    cylinder(h=pcb_thickness+1,r=1);
+                    cylinder(h=pcb_thickness+1,r=top_pin_cutout_r);
 
                 // Central pin
                 translate([0,0,pcb_thickness/2-socket_depth])
@@ -117,37 +119,70 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                 translate(diode_cutout_xy)
                     cylinder(h=pcb_thickness+1,r=.7,center=true);
 
-                wire_channels(row_channel_y, col_channel_xy, rotate_column);
+                // Row wire
+                kink_angle = top_pin_wire_kink_angle;
+                kink_width = top_pin_cutout_r*2;
+                kink_recovery_width = 2;
+                kink_deviation = tan(kink_angle)*kink_width/2;
+                difference(){
+                    translate([0,
+                            row_channel_y-kink_deviation,
+                            pcb_thickness/2-wire_diameter/3
+                    ]) rotate([upsidedown_switch?-90:90,0,90])
+                        teardrop(row_cutout_length,wire_diameter/2, center=true);
+                    if (kink_angle != 0) {
+                        // Block out some of the channel
+                        translate([
+                                top_pin_xy.x - kink_recovery_width,
+                                top_pin_xy.y])
+                            cube([
+                                    kink_width*2 + kink_recovery_width,
+                                    10,10], center=true);
+                    }
+                }
+
+                if (kink_angle != 0) {
+                    // Diagonal channel crossing switch pin
+                    translate([top_pin_xy.x,
+                            top_pin_xy.y,
+                            pcb_thickness/2-wire_diameter/3
+                    ]) rotate([upsidedown_switch?-90:90,0,90])
+                        skew(xz=-kink_angle)
+                        teardrop(kink_width,wire_diameter/2, center=true);
+
+                    //kink recovery
+                    translate([top_pin_xy.x - kink_recovery_width,
+                            top_pin_xy.y + kink_deviation,
+                            pcb_thickness/2-wire_diameter/3
+                    ]) rotate([upsidedown_switch?-90:90,0,90])
+                        teardrop(kink_recovery_width,wire_diameter/2, center=true);
+
+                    // Diagonal channel back to main channel, so the rest of
+                    // the channel to the left lines up with other keys.
+                    translate([top_pin_xy.x - kink_width -
+                            kink_recovery_width,
+                            top_pin_xy.y,
+                            pcb_thickness/2-wire_diameter/3
+                    ]) rotate([upsidedown_switch?-90:90,0,90])
+                        skew(xz=kink_angle)
+                        teardrop(kink_width,wire_diameter/2, center=true);
+                }
+
+                // Column wire
+                translate([
+                        col_channel_xy.x,
+                        col_channel_xy.y,
+                        -(pcb_thickness/2-wire_diameter/3)
+                ]) 
+                    rotate([upsidedown_switch?-90:90,0,rotate_column?90:0])
+                    translate([0,0,-4*grid])
+                    teardrop(col_cutout_length,wire_diameter/2, center=true);
 
             }
             socket_cleanup_cube(borders);
         }
 }
 
-
-module wire_channels(
-        row_channel_y_offset,
-        col_channel_xy,
-        rotate_column
-        ){
-
-    // Row wire
-    translate([0,
-            row_channel_y_offset,
-            pcb_thickness/2-wire_diameter/3
-    ]) rotate([upsidedown_switch?-90:90,0,90])
-        teardrop(row_cutout_length,wire_diameter/2, center=true);
-
-    // Column wire
-    translate([
-            col_channel_xy.x,
-            col_channel_xy.y,
-            -(pcb_thickness/2-wire_diameter/3)
-    ]) 
-        rotate([upsidedown_switch?-90:90,0,rotate_column?90:0])
-        translate([0,0,-4*grid])
-        teardrop(col_cutout_length,wire_diameter/2, center=true);
-}
 
 module socket_cleanup_cube(borders){
     translate([
