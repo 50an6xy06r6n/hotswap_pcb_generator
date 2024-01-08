@@ -1,3 +1,4 @@
+*.gcode
 stl/temp/
 img/original
 node_modules/
