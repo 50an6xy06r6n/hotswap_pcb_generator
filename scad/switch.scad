@@ -60,7 +60,7 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
         intersection() {
             union() {
                 // Top switch pin
-                translate(top_pin_xy)
+                translate([top_pin_xy.x, top_pin_xy.y, pcb_thickness/2-socket_depth])
                     cylinder(h=pcb_thickness+1,r=top_pin_cutout_r);
 
                 // Central pin
