@@ -114,7 +114,7 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                     cylinder(h=pcb_thickness+1,r=.7,center=true);
 
                 // Row wire
-                kink_angle = top_pin_wire_kink_angle;
+                kink_angle = row_wire_contact_angle;
                 kink_smoothing_width = 2.8;
                 kink_width = top_pin_cutout_r*3;
                 kink_deviation = tan(kink_angle)*kink_width/2;
