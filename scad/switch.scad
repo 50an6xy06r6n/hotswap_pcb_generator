@@ -35,7 +35,7 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
         : undef;
     // Side pin is +-
     side_pin_x =
-        switch_type == "mx" ? 4
+        switch_type == "mx" ? 4*grid
         : switch_type == "choc" ? 5.5
         : undef;
     diode_cutout_xy =
@@ -70,7 +70,7 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                 // Side pins
                 if (five_pin_switch){
                     for (x = [-side_pin_x, side_pin_x]) {
-                        translate([x*grid,0,pcb_thickness/2-socket_depth])
+                        translate([x,0,pcb_thickness/2-socket_depth])
                             cylinder(h=pcb_thickness+1,r=1.05);
                     }
                 }
