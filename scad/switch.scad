@@ -116,7 +116,7 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
                 // Row wire
                 kink_angle = top_pin_wire_kink_angle;
                 kink_smoothing_width = 2.8;
-                kink_width = top_pin_cutout_r*2;
+                kink_width = top_pin_cutout_r*3;
                 kink_deviation = tan(kink_angle)*kink_width/2;
                 difference(){
                     translate([0,
