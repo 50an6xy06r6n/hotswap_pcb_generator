@@ -10,6 +10,8 @@ diode_foldover = 4;
 pcb_thickness = 4;  // [1.6:0.1:10]
 // If using a traditional PCB, cases can still be generated
 pcb_type = "printed";  // [printed, traditional]
+// Angle of wire channel teardrop overhang
+teardrop_overhang_angle = 45;
 
 /* Switch Parameters */
 // Switch type
@@ -21,7 +23,7 @@ five_pin_switch = true;
 // Whether to use experimental diode leg contact
 use_folded_contact = false;
 // Angle the wire crosses the top switch pin
-top_pin_wire_kink_angle = 15;
+row_wire_contact_angle = 15;
 
 /* Stabilizer Parameters */
 stabilizer_type = "pcb";  // [pcb, plate]

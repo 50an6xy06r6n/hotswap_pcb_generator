@@ -31,6 +31,7 @@
 | `diode_foldover` | Length that the diode folds over on the back of the PCB. Only applies when `use_folded_contact = true` | `parameters.scad` |
 | `pcb_thickness` | Defines the overall thickness of the PCB. This must be at least 4mm, which is the minimum needed to fit both row and column wires. Can be increased if you want a sturdier PCB. | `parameters.scad` |
 | `pcb_type` | If you decide to have a traditional PCB fabricated for your board, you can change this from `printed` to `traditional` to help convert your existing case. Currently it just adjusts the height of the plate-to-PCB standoffs, since a traditional PCB won't have the step between the base of the socket and the wire routing area. | `parameters.scad` |
+| `teardrop_overhang_angle` |  Angle of the teardrop part of the wire channel. Turns the top part of the channel circle into a triangle, for clean printing. Set to the minimum angle your printer can print clean overhangs. Default of 45 is fine for most printers. | `parameters.scad` |
 
 ### Switch Parameters:
 | Name | Description | Location |

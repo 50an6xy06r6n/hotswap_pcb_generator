@@ -2,19 +2,23 @@ include <parameters.scad>
 
 /* Creates a flat 2D teardrop on the XY plane,
  * where no angle in the positive y direction is greater than 45º. */
-module teardrop2d(radius){
-	// Find tangents on the circle at 45 degrees
+module teardrop2d(radius, angle=teardrop_overhang_angle){
+	// Find tangents on the circle at `angle` degrees
 	// Radius is triangle hypotenuse
 	function tangent_point(circle_r, angle) = [
-		circle_r * cos(angle),
-				 circle_r * sin(angle),
+        circle_r * cos(angle),
+                 circle_r * sin(angle),
 	];
-	teardrop_point = [0,
-	tangent_point(radius, 45).y + tangent_point(radius, 45).x];
+    triangle_bl = tangent_point(radius, angle);
+    // Top of teardrop should be such that from the tangent point to
+    // the top has an angle of `angle`.
+    // a = triangle_bl.x, o = teardrop tip y
+    // tan(angle) = o/a
+	teardrop_point = [0, tan(270 - angle) *  triangle_bl.x + triangle_bl.y];
 	circle(radius);
 	polygon([
-		tangent_point(radius, 45),
-		tangent_point(radius, 135),
+		triangle_bl,
+		tangent_point(radius, 180-angle),
 		teardrop_point
 	]);
 }
