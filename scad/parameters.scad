@@ -23,7 +23,7 @@ five_pin_switch = true;
 // Whether to use experimental diode leg contact
 use_folded_contact = false;
 // Angle the wire crosses the top switch pin
-row_wire_contact_angle = 15;
+row_wire_contact_angle = -15;
 
 /* Stabilizer Parameters */
 stabilizer_type = "pcb";  // [pcb, plate]

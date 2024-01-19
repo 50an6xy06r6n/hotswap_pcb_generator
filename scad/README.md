@@ -40,7 +40,7 @@
 | `switch_orientation` | This can be set to either `north` or `south`, and defines the LED orientation of the switch. South-facing offers better compatibility with Cherry-profile keycaps, while north-facing may result in better illumination of shine-through legends (though there is not yet support for LEDs). | `parameters.scad` |
 | `five_pin_switch` | Sets whether to print the two side holes for the extra stability pins of a 5-pin switch. `true` fits 3 and 5 pin switches, `false` is cleaner and may be marginally faster to print. | `parameters.scad` |
 | `use_folded_contact` | This generates an experimental socket for MX switches that provides more robust hotswap contacts at the expense of more complexity when bending diodes. | `parameters.scad` |
-| `row_wire_contact_angle` | This sets the angle that the row wire crosses over the top switch pin at, to improve contact between the sharp pin and the wires. Probably best not to go above 30 or below -35, unless you don't mind holes in walls. A larger angle may require cutting a larger hole in the wire casing. | `parameters.scad` |
+| `row_wire_contact_angle` | This sets the angle that the row wire crosses over the top switch pin at, to improve contact between the sharp pin and the wires. The angle is the deviation from straight. Probably best not to go above 25 or below -20, unless you don't mind holes in walls. A larger angle may require cutting a larger hole in the wire casing. For choc switches, smaller may be necessary for there to be room for the deviation to return to straight. | `parameters.scad` |
 
 ### Stabilizer Parameters:
 | Name | Description | Location |
