@@ -140,7 +140,7 @@
 | `unit` | Defines the size of "1U" in the layout. | `parameters.scad` |
 | `h_unit` | Defines the size of "1U" horizontally. By default this is set to `unit`, but can be changed independently. Horizontal spacing for Choc keycaps is 18mm. | `parameters.scad` |
 | `v_unit` | Defines the size of "1U" vertically. By default this is set to `unit`, but can be changed independently. Vertical spacing for Choc keycaps is 17mm. | `parameters.scad` |
-| `grid` | Defines the size of the grid used for positioning elements in the MX switch footprint. Shouldn't need to be changed. | `parameters.scad` |
+| `mx_schematic_unit` | Defines the size of the grid used for positioning elements in the MX switch footprint. Shouldn't need to be changed. | `parameters.scad` |
 | `socket_size` | Size of the socket footprint for the switch. Shouldn't need to be changed. | `parameters.scad` |
 | `socket_depth` | Depth of the holes in the PCB for the switch pins and legs (in mm). 3.5mm should be enough for all the common switch types, but you can increase it if you're hitting the bottom for some reason. Note that this will create more perimeters and increase print time. | `parameters.scad` |
 | `plate_thickness` | Defines the thickness of the plate. This is already set for both MX and Choc switches, but can be tweaked for tighter/looser fits or to compensate for print tolerances. Note that these are not multiples of 0.2mm, so if you're printing at a 0.2mm layer height you should set a 0.3mm first layer height for accurate results. | `parameters.scad` |

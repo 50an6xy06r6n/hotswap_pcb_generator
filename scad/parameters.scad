@@ -149,7 +149,7 @@ h_unit = unit;
 // Vertical unit size (17mm for choc keycaps)
 v_unit = unit;
 // Spacing of grid for MX pins
-grid =
+mx_schematic_unit =
     switch_type == "mx"
     ? 1.27
     : switch_type == "choc"
