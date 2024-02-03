@@ -98,7 +98,9 @@ The diodes get their own section because they are the most tedious part of the b
     <img src="../img/build_guide/20_bent_diodes.JPG" width="400px" style="padding: 10px">
 </p>
 
-The anode leg of each diode goes through the same hole in the socket as the bottom switch pin, while the cathode leg goes through the column wire on the back of the PCB. In order to get the diode leg through the wire, you must first pierce a hole through the wire using the sewing needle. Hold the wire down to the PCB on either side of the hole and poke the needle through the hole and through the wire. It may help to twist a bit as you push to ease it through. Make sure the needle went through the actual strands of wire and not just through the side of the insulation. Pull the needle all the way through and then carefully push the diode leg through the hole you just created. If you encounter too much resistance, just run the needle through again to widen the hole. Once the diode is through, bend the bottom leg to the right to lock the wire in place and bend the top leg upwards to lock the diode in place. Trim the legs, leaving about 5mm on each.
+The anode leg of each diode goes through the same hole in the socket as the bottom switch pin, while the cathode leg goes through the column wire on the back of the PCB. In order to get the diode leg through the wire, you must first pierce a hole through the wire using the sewing needle. Hold the wire down to the PCB on either side of the hole and poke the needle through the hole and through the wire. It may help to twist a bit as you push to ease it through. Make sure the needle went through the actual strands of wire and not just through the side of the insulation. Pull the needle all the way through and then carefully push the diode leg through the hole you just created. If you encounter too much resistance, just run the needle through again to widen the hole. Once the diode is through, bend the bottom leg to the right to lock the wire in place and ~bend the top leg upwards to lock the diode in place~ - Actually, don't do this. Use tape to hold the diode if you need to, but the first bend might be sufficent. Make sure the diode legs aren't touching each other, or you might get issues with ghosting using NKRO.
+The pictures below have the wires touching, which shorts the diode and makes it pointless.
+Trim the legs, leaving about 5mm on each.
 <p align="center">
     <img src="../img/build_guide/21_wire_pierced.JPG" width="400px" style="padding: 10px">
     <img src="../img/build_guide/22_diodes_inserted.JPG" width="400px" style="padding: 10px">
@@ -109,6 +111,7 @@ On each switch socket, use the utility knife to cut a slit in the row wire insul
 <p align="center"><img src="../img/build_guide/24_diodes_front.JPG" width="750px" style="padding: 10px"></p>
 
 Note that either diode orientation will work, as long as you're consistent. The orientation described here corresponds to a `ROW2COL` diode direction in QMK.
+(Note that the QMK default is COL2ROW, so be sure to change this in firmware).
 
 ### Testing
 Before you assemble, it's a good idea to do a test fit of all the switches you want to use and test the switch matrix, as it's much easier to fix electrical problems before you have everything cased up. This will also slightly bend the diode and switch legs, making them easier to insert later. I use VIA to test the matrix, though if your firmware isn't VIA-enabled you can still just test every key and make sure the keyboard outputs the right values. See the [Firmware Guide](./firmware_guide.md) for instructions on how to create a VIA-enabled firmware and corresponding JSON file.
