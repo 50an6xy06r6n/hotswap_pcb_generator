@@ -10,15 +10,20 @@ diode_foldover = 4;
 pcb_thickness = 4;  // [1.6:0.1:10]
 // If using a traditional PCB, cases can still be generated
 pcb_type = "printed";  // [printed, traditional]
+// Angle of wire channel teardrop overhang
+teardrop_overhang_angle = 45;
 
 /* Switch Parameters */
 // Switch type
 switch_type = "mx";  // [mx, choc]
 // Switch orientation (based on LED location)
 switch_orientation = "south";  // [north, south]
+// Whether or not to print the side holes (for the extra two pins of a 5-pin switch).
+five_pin_switch = true;
 // Whether to use experimental diode leg contact
 use_folded_contact = false;
-
+// Angle the wire crosses the top switch pin
+row_wire_contact_angle = -15;
 
 /* Stabilizer Parameters */
 stabilizer_type = "pcb";  // [pcb, plate]
@@ -144,7 +149,12 @@ h_unit = unit;
 // Vertical unit size (17mm for choc keycaps)
 v_unit = unit;
 // Spacing of grid for MX pins
-grid = 1.27;
+mx_schematic_unit =
+    switch_type == "mx"
+    ? 1.27
+    : switch_type == "choc"
+        ? 0
+        : assert(false, "switch_type is invalid");
 // Size of socket body
 assert(
     switch_type == "mx" || switch_type == "choc",

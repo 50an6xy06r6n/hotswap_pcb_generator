@@ -19,14 +19,13 @@ This guide covers how to print, wire, and assemble your keyboard once you've fin
 
 #### Tools:
 - 3D-printed diode-bending guide
-- Utility knife (choose one with a narrow blade, like an Olfa)
+- Utility knife (choose one with a narrow blade, like an Olfa or Xacto)
 - Wire strippers
 - Screwdriver (profile depends on your screws)
-- 1mm drill bit
-- Pin vise
-- 1/16" drill bit
-- Electric drill
-- Sewing needle
+- 1mm drill bit and pin vise (optional)
+- 1/16" drill bit (optional)
+- Electric drill (optional)
+- Sewing needle, sewing pin or drawing pin
 - Flush cutters (recommended)
 - Needlenose pliers (recommended)
 - Tweezers (2A-SA profile recommended)
@@ -37,12 +36,13 @@ Plates, cases, and backplates are pretty straightforward to print, as long as yo
 
 When printing the PCB, you may want to slow down your perimeter speed because there are a lot of small features that can cause fit issues if they're a little out of spec. It's better to spend a little more time printing and save yourself time cleaning up a ton of tiny holes and channels that didn't quite come out right. You should also make sure your flow and retraction are calibrated properly so you don't get underextrusion on small features like standoffs and the tops of wire channels. If you're printing a staggered-row layout, you should print the PCB top-side-down so that you don't end up with a bunch of unsupported bridges and overhangs.
 
-In general, I recommend printing out standalone switch, MCU, and TRRS sockets to test fit before you print the full PCB. You can use these test fits to tweak the values in `parameters.scad` to best suit your particular printing setup.
+In general, I recommend printing out standalone switch, MCU, and TRRS sockets to test fit before you print the full PCB. You can use these test fits to tweak the values in `parameters.scad` to best suit your particular printing setup, as well as calibrate your printer for the holes etc.
 
 ### Print Cleanup
 <p align="center"><img src="../img/build_guide/01_case_flatlay.JPG" width="750px"></p>
 
-Unless your printer is super dialed-in, you'll probably need to do some amount of cleanup on your parts after you've printed them. The tools you'll need for this are a the utility knife, a 1mm drill bit in a pin vise (which is a handle you use to hold tiny drill bits), and a 1/16" drill bit in an electric drill.
+Unless your printer is super dialed-in, you'll probably need to do some amount of cleanup on your parts after you've printed them.
+The tools you might need for this, depending on the issues you have, are a utility knife, a 1mm drill bit in a pin vise (which is a handle you use to hold tiny drill bits), and a 1/16" drill bit in an electric drill.
 
 As mentioned previously, elephant's foot can cause issues with the switch cutouts in the plate. If you notice this, use your utility knife to trim off the excess. If you find yourself needing to take off a lot of material, it may be faster to tweak your print settings and print it again.
 
@@ -51,13 +51,15 @@ If any standoffs have their internal holes plugged up, the 1/16" drill bit is th
 On the PCB, the two most common issues involve the small holes that hold the switch pins. On the top side, the holes that hold the small plastic pins can easily get clogged up or be a little misshapen, causing the switch to not fit nicely, as in the image below). You can clear these holes by gently drilling them out with the 1/16" bit for a near-perfect fit.
 <p align="center"><img src="../img/build_guide/02_socket_closeup.JPG" width="750px"></p>
 
-On the bottom of the PCB, the small channels that the diode legs go through can also be easily clogged up. You can drill these out from the top with the 1mm bit. Be careful not to apply too much downward force, as you can easily snap the bit.
+On the bottom of the PCB, the small channels that the diode legs go through can also be easily clogged up.
+If they aren't too clogged, especially if it's just a bit of elephant's foot, the sewing needle or pin can often get through these fine.
+Otherwise, you can drill these out from the top with the 1mm bit. Be careful not to apply too much downward force, as you can easily snap the bit.
 <p align="center">
     <img src="../img/build_guide/03_blocked_wire_channel.JPG" width="400px" style="padding: 10px">
     <img src="../img/build_guide/04_cleared_wire_channel.JPG" width="400px" style="padding: 10px">
 </p>
 
-The wire channels on the PCB can also be affected by print artifacts. Elephant's foot can cause the openings to be too narrow for the wire to be easily pressed into place. If this happens, use the utility knife to carefully trim away the excess material around the edges. Poor overhang performance can also create small blobs of plastic inside the channel, which prevents the wire from fully seating inside it. These can also be cleared out with the utility knife.
+The wire channels on the PCB can also be affected by print artifacts. Elephant's foot can cause the openings to be too narrow for the wire to be easily pressed into place. If this happens, use the utility knife to carefully trim away the excess material around the edges.
 
 If the fit on the MCU socket is too tight for the MCU to snap in place, you may need to slightly trim or sand down the bottom tabs, or reprint the PCB with a slightly larger `mcu_length` value.
 
@@ -96,7 +98,9 @@ The diodes get their own section because they are the most tedious part of the b
     <img src="../img/build_guide/20_bent_diodes.JPG" width="400px" style="padding: 10px">
 </p>
 
-The anode leg of each diode goes through the same hole in the socket as the bottom switch pin, while the cathode leg goes through the column wire on the back of the PCB. In order to get the diode leg through the wire, you must first pierce a hole through the wire using the sewing needle. Hold the wire down to the PCB on either side of the hole and poke the needle through the hole and through the wire. It may help to twist a bit as you push to ease it through. Make sure the needle went through the actual strands of wire and not just through the side of the insulation. Pull the needle all the way through and then carefully push the diode leg through the hole you just created. If you encounter too much resistance, just run the needle through again to widen the hole. Once the diode is through, bend the bottom leg to the right to lock the wire in place and bend the top leg upwards to lock the diode in place. Trim the legs, leaving about 5mm on each.
+The anode leg of each diode goes through the same hole in the socket as the bottom switch pin, while the cathode leg goes through the column wire on the back of the PCB. In order to get the diode leg through the wire, you must first pierce a hole through the wire using the sewing needle. Hold the wire down to the PCB on either side of the hole and poke the needle through the hole and through the wire. It may help to twist a bit as you push to ease it through. Make sure the needle went through the actual strands of wire and not just through the side of the insulation. Pull the needle all the way through and then carefully push the diode leg through the hole you just created. If you encounter too much resistance, just run the needle through again to widen the hole. Once the diode is through, bend the bottom leg to the right to lock the wire in place and ~bend the top leg upwards to lock the diode in place~ - Actually, don't do this. Use tape to hold the diode if you need to, but the first bend might be sufficent. Make sure the diode legs aren't touching each other, or you might get issues with ghosting using NKRO.
+The pictures below have the wires touching, which shorts the diode and makes it pointless.
+Trim the legs, leaving about 5mm on each.
 <p align="center">
     <img src="../img/build_guide/21_wire_pierced.JPG" width="400px" style="padding: 10px">
     <img src="../img/build_guide/22_diodes_inserted.JPG" width="400px" style="padding: 10px">
@@ -107,6 +111,7 @@ On each switch socket, use the utility knife to cut a slit in the row wire insul
 <p align="center"><img src="../img/build_guide/24_diodes_front.JPG" width="750px" style="padding: 10px"></p>
 
 Note that either diode orientation will work, as long as you're consistent. The orientation described here corresponds to a `ROW2COL` diode direction in QMK.
+(Note that the QMK default is COL2ROW, so be sure to change this in firmware).
 
 ### Testing
 Before you assemble, it's a good idea to do a test fit of all the switches you want to use and test the switch matrix, as it's much easier to fix electrical problems before you have everything cased up. This will also slightly bend the diode and switch legs, making them easier to insert later. I use VIA to test the matrix, though if your firmware isn't VIA-enabled you can still just test every key and make sure the keyboard outputs the right values. See the [Firmware Guide](./firmware_guide.md) for instructions on how to create a VIA-enabled firmware and corresponding JSON file.
