@@ -6,39 +6,39 @@ module mx_improved_diode_template() {
             cube([socket_size, socket_size, pcb_thickness+diode_foldover], center=true);
             
         // Bottom switch pin
-        translate([-3*grid,2*grid,0])
+        translate([-3*mx_schematic_unit,2*mx_schematic_unit,0])
             translate([0,socket_size/2-0.75,0])
                 cube([1,socket_size,pcb_thickness+diode_foldover*2+2],center=true);
         // Diode cathode cutout
-        translate([3*grid,-4*grid,0])
+        translate([3*mx_schematic_unit,-4*mx_schematic_unit,0])
             translate([socket_size/2-0.001,0,0])
                 cube([socket_size,1,pcb_thickness+diode_foldover*2+2],center=true);
 
         // Diode Channel
-        translate([-3*grid,-1*grid-.25,pcb_thickness/2])
-            cube([1,6*grid+.5,2],center=true);
-        translate([0,-4*grid,pcb_thickness/2])
-           cube([6*grid,1,2],center=true);
-        translate([-1*grid-.5,-4*grid,pcb_thickness/2])
-            cube([4*grid,2,3],center=true);
+        translate([-3*mx_schematic_unit,-1*mx_schematic_unit-.25,pcb_thickness/2])
+            cube([1,6*mx_schematic_unit+.5,2],center=true);
+        translate([0,-4*mx_schematic_unit,pcb_thickness/2])
+           cube([6*mx_schematic_unit,1,2],center=true);
+        translate([-1*mx_schematic_unit-.5,-4*mx_schematic_unit,pcb_thickness/2])
+            cube([4*mx_schematic_unit,2,3],center=true);
         
-        translate([-1.5*grid,2*grid,pcb_thickness/2])
-            cube([3*grid,1,2],center=true);
+        translate([-1.5*mx_schematic_unit,2*mx_schematic_unit,pcb_thickness/2])
+            cube([3*mx_schematic_unit,1,2],center=true);
 
 
-        translate([-grid-0.5,5*grid,0]) rotate([0,0,90]) {
+        translate([-mx_schematic_unit-0.5,5*mx_schematic_unit,0]) rotate([0,0,90]) {
             // Bottom switch pin
-            translate([-3*grid,2*grid,0])
+            translate([-3*mx_schematic_unit,2*mx_schematic_unit,0])
                 translate([0,-0.5,0])
                     cube([1,1,pcb_thickness+7],center=true);
 
             // Diode Channel
-            translate([-3*grid,-1*grid-.25,pcb_thickness/2])
-                cube([1,6*grid+.5,2],center=true);
-            translate([0,-4*grid,pcb_thickness/2])
-               cube([6*grid,1,2],center=true);
-            translate([-1*grid-.5,-4*grid,pcb_thickness/2])
-                cube([4*grid,2,3],center=true);
+            translate([-3*mx_schematic_unit,-1*mx_schematic_unit-.25,pcb_thickness/2])
+                cube([1,6*mx_schematic_unit+.5,2],center=true);
+            translate([0,-4*mx_schematic_unit,pcb_thickness/2])
+               cube([6*mx_schematic_unit,1,2],center=true);
+            translate([-1*mx_schematic_unit-.5,-4*mx_schematic_unit,pcb_thickness/2])
+                cube([4*mx_schematic_unit,2,3],center=true);
 
         }
      }
@@ -49,21 +49,21 @@ module mx_diode_template() {
         cube([socket_size, socket_size, pcb_thickness], center=true);
             
         // Bottom switch pin
-        translate([-3*grid,2*grid,0])
+        translate([-3*mx_schematic_unit,2*mx_schematic_unit,0])
             translate([0,socket_size/2-0.001,0])
                 cube([1,socket_size,pcb_thickness+1],center=true);
         // Diode cathode cutout
-        translate([3*grid,-4*grid,0])
+        translate([3*mx_schematic_unit,-4*mx_schematic_unit,0])
             translate([socket_size/2-0.001,0,0])
                 cube([socket_size,1,pcb_thickness+1],center=true);
 
         // Diode Channel
-        translate([-3*grid,-1*grid-.25,pcb_thickness/2])
-            cube([1,6*grid+.5,2],center=true);
-        translate([0,-4*grid,pcb_thickness/2])
-            cube([6*grid,1,2],center=true);
-        translate([-1*grid-.5,-4*grid,pcb_thickness/2])
-            cube([4*grid,2,3],center=true);
+        translate([-3*mx_schematic_unit,-1*mx_schematic_unit-.25,pcb_thickness/2])
+            cube([1,6*mx_schematic_unit+.5,2],center=true);
+        translate([0,-4*mx_schematic_unit,pcb_thickness/2])
+            cube([6*mx_schematic_unit,1,2],center=true);
+        translate([-1*mx_schematic_unit-.5,-4*mx_schematic_unit,pcb_thickness/2])
+            cube([4*mx_schematic_unit,2,3],center=true);
     }
 }
 

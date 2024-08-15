@@ -31,13 +31,16 @@
 | `diode_foldover` | Length that the diode folds over on the back of the PCB. Only applies when `use_folded_contact = true` | `parameters.scad` |
 | `pcb_thickness` | Defines the overall thickness of the PCB. This must be at least 4mm, which is the minimum needed to fit both row and column wires. Can be increased if you want a sturdier PCB. | `parameters.scad` |
 | `pcb_type` | If you decide to have a traditional PCB fabricated for your board, you can change this from `printed` to `traditional` to help convert your existing case. Currently it just adjusts the height of the plate-to-PCB standoffs, since a traditional PCB won't have the step between the base of the socket and the wire routing area. | `parameters.scad` |
+| `teardrop_overhang_angle` |  Angle of the teardrop part of the wire channel. Turns the top part of the channel circle into a triangle, for clean printing. Set to the minimum angle your printer can print clean overhangs. Default of 45 is fine for most printers. | `parameters.scad` |
 
 ### Switch Parameters:
 | Name | Description | Location |
 | ---- | ----------- | -------- |
 | `switch_type` | This can be set to either `mx` or `choc`, depending on the type of switch you plan to use. This changes the PCB cutouts, as well as the plate thickness and spacing used for standoffs. Support for other switch types is possible if I'm able to obtain them. | `parameters.scad` |
 | `switch_orientation` | This can be set to either `north` or `south`, and defines the LED orientation of the switch. South-facing offers better compatibility with Cherry-profile keycaps, while north-facing may result in better illumination of shine-through legends (though there is not yet support for LEDs). | `parameters.scad` |
+| `five_pin_switch` | Sets whether to print the two side holes for the extra stability pins of a 5-pin switch. `true` fits 3 and 5 pin switches, `false` is cleaner and may be marginally faster to print. | `parameters.scad` |
 | `use_folded_contact` | This generates an experimental socket for MX switches that provides more robust hotswap contacts at the expense of more complexity when bending diodes. | `parameters.scad` |
+| `row_wire_contact_angle` | This sets the angle that the row wire crosses over the top switch pin at, to improve contact between the sharp pin and the wires. The angle is the deviation from straight. Probably best not to go above 25 or below -20, unless you don't mind holes in walls. A larger angle may require cutting a larger hole in the wire casing. For choc switches, smaller may be necessary for there to be room for the deviation to return to straight. | `parameters.scad` |
 
 ### Stabilizer Parameters:
 | Name | Description | Location |
@@ -137,7 +140,7 @@
 | `unit` | Defines the size of "1U" in the layout. | `parameters.scad` |
 | `h_unit` | Defines the size of "1U" horizontally. By default this is set to `unit`, but can be changed independently. Horizontal spacing for Choc keycaps is 18mm. | `parameters.scad` |
 | `v_unit` | Defines the size of "1U" vertically. By default this is set to `unit`, but can be changed independently. Vertical spacing for Choc keycaps is 17mm. | `parameters.scad` |
-| `grid` | Defines the size of the grid used for positioning elements in the MX switch footprint. Shouldn't need to be changed. | `parameters.scad` |
+| `mx_schematic_unit` | Defines the size of the grid used for positioning elements in the MX switch footprint. Shouldn't need to be changed. | `parameters.scad` |
 | `socket_size` | Size of the socket footprint for the switch. Shouldn't need to be changed. | `parameters.scad` |
 | `socket_depth` | Depth of the holes in the PCB for the switch pins and legs (in mm). 3.5mm should be enough for all the common switch types, but you can increase it if you're hitting the bottom for some reason. Note that this will create more perimeters and increase print time. | `parameters.scad` |
 | `plate_thickness` | Defines the thickness of the plate. This is already set for both MX and Choc switches, but can be tweaked for tighter/looser fits or to compensate for print tolerances. Note that these are not multiples of 0.2mm, so if you're printing at a 0.2mm layer height you should set a 0.3mm first layer height for accurate results. | `parameters.scad` |
