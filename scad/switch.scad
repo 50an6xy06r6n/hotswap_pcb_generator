@@ -5,13 +5,7 @@ use <utils.scad>
 module switch_socket(borders=[1,1,1,1], rotate_column=false) {
     difference() {
         switch_socket_base(borders);
-        if (switch_type == "mx"){
-            mx_socket_cutout(borders, rotate_column);
-        } else if (switch_type == "choc"){
-            choc_socket_cutout(borders, rotate_column);
-        } else {
-            assert(false, "switch_type is invalid");
-        }
+        switch_socket_cutout(borders, rotate_column);
     }
 }
 
@@ -29,8 +23,18 @@ module switch_socket_base(borders=[1,1,1,1]) {
     }
 }
 
+module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
+    if (switch_type == "mx"){
+        mx_socket_cutout(borders, rotate_column);
+    } else if (switch_type == "choc"){
+        choc_socket_cutout(borders, rotate_column);
+    } else {
+        assert(false, "switch_type is invalid");
+    }
+}
+
 module mx_socket_cutout(borders=[1,1,1,1], rotate_column=false){
-    switch_socket_cutout(
+    switch_socket_cutout_logic(
             top_pin_xy = [2*mx_schematic_unit,4*mx_schematic_unit],
             bottom_pin_xy = [-3*mx_schematic_unit,2*mx_schematic_unit],
             side_pin_x = 4*mx_schematic_unit,
@@ -44,7 +48,7 @@ module mx_socket_cutout(borders=[1,1,1,1], rotate_column=false){
 }
 
 module choc_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
-    switch_socket_cutout(
+    switch_socket_cutout_logic(
             top_pin_xy = [0,5.9],
             bottom_pin_xy = [5,3.8],
             side_pin_x = 5.5,
@@ -57,7 +61,7 @@ module choc_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
             );
 }
 
-module switch_socket_cutout(
+module switch_socket_cutout_logic(
         // Pin positions within socket cutout
         top_pin_xy,
         bottom_pin_xy,
