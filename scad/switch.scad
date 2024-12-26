@@ -249,7 +249,7 @@ module switch_plate_base(borders=[1,1,1,1], thickness=plate_thickness) {
 }
 
 module switch_plate_cutout(thickness=plate_thickness) {
-    linear_extrude(thickness+1, center=true)
+    linear_extrude(thickness+2*total_thickness, center=true)
         switch_plate_cutout_footprint();
 }
 
