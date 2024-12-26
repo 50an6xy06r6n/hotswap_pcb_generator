@@ -6,10 +6,43 @@ module standoff_footprint() {
     circle(d=standoff_diameter);
 }
 
-module standoff(height, solid=false) {
+module standoff_fillet(standoff_diameter, fillet_radius) {
+    eps=0.001;
     difference() {
-        translate([h_unit/2,-v_unit/2,0]) 
-            cylinder(h=height,d=standoff_diameter,center=true);
+        // Start with a basic conical chamfer
+        cylinder(
+            h=fillet_radius,
+            d1=standoff_diameter,
+            d2=standoff_diameter+2*fillet_radius,
+            center=true
+        );
+
+        // Subtract a donut to create the fillet profile
+        translate([0,0,-fillet_radius/2])
+        minkowski() {
+            // Ring through the center of the donut
+            difference() {
+                cylinder(h=eps,d=standoff_diameter+2*fillet_radius+2*eps);
+                cylinder(h=eps,d=standoff_diameter+2*fillet_radius);
+            }
+            sphere(r=fillet_radius);
+        }
+    }
+}
+
+module standoff(height, attachment_thickness, solid=false, fillet=default_standoff_fillet) {
+    // Default values work kinda weird
+    fillet = fillet == undef ? default_standoff_fillet : fillet;
+
+    difference() {
+        translate([h_unit/2,-v_unit/2,0])
+            union() {
+                cylinder(h=height,d=standoff_diameter,center=true);
+
+                // Fillet at the base of the standoff to improve strength
+                translate([0,0,(height-fillet)/2-attachment_thickness])
+                standoff_fillet(standoff_diameter, fillet);
+            }
         if (!solid) 
             standoff_pilot_hole(height+1);
     }
@@ -47,6 +80,7 @@ module standoff_counterbore(z_offset) {
 module pcb_standoff(standoff_config, solid=false) {
     standoff_integration = standoff_config[0];
     standoff_attachment = standoff_config[1];
+    standoff_fillet = standoff_config[2];
     
     if (standoff_integration == "pcb") {
         assert(
@@ -65,8 +99,14 @@ module pcb_standoff(standoff_config, solid=false) {
             : standoff_attachment == "backplate" ? -height/2
             : undef;
         
-        translate([0,0,standoff_offset]) 
-            standoff(height, solid);
+        translate([0,0,standoff_offset])
+        mirror([0,0,standoff_attachment == "plate" ? 1 : 0]) 
+            standoff(
+                height,
+                standoff_attachment == "plate" ? pcb_thickness/2 - 2 : pcb_thickness/2,
+                solid,
+                standoff_fillet
+            );
     }
 }
 
@@ -94,6 +134,7 @@ module plate_standoff_footprint(standoff_config) {
 module plate_standoff(standoff_config, solid=false) {
     standoff_integration = standoff_config[0];
     standoff_attachment = standoff_config[1];
+    standoff_fillet = standoff_config[2];
     
     if (standoff_integration == "plate") {
         assert(
@@ -110,7 +151,7 @@ module plate_standoff(standoff_config, solid=false) {
         standoff_offset = -(height-plate_thickness)/2;
         
         translate([0,0,standoff_offset]) 
-            standoff(height, solid);
+            standoff(height, plate_thickness, solid, standoff_fillet);
     }
 }
 
@@ -121,6 +162,7 @@ module backplate_standoff_footprint(standoff_config) {
 module backplate_standoff(standoff_config, solid=false) {
     standoff_integration = standoff_config[0];
     standoff_attachment = standoff_config[1];
+    standoff_fillet = standoff_config[2];
     
     if (standoff_integration == "backplate") {
         assert(
@@ -136,8 +178,9 @@ module backplate_standoff(standoff_config, solid=false) {
             : undef;
         standoff_offset = height/2 + backplate_thickness/2;
         
-        translate([0,0,standoff_offset]) 
-            standoff(height, solid);
+        #translate([0,0,standoff_offset])
+        mirror([0,0,1])
+            standoff(height, 0, solid, standoff_fillet);
     }
 }
 

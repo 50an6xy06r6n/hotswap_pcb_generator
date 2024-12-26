@@ -127,6 +127,8 @@ standoff_clearance_hole_diameter = 2.5;
 standoff_pilot_hole_diameter = 1.6;
 // Diameter of standoff screw head counterbores
 standoff_counterbore_diameter = 4.5;
+// Radius of the fillet at the base of standoffs
+default_standoff_fillet=1;
 
 
 // Cutout Grid Parameters
