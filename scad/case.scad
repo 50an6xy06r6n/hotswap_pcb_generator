@@ -9,37 +9,77 @@ use <stabilizer.scad>
 use <standoff.scad>
 
 module case_shell(height, switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout) {
-    if (use_plate_layout_only) {
-        linear_extrude(height, convexity=10)
-            plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
-    } else {
-        bottom_offset = tan(case_wall_draft_angle) * (height-case_base_height);
-        chamfer_offset = tan(case_wall_draft_angle)*tan(case_chamfer_angle)*case_chamfer_width / (1-tan(case_wall_draft_angle)*tan(case_chamfer_angle));
-        chamfer_height = chamfer_offset/tan(case_wall_draft_angle);
+    // Additional wall thickness introduced by draft angle
+    bottom_offset = (
+        tan(case_wall_draft_angle) *
+        (height-case_base_height) // Height of the drafted part of the wall
+    );
 
+    // Height of the chamfer with no draft angle
+    base_chamfer_height = tan(case_chamfer_angle)*case_chamfer_width;
+
+    // Offset of chamfer-draft intersection from base footprint (accounting for draft angle)
+    chamfer_offset = min(
+        case_wall_draft_angle > 0 ? ( // Special-case the no draft angle case, since that divides by zero
+            base_chamfer_height *
+            tan(case_wall_draft_angle) / // Converts to the added width of the drafted body at the undrafted chamfer edge
+            (1-tan(case_wall_draft_angle)*tan(case_chamfer_angle)) // Solve for X to find the intersection of the draft and chamfer
+        ) : 0, // No offset if the walls are vertical
+        (height - case_base_height) / tan(case_chamfer_angle) // In cases where the chamfer doesn't intersect the draft, the chamfer stops at the base
+    );
+
+    // Total height to the chamfer-draft intersection
+    chamfer_height = min(
+        case_wall_draft_angle > 0 ? // More special casing to avoid dividing by zero
+            chamfer_offset/tan(case_wall_draft_angle) :
+            base_chamfer_height,
+        height - case_base_height // Chamfer height can't exceed total case height
+    );
+
+    // Height of the drafted part of the wall
+    draft_height = height - chamfer_height - case_base_height;
+
+    // Use the outline as defined by the plate layout
+    if (use_plate_layout_only) {
+        if (case_wall_draft_angle == 0 && case_chamfer_width == 0) {
+            // If there are no angles then the minkowski geometry becomes degenerate
+            linear_extrude(height, convexity=10)
+                plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+        } else {
+            minkowski() {
+                // Just extrude the straight-sided base
+                linear_extrude(case_base_height, convexity=10)
+                    offset(-case_chamfer_width)
+                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+
+                // Side profile for both the chamfer and the draft angle
+                union() {
+                    translate([0,0,draft_height])
+                        cylinder(chamfer_height, case_chamfer_width + chamfer_offset, 0); // Chamfer cone
+                        cylinder(draft_height, bottom_offset + case_chamfer_width, case_chamfer_width + chamfer_offset); // Draft cone/cylinder
+                }
+            }
+        }
+    } else { // Just hull everything to get a basic shape (eliminates any concavity in the profile)
         eps = 0.001;
-        intersection() {
-            // Chamfer body
-            hull() {
-                translate([0,0,-eps])
-                linear_extrude(eps)
-                offset(height / tan(case_chamfer_angle) - case_chamfer_width)
-                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
-                translate([0,0,height-eps])
-                linear_extrude(eps)
-                offset(-case_chamfer_width)
-                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
-            }
-            // Main body
-            hull() {
-                translate([0,0,-eps])
-                linear_extrude(case_base_height+eps)
-                offset(bottom_offset)
-                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
-                translate([0,0,height-eps])
-                linear_extrude(eps)
-                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
-            }
+        hull() {
+            // top plate surface
+            translate([0,0,height-eps])
+            linear_extrude(eps)
+            offset(-case_chamfer_width)
+                plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+
+            // Chamfer-draft intersection
+            translate([0,0,height-chamfer_height-eps])
+            linear_extrude(eps)
+            offset(chamfer_offset)
+                plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+
+            // Bottom section
+            translate([0,0,-eps])
+            linear_extrude(case_base_height+eps)
+            offset(bottom_offset)
+                plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
         }
     }
 }
