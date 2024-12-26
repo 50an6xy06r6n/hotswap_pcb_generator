@@ -83,7 +83,13 @@ base_trrs_layout = [];
 // Stabilizer layout
 //     (extra_data = [key_size, left_offset, right_offset, switch_offset=0])
 //     (see stabilizer_spacing.scad for presets)
-base_stab_layout = [];
+`
+file_content += formatted_keys.filter((k) => k[0][1] >= 2).reduce(
+    (total, key) => total + "  " + JSON.stringify([key[0], key[1], "stab_" + JSON.stringify(key[0][1]).replace('.', '_') + "u"]).replace(/"/g, "") + ",\n",
+    "base_stab_layout = [\n"
+);
+file_content +=
+`];
 
 // Via layout
 //     (extra_data = [via_width, via_length])
