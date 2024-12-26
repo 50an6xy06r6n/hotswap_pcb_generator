@@ -34,11 +34,11 @@ stabilizer_type = "pcb";  // [pcb, plate]
 case_type = "plate_case";  // [sandwich, plate_case, backplate_case]
 // Thickness of case walls
 case_wall_thickness = 4;
-// Case wall draft angle (convex cases only)
+// Case wall draft angle
 case_wall_draft_angle = 15;
-// Width of the case chamfer (convex cases only)
+// Width of the case chamfer
 case_chamfer_width = 1;
-// Angle of the case chamfer (convex cases only)
+// Angle of the case chamfer
 case_chamfer_angle = 45;
 // Height of the vertical portion at the bottom of the case 
 // (not including backplate flange)

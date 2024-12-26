@@ -12,8 +12,10 @@ try {
     console.error(err);
 }
 
+// Parse KLE file
 var keyboard = kle.Serial.parse(kle_json);
 
+// Convert KLE data to the desired format
 var formatted_keys = keyboard.keys.map(
     key => {
         let side_border = ((key.width-1)/2);
@@ -26,7 +28,7 @@ var formatted_keys = keyboard.keys.map(
             [
                 1,
                 1,
-                side_border ? "1+" + side_border.toString() + "*unit*mm" : 1,
+                side_border ? "1+" + side_border.toString() + "*unit*mm" : 1, // adjust side borders for wide keys
                 side_border ? "1+" + side_border.toString() + "*unit*mm" : 1,
             ],
             false
@@ -68,7 +70,12 @@ use <utils.scad>
 //     (extra_data = rotate_column)
 `
 file_content += formatted_keys.reduce(
-    (total, key) => total + "  " + JSON.stringify(key).replace(/"/g, "") + ",\n",
+    (total, key) => (
+        total +  // Output accumulator
+        "  " +   // Indentation
+        JSON.stringify(key).replace(/"/g, "") + // Key data
+        ",\n"  // End of line
+    ),
     "base_switch_layout = [\n"
 );
 file_content +=
@@ -85,9 +92,20 @@ base_trrs_layout = [];
 //     (see stabilizer_spacing.scad for presets)
 `
 file_content += formatted_keys.filter((k) => k[0][1] >= 2).reduce(
-    (total, key) => total + "  " + JSON.stringify([key[0], key[1], "stab_" + JSON.stringify(key[0][1]).replace('.', '_') + "u"]).replace(/"/g, "") + ",\n",
+    (total, key) => (
+        total +  // Output accumulator
+        "  " +   // Indentation
+        JSON.stringify([
+            key[0], // Key position
+            key[1], // Key rotation
+            `stab_${key[0][1].toString().replace('.', '_')}u`, // Convert key width to default stabilizer constant
+        ]).replace(/"/g, "") +
+        ",\n"  // End of line
+    ),
     "base_stab_layout = [\n"
 );
+
+// Rest of the standard data
 file_content +=
 `];
 
