@@ -40,6 +40,8 @@ case_wall_draft_angle = 15;
 case_chamfer_width = 1;
 // Angle of the case chamfer
 case_chamfer_angle = 45;
+// Chamfer/draft corner behavior (straight and beveled are experimental, require a nightly OpenSCAD build, and don't work with outer fillets)
+chamfer_corner_type = "beveled"; // [rounded, beveled, straight]
 // Height of the vertical portion at the bottom of the case 
 // (not including backplate flange)
 case_base_height = 2;
@@ -51,7 +53,7 @@ case_fit_tolerance = 0.2;
 // Distance the plate sticks out past the PCB
 plate_margin = 5;
 // Radius of outer fillets
-plate_outer_fillet = 2.5;
+plate_outer_fillet = 0;
 // Radius of inner fillets
 plate_inner_fillet = 50;
 // Setting this lower can help fix geometry issues when using custom plate shapes

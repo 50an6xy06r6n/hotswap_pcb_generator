@@ -19,8 +19,8 @@
 | `base_standoff_layout` | Defines the position of each (optional) standoff. Data format is identical to that of `base_switch_layout`, with the standoff placed at the center of the key unit. This makes it means that you can place a standoff in between two keys by just averaging their positions. By default, standoffs are configured according to the `standoff_integration_default` and `standoff_attachment_default` parameters defined in `parameters.scad`, but these can be overridden on a per-standoff basis using the `extra_data` parameter. | `layout.scad` |
 | `invert_layout_flag` | If set to true, the layout will be inverted when generating the PCB and plate. This is handy for split layouts with identical left and right hands, as it saves you the trouble of copying over any changes you make to the borders and standoff positions. | `layout.scad` |
 | `layout_type` | This can be set to either `column` or `row` (depending on the layout stagger), and affects which side the recessed grid is printed on, which is necessary for routing matrix wires that don't run in a straight line. For row-staggered layouts, the grid will be on the bottom (column-side) of the PCB, so it will be easier to print upside down. | `layout.scad` |
-| `tent_angle_x` | Angle at which the keyboard is tilted around the x-axis. Currently unimplemented. | `layout.scad` |
-| `tent_angle_y` | Angle at which the keyboard is tilted around the y-axis. Currently unimplemented. | `layout.scad` |
+| `tent_angle_x` | Angle at which the keyboard is tilted around the x-axis. | `layout.scad` |
+| `tent_angle_y` | Angle at which the keyboard is tilted around the y-axis. | `layout.scad` |
 | `tent_point` | Point around which the keyboard is tented. This is the point that will stay at 0 elevation above the desk. Useful for positive typing angles. | `layout.scad` |
 
 ### PCB Parameters:
@@ -55,6 +55,7 @@
 | `case_wall_draft_angle` | Angle at which the case walls slope outwards from the plate. Corners are rounded. Angle measured from vertical. | `parameters.scad` |
 | `case_chamfer_width` | Width of the chamfer on the top of the case, measured horizontally from the unchamfered plate edge to the chamfered plate edge. Corners are rounded. | `parameters.scad` |
 | `case_chamfer_angle` | Angle (from horizontal) of the chamfer on the top of the case. Corners are rounded. Angle measured from horizontal. | `parameters.scad` |
+| `chamfer_corner_type` (experimental) | This defines how the chamfers and drafted walls behave at corners. Possible values are `rounded` (default), `straight` (experiment), and `beveled` (extra-experimental). Some notes:<br/>&nbsp;&nbsp;1. `straight` and `beveled` require a nightly build of OpenSCAD, as they use the experimental `roof()` module.<br/>&nbsp;&nbsp;2. `straight` and `beveled` are also not compatible with external fillets, as that usually causes `roof()` to generate non-manifold geometry for some reason. | `parameters.scad` |
 | `case_base_height` | Height of the vertical portion of the case wall at its base. Only applies when a draft angle is applied to the case wall. Does not include the height of the backplate flange. | `parameters.scad` |
 | `case_fit_tolerance` | Fit tolerance between interlocking case parts (e.g. an integrated-plate case and its backplate), so that they can be easily taken apart when unscrewed. Default value of 0.2 creates a pretty snug fit that doesn't get stuck. | `parameters.scad` |
 
