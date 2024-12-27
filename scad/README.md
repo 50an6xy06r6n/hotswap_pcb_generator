@@ -51,10 +51,10 @@
 | Name | Description | Location |
 | ---- | ----------- | -------- |
 | `case_type` | This can be set to `sandwich`, `plate_case`, or `backplate_case`, and defines the structure of the optional case. `sandwich` is the most basic, and consists of a switch plate, PCB, and backplate connected by standoffs. `plate_case` is an integrated-plate case, where the sides are enclosed by a wall connected to the plate. The backplate is slightly inset into the case. `backplate_case` is currently unimplemented, but will likely be some kind of tray-mount case. | `parameters.scad` |
-| `case_wall_thickness` | Thickness of the case wall, if applicable. Default value of 2 is probably the minimum recommended thickness. | `parameters.scad` |
-| `case_wall_draft_angle` | Angle at which the case walls slope outwards. Only used when `use_plate_layout_only = false`, as the technique used only works on convex profiles. | `parameters.scad` |
-| `case_chamfer_width` | Width of the chamfer on the top of the case. Only used when `use_plate_layout_only = false`, as the technique used only works on convex profiles. | `parameters.scad` |
-| `case_chamfer_angle` | Angle (from horizontal) of the chamfer on the top of the case. Only used when `use_plate_layout_only = false`, and the technique used only works on convex profiles. | `parameters.scad` |
+| `case_wall_thickness` | Thickness of the case wall at the point where it meets the plate (before chamfering). Default value of 2 is the minimum recommended thickness. | `parameters.scad` |
+| `case_wall_draft_angle` | Angle at which the case walls slope outwards from the plate. Corners are rounded. Angle measured from vertical. | `parameters.scad` |
+| `case_chamfer_width` | Width of the chamfer on the top of the case, measured horizontally from the unchamfered plate edge to the chamfered plate edge. Corners are rounded. | `parameters.scad` |
+| `case_chamfer_angle` | Angle (from horizontal) of the chamfer on the top of the case. Corners are rounded. Angle measured from horizontal. | `parameters.scad` |
 | `case_base_height` | Height of the vertical portion of the case wall at its base. Only applies when a draft angle is applied to the case wall. Does not include the height of the backplate flange. | `parameters.scad` |
 | `case_fit_tolerance` | Fit tolerance between interlocking case parts (e.g. an integrated-plate case and its backplate), so that they can be easily taken apart when unscrewed. Default value of 0.2 creates a pretty snug fit that doesn't get stuck. | `parameters.scad` |
 
@@ -123,6 +123,7 @@
 | `standoff_clearance_hole_diameter` | Defines the size of through holes for standoff screws. Default value is set for M2 screws. | `parameters.scad` |
 | `standoff_pilot_hole_diameter` | Defines the size of pilot holes for standoff screws. This diameter should be sized such that the screw can cut threads into the plastic. Default value is set for M2 screws. | `parameters.scad` |
 | `standoff_counterbore_diameter` | Defines the size of counterbore holes for standoff screw heads. Useful for tented baseplates, and other instances where you want the screws to be recessed. Default value is set for M2 screws. | `parameters.scad` |
+| `default_standoff_fillet` | Defines the radius of the default fillet applied to the base of standoffs. This can be overridden in the layout on a per-standoff basis. | `parameters.scad` |
 
 ### Cutout Grid Parameters:
 | `cutout_grid_size` | Size of the holes in the grid cutout pattern. What that means exactly depends on the pattern. | `parameters.scad` |
@@ -138,8 +139,8 @@
 | Name | Description | Location |
 | ---- | ----------- | -------- |
 | `unit` | Defines the size of "1U" in the layout. | `parameters.scad` |
-| `h_unit` | Defines the size of "1U" horizontally. By default this is set to `unit`, but can be changed independently. Horizontal spacing for Choc keycaps is 18mm. | `parameters.scad` |
-| `v_unit` | Defines the size of "1U" vertically. By default this is set to `unit`, but can be changed independently. Vertical spacing for Choc keycaps is 17mm. | `parameters.scad` |
+| `h_unit` | Defines the size of "1U" horizontally. By default this is set to `unit`, but can be changed independently. (e.g. horizontal spacing for Choc keycaps is 18mm) | `parameters.scad` |
+| `v_unit` | Defines the size of "1U" vertically. By default this is set to `unit`, but can be changed independently. (e.g. vertical spacing for Choc keycaps is 17mm) | `parameters.scad` |
 | `mx_schematic_unit` | Defines the size of the grid used for positioning elements in the MX switch footprint. Shouldn't need to be changed. | `parameters.scad` |
 | `socket_size` | Size of the socket footprint for the switch. Shouldn't need to be changed. | `parameters.scad` |
 | `socket_depth` | Depth of the holes in the PCB for the switch pins and legs (in mm). 3.5mm should be enough for all the common switch types, but you can increase it if you're hitting the bottom for some reason. Note that this will create more perimeters and increase print time. | `parameters.scad` |
