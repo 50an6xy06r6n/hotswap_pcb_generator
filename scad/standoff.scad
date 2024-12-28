@@ -7,7 +7,6 @@ module standoff_footprint() {
 }
 
 module standoff_fillet(standoff_diameter, fillet_radius) {
-    eps=0.001;
     difference() {
         // Start with a basic conical chamfer
         cylinder(

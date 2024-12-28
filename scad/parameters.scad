@@ -35,25 +35,27 @@ case_type = "plate_case";  // [sandwich, plate_case, backplate_case]
 // Thickness of case walls
 case_wall_thickness = 4;
 // Case wall draft angle
-case_wall_draft_angle = 15;
+case_wall_draft_angle = 10;
 // Width of the case chamfer
-case_chamfer_width = 1;
+case_chamfer_width = 2;
 // Angle of the case chamfer
 case_chamfer_angle = 45;
 // Chamfer/draft corner behavior (straight and beveled are experimental, require a nightly OpenSCAD build, and don't work with outer fillets)
-chamfer_corner_type = "beveled"; // [rounded, beveled, straight]
+chamfer_corner_type = "rounded"; // [rounded, beveled, straight]
 // Height of the vertical portion at the bottom of the case 
 // (not including backplate flange)
 case_base_height = 2;
 // Fit tolerance between interlocking case parts
 case_fit_tolerance = 0.2;
+// Minimum gap between case wall and PCB
+case_min_pcb_clearance = 1;
 
 
 /* Plate Parameters */
 // Distance the plate sticks out past the PCB
 plate_margin = 5;
 // Radius of outer fillets
-plate_outer_fillet = 0;
+plate_outer_fillet = 2.5;
 // Radius of inner fillets
 plate_inner_fillet = 50;
 // Setting this lower can help fix geometry issues when using custom plate shapes
@@ -130,7 +132,7 @@ standoff_pilot_hole_diameter = 1.6;
 // Diameter of standoff screw head counterbores
 standoff_counterbore_diameter = 4.5;
 // Radius of the fillet at the base of standoffs
-default_standoff_fillet=1;
+default_standoff_fillet=2;
 
 
 // Cutout Grid Parameters
@@ -143,7 +145,8 @@ cutout_grid_spacing = 1.6;
 fit_tolerance = 0;
 // Resolution of holes (affects render times)
 $fn= $preview ? 12 : 60;
-
+// Very small value added to dimensions for through cuts
+eps=0.001;
 
 /* Advanced Parameters (related to switch size) */
 // Switch spacing distance
@@ -154,11 +157,9 @@ h_unit = unit;
 v_unit = unit;
 // Spacing of grid for MX pins
 mx_schematic_unit =
-    switch_type == "mx"
-    ? 1.27
-    : switch_type == "choc"
-        ? 0
-        : assert(false, "switch_type is invalid");
+    switch_type == "mx" ? 1.27
+    : switch_type == "choc" ? 1
+    : undef;
 // Size of socket body
 assert(
     switch_type == "mx" || switch_type == "choc",

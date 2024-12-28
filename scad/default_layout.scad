@@ -52,7 +52,11 @@ base_plate_layout = [];
 
 module additional_plate_cutouts() { // Initialize module so it doesn't break
     square(0); // Dummy geometry to fix preview bug
-} 
+}
+
+module additional_case_cavities() {
+    square(0); // Dummy geometry to fix preview bug
+}
 
 // Whether to only use base_plate_layout to generate the plate footprint
 use_plate_layout_only = false;

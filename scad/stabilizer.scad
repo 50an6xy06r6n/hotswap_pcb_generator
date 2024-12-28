@@ -31,7 +31,7 @@ module stabilizer_pcb(spacing=stab_2u) {
 module stabilizer_plate(spacing=stab_2u, thickness=plate_thickness) {
     linear_extrude(thickness, center=true)
     difference() {
-        stabilizer_plate_footprint([1,1,1,1], spacing);
+        stabilizer_footprint([1,1,1,1], spacing);
         stabilizer_plate_cutout_footprint(spacing);
         switch_plate_cutout_footprint();
     }
@@ -74,6 +74,7 @@ module stabilizer_pcb_cutout(spacing=stab_2u) {
         }
     }
     module plate_mount_cutout() {
+        // Nothing needs to be done on the PCB
     }
     stabilizer_layout(spacing) {
         if (stabilizer_type == "pcb") {
@@ -84,10 +85,13 @@ module stabilizer_pcb_cutout(spacing=stab_2u) {
             assert(false, "stabilizer_type is invalid");
         }
     }
+    translate([0,0,-pcb_thickness-eps])
+    linear_extrude(pcb_thickness+2*eps)
+        trrs_footprint_trim(borders, trim);
 }
 
 
-module stabilizer_plate_footprint(borders=[1,1,1,1], spacing=stab_2u) {
+module stabilizer_footprint(borders=[1,1,1,1], spacing=stab_2u) {
     translate([unit/2,-v_unit/2,0])
     border_footprint(
         [spacing[0]*h_unit,v_unit],
@@ -95,7 +99,7 @@ module stabilizer_plate_footprint(borders=[1,1,1,1], spacing=stab_2u) {
     );
 }
 
-module stabilizer_plate_footprint(borders=[1,1,1,1], spacing=stab_2u, trim=undef) {
+module stabilizer_footprint_trim(borders=[1,1,1,1], spacing=stab_2u, trim=undef) {
     if (trim)
     translate([unit/2,-v_unit/2,0])
     border_trim(
@@ -136,7 +140,7 @@ module stabilizer_plate_cutout_footprint(spacing=stab_2u) {
 
 module stabilizer_plate_base(borders=[1,1,1,1], spacing=stab_2u, thickness=plate_thickness) {
     linear_extrude(thickness, center=true)
-        stabilizer_plate_footprint(borders, spacing);
+        stabilizer_footprint(borders, spacing);
 }
 
 module stabilizer_plate_cutout(spacing=stab_2u, thickness=plate_thickness) {

@@ -2,6 +2,7 @@ include <parameters.scad>
 include <param_processing.scad>
 
 use <plate.scad>
+use <pcb.scad>
 use <switch.scad>
 use <mcu.scad>
 use <trrs.scad>
@@ -34,7 +35,14 @@ module straight_chamfer(
 }
 
 // External profile of the case
-module case_shell(height, switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout) {
+module case_shell(
+    height,
+    switch_layout,
+    mcu_layout,
+    trrs_layout,
+    plate_layout,
+    stab_layout
+) {
     // Helper module for shared plate profile
     module local_plate_profile() {
         plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
@@ -135,7 +143,6 @@ module case_shell(height, switch_layout, mcu_layout, trrs_layout, plate_layout, 
     } else {
         // Just hull everything to get a basic shape (eliminates any concavity in the profile)
         // This could probably also be done via the minkowski method, but this is more computationally efficient
-        eps = 0.001;
         rounded_corners = chamfer_corner_type == "rounded";
         beveled_corners = chamfer_corner_type == "beveled";
 
@@ -170,6 +177,40 @@ module case_shell(height, switch_layout, mcu_layout, trrs_layout, plate_layout, 
     }
 }
 
+// Internal space to put stuff in
+module case_cavity(
+    height,
+    switch_layout,
+    mcu_layout,
+    trrs_layout,
+    plate_layout,
+    stab_layout
+) {
+    linear_extrude(height-plate_thickness, convexity=10)
+    union() {
+        offset(-case_wall_thickness)
+            plate_footprint(
+                switch_layout,
+                mcu_layout,
+                trrs_layout,
+                plate_layout,
+                stab_layout
+            );
+
+        // Also cut out the PCB profile to make extra sure there's room
+        offset(case_min_pcb_clearance)
+            pcb_footprint(
+                switch_layout,
+                mcu_layout,
+                trrs_layout,
+                stab_layout
+            );
+
+        // Add additional case cavities
+        additional_case_cavities();
+    }
+}
+
 module case(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, standoff_layout) {
     // Helper module for shared plate profile
     module local_plate_profile() {
@@ -187,11 +228,17 @@ module case(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, s
                 translate([0,0,-height+plate_thickness/2]) 
                 difference() {
                     case_shell(height, switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
-                    translate([0,0,-1])
-                    linear_extrude(height-plate_thickness+1, convexity=10)
-                        offset(-case_wall_thickness)
-                        local_plate_profile();
+                    translate([0,0,-eps])
+                        case_cavity(
+                            height + eps,
+                            switch_layout,
+                            mcu_layout,
+                            trrs_layout,
+                            plate_layout,
+                            stab_layout
+                        );
                 }
+
                 // Add undrilled standoffs
                 layout_pattern(standoff_layout) {
                     plate_standoff($extra_data, true);
@@ -225,6 +272,7 @@ module case(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, s
                 // Make sure it doesn't cut into the case walls by intersecting with the inner plate profile
                 offset(-case_wall_thickness)
                     local_plate_profile();
+                // TODO: make this 2-D?
                 additional_plate_cutouts(); 
             }
         }
@@ -239,23 +287,3 @@ case(
     stab_layout_final,
     standoff_layout_final
 );
-
-// module plate_profile () {
-//     plate_footprint(
-//         switch_layout_final,
-//         mcu_layout_final,
-//         trrs_layout_final,
-//         plate_layout_final,
-//         stab_layout_final
-//     );
-// }
-
-// difference() {
-//     roof("straight")
-//         plate_profile();
-//     translate([0,0,4])
-//         linear_extrude(100)
-//         offset(4)
-//         plate_profile();
-// };
-

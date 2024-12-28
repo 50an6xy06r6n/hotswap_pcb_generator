@@ -23,7 +23,7 @@ module switch_socket_base(borders=[1,1,1,1]) {
     }
 }
 
-module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
+module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false, trim=undef) {
     if (switch_type == "mx"){
         mx_socket_cutout(borders, rotate_column);
     } else if (switch_type == "choc"){
@@ -31,6 +31,9 @@ module switch_socket_cutout(borders=[1,1,1,1], rotate_column=false) {
     } else {
         assert(false, "switch_type is invalid");
     }
+    translate([0,0,-pcb_thickness-eps])
+    linear_extrude(pcb_thickness+2*eps) 
+        switch_footprint_trim(borders, trim);
 }
 
 module mx_socket_cutout(borders=[1,1,1,1], rotate_column=false){
@@ -215,7 +218,7 @@ module socket_cleanup_cube(borders){
     }
 }
 
-module switch_plate_footprint(borders=[1,1,1,1]) {
+module switch_footprint(borders=[1,1,1,1]) {
     translate([h_unit/2,-v_unit/2,0])
         border_footprint(
             [socket_size,socket_size], 
@@ -225,7 +228,7 @@ module switch_plate_footprint(borders=[1,1,1,1]) {
         );
 }
 
-module switch_plate_footprint_trim(borders=[1,1,1,1], trim=undef) {
+module switch_footprint_trim(borders=[1,1,1,1], trim=undef) {
     if (trim)
     translate([h_unit/2,-v_unit/2,0])
         border_trim(
@@ -245,7 +248,7 @@ module switch_plate_cutout_footprint() {
 
 module switch_plate_base(borders=[1,1,1,1], thickness=plate_thickness) {
     linear_extrude(thickness, center=true)
-        switch_plate_footprint(borders);
+        switch_footprint(borders);
 }
 
 module switch_plate_cutout(thickness=plate_thickness) {

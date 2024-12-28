@@ -6,6 +6,7 @@ use <mcu.scad>
 use <trrs.scad>
 use <stabilizer.scad>
 use <standoff.scad>
+use <pcb.scad>
 
 function plate_borders(borders, h_unit=1, v_unit=1) = [
     borders[0] + plate_margin/v_unit,
@@ -42,68 +43,58 @@ module plate_footprint(
     // Base plate layout containing board components
     {
         if (use_plate_layout_only) {
-            // Trim outer edge of the plate to clean up the profile
-            difference() {
-                // Hull each group and then union separately, which allows for concavity
-                union() for (group = plate_layout) {
-                    hull() {
-                        layout_pattern(group) {
-                            let(component_type = $extra_data[0]) {
-                                if (component_type == "switch")
-                                    switch_plate_footprint($borders);
-                                else if (component_type == "mcu"){
-                                    mcu_plate_footprint($borders);}
-                                else if (component_type == "trrs")
-                                    trrs_plate_footprint($borders);
-                                else if (component_type == "stab")
-                                    stabilizer_plate_footprint($borders, $extra_data[1]);
-                            }
-                        }
-                    }
-                }
-
-                // Generate a negative external profile of the plate (useful for cleaning up convex intersections)
-                union() for (group = plate_layout) {
-                    layout_pattern(group) {
-                        let(component_type = $extra_data[0]) {
-                            if (component_type == "switch")
-                                switch_plate_footprint_trim($borders, $trim);
-                            else if (component_type == "mcu"){
-                                mcu_plate_footprint_trim($borders, $trim);}
-                            else if (component_type == "trrs")
-                                trrs_plate_footprint_trim($borders, $trim);
-                            else if (component_type == "stab")
-                                stabilizer_plate_footprint_trim($borders, $extra_data[1], $trim);
-                        }
-                    }
-                }
-            }
+            plate_layout_footprint(plate_layout);
         } else {
             // Do a basic hull of all components to make sure they fit
             hull() {
-                layout_pattern(switch_layout) {
-                    switch_plate_footprint($borders);
-                }
-                layout_pattern([for(g=plate_layout) for(e=g) e]) {
+                pcb_footprint(
+                    switch_layout,
+                    mcu_layout,
+                    trrs_layout,
+                    stab_layout
+                );
+
+                // Add plate layout data as well
+                plate_layout_footprint(plate_layout);
+            }
+        }
+    }
+}
+
+// Helper module to generate the base form of the plate_layout data
+module plate_layout_footprint(plate_layout) {
+    // Trim outer edge of the plate to clean up the profile
+    difference() {
+        // Hull each group and then union separately, which allows for concavity
+        union() for (group = plate_layout) {
+            hull() {
+                layout_pattern(group) {
                     let(component_type = $extra_data[0]) {
                         if (component_type == "switch")
-                            switch_plate_footprint($borders);
-                        else if (component_type == "mcu")
-                            mcu_plate_footprint($borders);
+                            switch_footprint($borders);
+                        else if (component_type == "mcu"){
+                            mcu_footprint($borders);}
                         else if (component_type == "trrs")
-                            trrs_plate_footprint($borders);
+                            trrs_footprint($borders);
                         else if (component_type == "stab")
-                            stabilizer_plate_footprint($borders, $extra_data[1]);
+                            stabilizer_footprint($borders, $extra_data[1]);
                     }
                 }
-                layout_pattern(mcu_layout) {
-                    mcu_plate_footprint($borders);
-                }
-                layout_pattern(trrs_layout) {
-                    trrs_plate_footprint($borders);
-                }
-                layout_pattern(stab_layout) {
-                    stabilizer_plate_footprint($borders, $extra_data);
+            }
+        }
+
+        // Generate a negative external profile of the plate (useful for cleaning up convex intersections)
+        union() for (group = plate_layout) {
+            layout_pattern(group) {
+                let(component_type = $extra_data[0]) {
+                    if (component_type == "switch")
+                        switch_footprint_trim($borders, $trim);
+                    else if (component_type == "mcu"){
+                        mcu_footprint_trim($borders, $trim);}
+                    else if (component_type == "trrs")
+                        trrs_footprint_trim($borders, $trim);
+                    else if (component_type == "stab")
+                        stabilizer_footprint_trim($borders, $extra_data[1], $trim);
                 }
             }
         }
@@ -191,4 +182,9 @@ plate(
     stab_layout_final,
     standoff_layout_final
 );
-// plate_footprint(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final);
+// plate_footprint(
+//     switch_layout_final,
+//     mcu_layout_final,
+//     trrs_layout_final,
+//     plate_layout_final
+// );

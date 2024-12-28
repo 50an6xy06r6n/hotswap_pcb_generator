@@ -52,19 +52,17 @@ assert(
 // Since changing the row/column layout flips the switch print
 // orientation, we also need to flip the teardrop.
 upsidedown_switch = 
-    layout_type == "column"
-    ? false 
-    : layout_type == "row"
-        ? true 
-        : assert(false, "layout_type parameter is invalid");
+    layout_type == "column" ? false
+    : layout_type == "row" ? true
+    : undef;
 
 // Moves the flat part to the top if layout is row-staggered so column wires
 // can be routed. PCB should be printed upside down in this case.
 border_z_offset =
     pcb_type == "traditional" ? 0
-        : layout_type == "column" ? -1
-        : layout_type == "row" ? 1
-        : undef;
+    : layout_type == "column" ? -1
+    : layout_type == "row" ? 1
+    : undef;
 
 trrs_inset =
     pcb_type == "printed" ? 2
