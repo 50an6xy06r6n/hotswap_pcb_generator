@@ -68,6 +68,8 @@ plate_precision = 1/100;
 backplate_thickness = 3;
 // Thickness of flange around backplate if using an integrated-plate case
 backplate_case_flange = 2;
+// Width of the backplat indexing lip (solid area if undefined)
+backplate_lip_width = 5;
 // Spacing between the bottom of the PCB and the top of the backplate
 pcb_backplate_spacing = 3;
 

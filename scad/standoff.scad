@@ -177,7 +177,7 @@ module backplate_standoff(standoff_config, solid=false) {
             : undef;
         standoff_offset = height/2 + backplate_thickness/2;
         
-        #translate([0,0,standoff_offset])
+        translate([0,0,standoff_offset])
         mirror([0,0,1])
             standoff(height, 0, solid, standoff_fillet);
     }

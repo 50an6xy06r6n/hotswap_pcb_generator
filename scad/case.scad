@@ -187,6 +187,22 @@ module case_cavity(
     stab_layout
 ) {
     linear_extrude(height-plate_thickness, convexity=10)
+    case_cavity_footprint(
+        switch_layout,
+        mcu_layout,
+        trrs_layout,
+        plate_layout,
+        stab_layout
+    );
+}
+
+module case_cavity_footprint(
+    switch_layout,
+    mcu_layout,
+    trrs_layout,
+    plate_layout,
+    stab_layout
+) {
     union() {
         offset(-case_wall_thickness)
             plate_footprint(
@@ -217,7 +233,7 @@ module case(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, s
         plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
     }
 
-    height = total_thickness - backplate_case_flange;
+    height = total_thickness - backplate_thickness;
     intersection() {
         // Trim off any components that extend past the case (e.g. standoffs)
         translate([0,0,-height+plate_thickness/2])
@@ -262,9 +278,20 @@ module case(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, s
             layout_pattern(standoff_layout) {
                 case_standoff_hole($extra_data);
                 plate_standoff_hole($extra_data);
-                translate([0,0,plate_thickness/2-pcb_plate_spacing-pcb_thickness-pcb_backplate_spacing-backplate_thickness/2-0.5])
+                translate([0,0,-pcb_plate_spacing-pcb_thickness-pcb_backplate_spacing-0.25])
                     backplate_standoff_hole($extra_data);
             }
+
+            // Add clearance for backplate indexing feature
+            translate([0,0,-height+plate_thickness/2-eps])
+            linear_extrude(backplate_index_height+eps)
+                case_cavity_footprint(
+                    switch_layout,
+                    mcu_layout,
+                    trrs_layout,
+                    plate_layout,
+                    stab_layout
+                );
 
             // Additional user-defined cutouts
             linear_extrude(plate_thickness+1, center=true)
