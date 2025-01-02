@@ -235,7 +235,8 @@ function project_onto_plane(rotations, rotation_point, projection_xy) = (
         // offset by inverting the z-distance of the rotation point from the plane
         // rotated around the origin.
         rotation_point_projection = project_onto_plane_helper(rotations, rotation_point),
-        z_offset = rotation_point_projection[2] - rotation_point[2]
+        rotation_point_z = is_undef(rotation_point[2]) ? 0 : rotation_point[2],
+        z_offset = rotation_point_projection[2] - rotation_point_z
     )
     [
         before_offset[0],

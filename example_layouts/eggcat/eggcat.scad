@@ -54,7 +54,7 @@ base_switch_layout = [
     [[[5,1.25],1,[0,0,0]],[1,1,2,0],false],
     [[[5,2.25],1,[0,0,0]],[1,1+15*mm,2,0],false],
     [[[4.875,4.625],1.5,[60,4.875,4.625]],[30*mm,1,0.25*unit*mm,20*mm],true],
-    [[[4.875,5.625],1.5,[60,4.875,4.625]],[1,0,0.25*unit*mm,20*mm],true, [false, true, false, false]],
+    [[[4.875,5.625],1.5,[60,4.875,4.625]],[1,0,0.25*unit*mm,20*mm],true,[false, true, false, false]],
 ];
 
 // MCU Position(s)
@@ -115,8 +115,7 @@ base_standoff_layout = [
 module additional_plate_cutouts() {
     position_item(
         invert_layout_item(
-            set_item_defaults(base_mcu_layout[0]), // Cutout above MCU (for traditional PCB)
-            invert_layout_flag
+            set_item_defaults(base_mcu_layout[0]) // Cutout above MCU (for traditional PCB)
         )
     ) {
         translate([h_unit/2,-mcu_v_unit_size*v_unit/2,0])
@@ -124,10 +123,7 @@ module additional_plate_cutouts() {
         offset(delta=-10)
         border_footprint(
             [mcu_socket_width,mcu_v_unit_size*v_unit], 
-            invert_borders(
-                [1000,(unit+trrs_plug_width)/2,0,100],
-                invert_layout_flag
-            )
+            invert_borders([1000,(unit+trrs_plug_width)/2,0,100])
         );
     }
 }
@@ -137,8 +133,7 @@ module additional_case_cavities() {
     // Clearance for wire harness to wrap from inside MCU pins to the back of the PCB
     position_item(
         invert_layout_item(
-            set_item_defaults(base_mcu_layout[0]),
-            invert_layout_flag
+            set_item_defaults(base_mcu_layout[0])
         )
     ) {
         translate([h_unit/2,-mcu_v_unit_size*v_unit/2])
@@ -146,10 +141,7 @@ module additional_case_cavities() {
         offset(delta=-3)
         border_footprint(
             [mcu_h_unit_size*h_unit,mcu_v_unit_size*v_unit*0.75], 
-            invert_borders(
-                [0,0,0,3],
-                invert_layout_flag
-            )
+            invert_borders([0,0,0,3])
         );
     }
 }
@@ -158,6 +150,7 @@ module additional_case_cavities() {
 module backplate_cutouts() {
     tent_angles = [-tent_angle_x, tent_angle_y, 0];
 
+    // Add pocket for a magsafe ring adapter
     project_onto_plane(
         tent_angles,
         tent_point,
@@ -178,8 +171,7 @@ module backplate_cutouts() {
             [[[-0.375,3.5]]],
             [[[4.25,6],1.5,[60,4.875,4.625]]],
             [[[7,0.125]]],
-        ]),
-        invert_layout_flag
+        ])
     );
 
     for(item = foot_layout) {
@@ -210,4 +202,4 @@ tent_angle_y = 0;
 // Angle around x-axis
 tent_angle_x = 0;
 // Point around which keyboard is tented
-tent_point = [0,4.125*unit,0];
+tent_point = [0,4.125*unit];

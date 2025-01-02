@@ -53,7 +53,7 @@ case_min_pcb_clearance = 1;
 
 /* Plate Parameters */
 // Distance the plate sticks out past the PCB
-plate_margin = 5;
+plate_margin = 6;
 // Radius of outer fillets
 plate_outer_fillet = 2.5;
 // Radius of inner fillets
@@ -70,7 +70,7 @@ backplate_thickness = 4;
 backplate_index_height = 1;
 // Width of the backplate indexing lip (solid area if undefined)
 backplate_lip_width = 2;
-// Thickness of the portion of the backplate that gets screwed through (i.e. thickness - counterbore depth)
+// Thickness of the portion of the backplate that gets clamped by screws (i.e. thickness - counterbore depth)
 backplate_screw_flange_thickness = 2;
 // Spacing between the bottom of the PCB and the top of the backplate
 pcb_backplate_spacing = 3;
