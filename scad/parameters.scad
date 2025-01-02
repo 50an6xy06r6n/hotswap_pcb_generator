@@ -65,11 +65,13 @@ plate_precision = 1/100;
 
 /* Backplate Parameters */
 // Thickness of the backplate
-backplate_thickness = 3;
+backplate_thickness = 4;
 // Thickness of flange around backplate if using an integrated-plate case
-backplate_case_flange = 2;
-// Width of the backplat indexing lip (solid area if undefined)
-backplate_lip_width = 5;
+backplate_index_height = 1;
+// Width of the backplate indexing lip (solid area if undefined)
+backplate_lip_width = 2;
+// Thickness of the portion of the backplate that gets screwed through (i.e. thickness - counterbore depth)
+backplate_screw_flange_thickness = 2;
 // Spacing between the bottom of the PCB and the top of the backplate
 pcb_backplate_spacing = 3;
 
@@ -85,7 +87,7 @@ mcu_pin_count = 24;
 mcu_pin_pitch = 2.54;
 mcu_pin_offset = 0;  // Offset from the rear of the PCB
 mcu_connector_width = 13;  // Width of the connector (for plate cutout)
-mcu_connector_length = 4;  // Distance the connector extends onto the MCU (for plate cutout)
+mcu_connector_length = 6;  // Distance the connector extends onto the MCU (for plate cutout)
 mcu_connector_height = 8;  // Height of the plug housing
 mcu_connector_offset = 1.5; // Vertical offset of plug center from PCB center
 mcu_pcb_thickness = 1.6;
@@ -130,7 +132,7 @@ standoff_diameter = 4.5;
 // Diameter of standoff clearance hole
 standoff_clearance_hole_diameter = 2.5;
 // Diameter of standoff pilot hole
-standoff_pilot_hole_diameter = 1.6;
+standoff_pilot_hole_diameter = 2;
 // Diameter of standoff screw head counterbores
 standoff_counterbore_diameter = 4.5;
 // Radius of the fillet at the base of standoffs
@@ -196,8 +198,12 @@ mcu_h_unit_size = ceil(mcu_socket_width/mcu_unit_resolution/h_unit) * mcu_unit_r
 mcu_v_unit_size = ceil(mcu_socket_length/mcu_unit_resolution/v_unit) * mcu_unit_resolution;
 
 // Total assembly thickness (for reference)
-total_thickness =
-    pcb_plate_spacing + pcb_thickness + pcb_backplate_spacing + backplate_thickness;
+total_thickness = 
+    pcb_plate_spacing +
+    pcb_thickness +
+    pcb_backplate_spacing +
+    backplate_index_height +
+    backplate_thickness;
 
 // Width of a border unit around the socket (for joining adjacent sockets)
 border_width = (unit - socket_size)/2;

@@ -39,10 +39,10 @@ translate([
 
 // Backplate
 color("maroon")
-translate([
+%translate([
     0,
     0,
-    backplate_thickness/2
+    0
 ]) {
     if (case_type == "sandwich" || case_type == "plate_case") {
         backplate(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final, stab_layout_final, standoff_layout_final);

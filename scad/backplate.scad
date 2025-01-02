@@ -12,7 +12,7 @@ use <case.scad>
 // 2-D outline of the backplate
 module backplate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout) {
     // TODO: move these calculations somewhere shared
-    case_height = total_thickness - backplate_case_flange;
+    case_height = total_thickness - backplate_thickness;
 
     // Additional wall thickness introduced by draft angle
     bottom_offset = (
@@ -35,7 +35,7 @@ module backplate_base(switch_layout, mcu_layout, trrs_layout, plate_layout, stab
     difference() {
         // Create an extra-chonky version of the backplate that we can chop down to size
         translate([0,0,-500])
-        linear_extrude(thickness+1000, center=true, convexity=10)
+        linear_extrude(500, convexity=10)
             backplate_footprint(
                 switch_layout,
                 mcu_layout,
@@ -45,8 +45,7 @@ module backplate_base(switch_layout, mcu_layout, trrs_layout, plate_layout, stab
             );
 
         // Create a large subtractive block that cuts the tent angle into the backplate base
-        translate([tent_point[0]-plate_margin,plate_margin-tent_point[1],-thickness/2])
-        rotate([-tent_angle_x, tent_angle_y,0])
+        tent_transform(thickness)
         translate([-1000,-1000,-1000])
             cube([2000,2000,1000]);
     }
@@ -55,7 +54,7 @@ module backplate_base(switch_layout, mcu_layout, trrs_layout, plate_layout, stab
 // Generates the final backplate by adding features to the base
 module backplate(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, standoff_layout) {
     module local_plate_profile() {
-        plate_footprint(
+        case_cavity_footprint(
             switch_layout,
             mcu_layout,
             trrs_layout,
@@ -78,15 +77,16 @@ module backplate(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layo
                 );
             } else if (case_type == "plate_case") {
                 // Adds an indexing feature that seats the backplate into the back of the case
-                linear_extrude(backplate_thickness, center=true, convexity=10)
+                // translate([0,0,-backplate_thickness+backplate_index_height])
+                linear_extrude(backplate_index_height, convexity=10)
                 union() {
                     // Basic perimeter around inside of case
                     difference() {
-                        offset(-case_wall_thickness-case_fit_tolerance)
+                        offset(-case_fit_tolerance)
                             local_plate_profile();
                         
                         if (!is_undef(backplate_lip_width)) {
-                            offset(-case_wall_thickness-case_fit_tolerance - backplate_lip_width)
+                            offset(-case_fit_tolerance - backplate_lip_width)
                                 local_plate_profile();
                         }
                     }
@@ -104,22 +104,21 @@ module backplate(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layo
                             }
 
                             // Don't let it stick out past the lip
-                            offset(-case_wall_thickness-case_fit_tolerance)
+                            offset(-case_fit_tolerance)
                                 local_plate_profile();
                         }
                     }
                 }
 
                 // Add the plate base (including any tenting)
-                translate([0,0,(backplate_case_flange-backplate_thickness)/2])
-                    backplate_base(
-                        switch_layout,
-                        mcu_layout,
-                        trrs_layout,
-                        plate_layout,
-                        stab_layout,
-                        backplate_thickness
-                    );
+                backplate_base(
+                    switch_layout,
+                    mcu_layout,
+                    trrs_layout,
+                    plate_layout,
+                    stab_layout,
+                    backplate_thickness
+                );
             }
 
             // Add undrilled backplate standoffs
@@ -132,7 +131,18 @@ module backplate(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layo
         layout_pattern(standoff_layout) {
             backplate_standoff_hole($extra_data);
         }
+
+        // Additional backplate cutouts
+        translate([0,0,-backplate_thickness-eps])
+            backplate_cutouts();
     }
+}
+
+module tent_transform(thickness) {
+    translate([tent_point[0],-tent_point[1],-thickness])
+    rotate([-tent_angle_x, tent_angle_y,0])
+    translate([-tent_point[0],tent_point[1],0])
+        children();
 }
 
 backplate(switch_layout_final, mcu_layout_final, trrs_layout_final, plate_layout_final, stab_layout_final, standoff_layout_final);

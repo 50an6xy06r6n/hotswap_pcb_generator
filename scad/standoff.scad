@@ -255,8 +255,9 @@ module backplate_standoff_hole(standoff_config) {
         (standoff_integration == "separate" && standoff_attachment == "plate_backplate")
     ) {
         // Standoff screwed into backplate
-        standoff_clearance_hole(backplate_thickness+1);
-        standoff_counterbore(-backplate_thickness/2);
+        translate([0,0,backplate_index_height/2-backplate_thickness/2-eps])
+            standoff_clearance_hole(backplate_index_height+backplate_thickness+2*eps);
+        standoff_counterbore(-backplate_screw_flange_thickness);
     } 
 } 
 
@@ -268,7 +269,7 @@ module case_standoff_hole(standoff_config) {
         (standoff_integration == "plate" && standoff_attachment == "pcb") || 
         (standoff_integration == "plate" && standoff_attachment == "backplate") 
     ) {
-        height = pcb_plate_spacing + pcb_thickness + pcb_backplate_spacing + backplate_thickness;
+        height = pcb_plate_spacing + pcb_thickness + pcb_backplate_spacing + backplate_index_height;
         translate([0,0,-(height+plate_thickness)/2])
             standoff_pilot_hole(height);
     } 

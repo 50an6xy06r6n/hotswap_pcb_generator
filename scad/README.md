@@ -71,7 +71,7 @@
 | Name | Description | Location |
 | ---- | ----------- | -------- |
 | `backplate_thickness` | Defines the thickness of the backplate. | `parameters.scad` |
-| `backplate_case_flange` | If using the `plate_case` case type, this defines the thickness of the flange that forms the bottom surface of the case. | `parameters.scad` |
+| `backplate_index_height` | If using the `plate_case` case type, this defines the height of the feature that indexes into the bottom of the case. | `parameters.scad` |
 | `pcb_backplate_spacing` | Defines the distance between the bottom of the PCB and the top of the backplate. Can be decreased for a lower profile or increased for more room to route wires. | `parameters.scad` |
 
 ### MCU Parameters:
