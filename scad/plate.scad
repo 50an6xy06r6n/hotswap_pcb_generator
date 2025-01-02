@@ -27,18 +27,31 @@ module plate_footprint(
         ? plate_precision * 100000
         : 1;
 
+    // BUGGY VERSION
     // Create inner fillets
-    offset(-plate_inner_fillet,$fn=360)
+    // offset(-plate_inner_fillet,$fn=360)
     offset(delta=plate_inner_fillet)
 
     // Create outer fillets
     offset(plate_outer_fillet,$fn=360)
     offset(delta=-plate_outer_fillet)
 
-    // Offset plate margin and do scale-based fudging to merge points (deprecated)
-    scale(scale_factor)
-    offset(delta=plate_margin / scale_factor)
-    scale(1/scale_factor)
+    // Offset plate margin
+    offset(delta=plate_margin)
+
+    // ORIGINAL VERSION
+    // // Create inner fillets
+    // // offset(-plate_inner_fillet,$fn=360)
+    // offset(delta=plate_inner_fillet)
+
+    // // Create outer fillets
+    // offset(plate_outer_fillet,$fn=360)
+    // offset(delta=-plate_outer_fillet)
+
+    // // Offset plate margin and do scale-based fudging to merge points (deprecated)
+    // scale(scale_factor)
+    // offset(delta=plate_margin / scale_factor)
+    // scale(1/scale_factor)
 
     // Base plate layout containing board components
     {
@@ -174,17 +187,17 @@ module plate(
     }
 }
 
-plate(
-    switch_layout_final,
-    mcu_layout_final,
-    trrs_layout_final,
-    plate_layout_final,
-    stab_layout_final,
-    standoff_layout_final
-);
-// plate_footprint(
+// plate(
 //     switch_layout_final,
 //     mcu_layout_final,
 //     trrs_layout_final,
-//     plate_layout_final
+//     plate_layout_final,
+//     stab_layout_final,
+//     standoff_layout_final
 // );
+plate_footprint(
+    switch_layout_final,
+    mcu_layout_final,
+    trrs_layout_final,
+    plate_layout_final
+);

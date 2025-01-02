@@ -133,7 +133,8 @@ module backplate(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layo
         }
 
         // Additional backplate cutouts
-        backplate_cutouts();
+        translate([0,0,-backplate_thickness-eps])
+            backplate_cutouts();
     }
 }
 

@@ -1,4 +1,5 @@
 include <parameters.scad>
+include <layout.scad>
 
 /* Creates a flat 2D teardrop on the XY plane,
  * where no angle in the positive y direction is greater than 45º. */
