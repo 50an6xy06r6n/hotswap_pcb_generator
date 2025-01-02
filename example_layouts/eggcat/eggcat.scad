@@ -90,11 +90,32 @@ base_plate_layout = [
     slice(base_switch_layout, [-2,0], ["switch"])
 ];
 
+// Standoff layout
+//     (extra_data = [standoff_integration_override, standoff_attachment_override])
+base_standoff_layout = [
+    // PCB-Plate standoffs
+    [[[0.5,0.125]]],
+    [[[0.5,3]]],
+    [[[2.5,1.5]]],
+    [[[3.5,3]]],
+    [[[4.5,0.25]]],
+    [[[4.875,5.125],1.5,[60,4.875,4.625]], [0,0,0,0]],
+    // PCB-Backplate standoffs
+    [[[-0.5,-0.375+.05*mm]],[0,0,0,0],["plate", "backplate", 0]],
+    [[[-0.5,3.625]],[0,0,0,0],["plate", "backplate", 0]],
+    [[[3.5,3.75]],[0,0,0,0],["plate", "backplate", 0]],
+    [[[3,-0.53125]],[0,0,0,0],["plate", "backplate", 0]],
+    [[[4.125,6.125],1.5,[60,4.875,4.625]],[0,0,0,0],["plate", "backplate", 0]],
+    [[[6.5,3]],[0,0,0,0],["plate", "backplate", 4]],
+    [[[5.5,-0.1875]],[0,0,0,0],["plate", "backplate", 0]],
+    [[[7.125,0]],[0,0,0,0],["plate", "backplate", 0]],
+];
+
 // Additional cutouts in the plate surface to accommodate anything sticking up too far off the PCB
 module additional_plate_cutouts() {
     position_item(
         invert_layout_item(
-            set_item_defaults(base_mcu_layout[0]), // Cutout above MCU
+            set_item_defaults(base_mcu_layout[0]), // Cutout above MCU (for traditional PCB)
             invert_layout_flag
         )
     ) {
@@ -133,29 +154,49 @@ module additional_case_cavities() {
     }
 }
 
+// Cutouts on the bottom of the backplate (recesses for rubber feet, mounting points, etc)
+module backplate_cutouts() {
+    tent_angles = [-tent_angle_x, tent_angle_y, 0];
+
+    project_onto_plane(
+        tent_angles,
+        tent_point,
+        [[4,1.75,0],0,[0,0,0]],
+        [1/2, -1/2]
+    )
+        translate([0,0,-eps])
+        linear_extrude(1.4 + eps)
+        difference() {
+            circle(d=59);
+            circle(d=41);
+        }
+
+    // Place feet below and slightly inboard of corner screws
+    foot_layout = invert_layout(
+        set_defaults([
+            [[[-0.375,-0.25+.05*mm]]],
+            [[[-0.375,3.5]]],
+            [[[4.25,6],1.5,[60,4.875,4.625]]],
+            [[[7,0.125]]],
+        ]),
+        invert_layout_flag
+    );
+
+    for(item = foot_layout) {
+        project_onto_plane(
+            tent_angles,
+            tent_point,
+            item[0],
+            [1/2, -1/2]
+        ) {
+            translate([0,0,-eps])
+            cylinder(1+eps, d=10.5);
+        }
+    }
+}
+
 // Whether to only use base_plate_layout to generate the plate footprint
 use_plate_layout_only = true;
-
-// Standoff layout
-//     (extra_data = [standoff_integration_override, standoff_attachment_override])
-base_standoff_layout = [
-    // PCB-Plate standoffs
-    [[[0.5,0.125]]],
-    [[[0.5,3]]],
-    [[[2.5,1.5]]],
-    [[[3.5,3]]],
-    [[[4.5,0.25]]],
-    [[[4.875,5.125],1.5,[60,4.875,4.625]], [0,0,0,0]],
-    // PCB-Backplate standoffs
-    [[[-0.5,-0.375+.05*mm]],[0,0,0,0],["plate", "backplate", 0]],
-    [[[-0.5,3.625]],[0,0,0,0],["plate", "backplate", 0]],
-    [[[3.5,3.75]],[0,0,0,0],["plate", "backplate", 0]],
-    [[[3,-0.53125]],[0,0,0,0],["plate", "backplate", 0]],
-    [[[4.125,6.125],1.5,[60,4.875,4.625]],[0,0,0,0],["plate", "backplate", 0]],
-    [[[6.5,3]],[0,0,0,0],["plate", "backplate", 4]],
-    [[[5.5,-0.1875]],[0,0,0,0],["plate", "backplate", 0]],
-    [[[7.125,0]],[0,0,0,0],["plate", "backplate", 0]],
-];
 
 // Whether to flip the layout
 invert_layout_flag = false;
@@ -165,8 +206,8 @@ layout_type = "column";  // [column, row]
 
 // Tenting
 // Angle around y-axis (i.e. typing angle)
-tent_angle_y = 5;
+tent_angle_y = 0;
 // Angle around x-axis
-tent_angle_x = 5;
+tent_angle_x = 0;
 // Point around which keyboard is tented
-tent_point = [0,4.125*19.05];
+tent_point = [0,4.125*unit,0];

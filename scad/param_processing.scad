@@ -8,30 +8,37 @@ use <utils.scad>
 // Post-processing of parameter and layout values
 
 // Determine whether to invert the layout
-switch_layout_final = invert_layout_flag
-    ? invert_layout(set_defaults(base_switch_layout, false))
-    : set_defaults(base_switch_layout, false);
+switch_layout_final = invert_layout(
+    set_defaults(base_switch_layout, false),
+    invert_layout_flag
+);
 plate_layout_final = [
     for (group = base_plate_layout)
-        invert_layout_flag
-            ? invert_layout(set_defaults(group, ["switch"]))
-            : set_defaults(group, ["switch"])
+        invert_layout(
+            set_defaults(group, ["switch"]),
+            invert_layout_flag
+        )
 ];
-mcu_layout_final = invert_layout_flag
-    ? invert_layout(set_defaults(base_mcu_layout))
-    : set_defaults(base_mcu_layout);
-trrs_layout_final = invert_layout_flag
-    ? invert_layout(set_defaults(base_trrs_layout))
-    : set_defaults(base_trrs_layout);
-stab_layout_final = invert_layout_flag
-    ? invert_layout(set_defaults(base_stab_layout))
-    : set_defaults(base_stab_layout, stab_2u);
-standoff_layout_final = invert_layout_flag
-    ? invert_layout(set_defaults(base_standoff_layout, standoff_config_default))
-    : set_defaults(base_standoff_layout, standoff_config_default);
-via_layout_final = invert_layout_flag
-    ? invert_layout(set_defaults(base_via_layout, via_shape))
-    : set_defaults(base_via_layout, via_shape);
+mcu_layout_final = invert_layout(
+    set_defaults(base_mcu_layout),
+    invert_layout_flag
+);
+trrs_layout_final = invert_layout(
+    set_defaults(base_trrs_layout),
+    invert_layout_flag
+);
+stab_layout_final = invert_layout(
+    set_defaults(base_stab_layout),
+    invert_layout_flag
+);
+standoff_layout_final = invert_layout(
+    set_defaults(base_standoff_layout, standoff_config_default),
+    invert_layout_flag
+);
+via_layout_final = invert_layout(
+    set_defaults(base_via_layout, via_shape),
+    invert_layout_flag
+);
 
 assert(
     layout_type == "column" || layout_type == "row",
