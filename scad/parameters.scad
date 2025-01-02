@@ -53,7 +53,7 @@ case_min_pcb_clearance = 1;
 
 /* Plate Parameters */
 // Distance the plate sticks out past the PCB
-plate_margin = 6;
+plate_margin = 5;
 // Radius of outer fillets
 plate_outer_fillet = 2.5;
 // Radius of inner fillets

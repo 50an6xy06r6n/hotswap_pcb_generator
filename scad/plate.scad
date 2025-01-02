@@ -27,7 +27,7 @@ module plate_footprint(
         ? plate_precision * 100000
         : 1;
 
-    // BUGGY VERSION
+    // BUGGY VERSION (convex artifact)
     // Create inner fillets
     // offset(-plate_inner_fillet,$fn=360)
     offset(delta=plate_inner_fillet)
@@ -38,6 +38,20 @@ module plate_footprint(
 
     // Offset plate margin
     offset(delta=plate_margin)
+
+    // BUGGY VERSION (concave artifact)
+    // // Create inner fillets
+    // // offset(-plate_inner_fillet,$fn=360)
+    // offset(delta=plate_inner_fillet)
+
+    // // Create outer fillets
+    // offset(plate_outer_fillet,$fn=360)
+    // offset(delta=-plate_outer_fillet)
+
+    // // Offset plate margin and do scale-based fudging to merge points (deprecated)
+    // scale(scale_factor)
+    // offset(delta=plate_margin / scale_factor)
+    // scale(1/scale_factor)
 
     // ORIGINAL VERSION
     // // Create inner fillets
