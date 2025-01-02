@@ -139,7 +139,13 @@ module bare_mcu(borders=[0,0,0,0]) {
     }
 }
 
-module mcu_plate_footprint(borders=[0,0,0,0]) {
+module mcu_pcb_cutout(borders, extra_data, trim) {
+    translate([0,0,-pcb_thickness-eps])
+    linear_extrude(pcb_thickness+2*eps) 
+        mcu_footprint_trim(borders, trim);
+}
+
+module mcu_footprint(borders=[0,0,0,0]) {
     translate([h_unit/2,-mcu_v_unit_size*v_unit/2,0]) {
         border_footprint(
             [mcu_h_unit_size*h_unit,mcu_v_unit_size*v_unit], 
@@ -148,7 +154,7 @@ module mcu_plate_footprint(borders=[0,0,0,0]) {
     }
 }
 
-module mcu_plate_footprint_trim(borders=[0,0,0,0], trim=undef) {
+module mcu_footprint_trim(borders=[0,0,0,0], trim=undef) {
     if (trim)
     translate([h_unit/2,-mcu_v_unit_size*v_unit/2,0]) {
         border_trim(
@@ -201,7 +207,7 @@ module mcu_plate_cutout_footprint() {
 
 module mcu_plate_base(borders=[0,0,0,0], thickness=plate_thickness) {
     linear_extrude(thickness, center=true)
-        mcu_plate_footprint(borders);
+        mcu_footprint(borders);
 }
 
 module mcu_plate_cutout(thickness=plate_thickness) {

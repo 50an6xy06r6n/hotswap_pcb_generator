@@ -1,6 +1,5 @@
 const kle = require("@ijprest/kle-serial");
 const fs = require('fs')
-const util = require('util')
 
 
 var kle_filename = process.argv[2] ?? 'layout.json';
@@ -117,16 +116,20 @@ base_via_layout = [];
 //     (extra_data = component_type)
 base_plate_layout = [];
 
+// Standoff layout
+//     (extra_data = [standoff_integration_override, standoff_attachment_override])
+base_standoff_layout = [];
+
 module additional_plate_cutouts() {
     square(0); // Dummy geometry to fix preview bug
 } 
 
+module additional_case_cavities() {
+    square(0); // Dummy geometry to fix preview bug
+}
+
 // Whether to only use base_plate_layout to generate the plate footprint
 use_plate_layout_only = false;
-
-// Standoff layout
-//     (extra_data = [standoff_integration_override, standoff_attachment_override])
-base_standoff_layout = [];
 
 // Whether to flip the layout (useful for split boards)
 invert_layout_flag = false;

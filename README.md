@@ -20,6 +20,8 @@ npm start -- <layout json file>
 ```
 Once the basic layout is set there are more values you can tweak in `layout.scad` to change the footprint of the PCB, add components like MCU/TRRS sockets, and add stabilizers/standoffs. Other parameters such as wire/pin diameters and pcb/plate thicknesses (and many many more) are contained in `parameters.scad`. All these values are described in full in the [`scad/` README](scad/README.md). [`default_layout.scad`](scad/default_layout.scad) contains an example layout that uses most of the available customizations, so you can see what's possible. The [`example_layouts/`](example_layouts) directory contains a couple of other examples as well, with varying degrees of complexity.
 
+**Note on OpenSCAD:** I highly recommend installing [the nightly development build of OpenSCAD](https://openscad.org/downloads.html#snapshots), as it includes support for the [Manifold](https://github.com/elalish/manifold) geometry engine, which is much much faster than the CGAL library that OpenSCAD has historically used. Stuff that can take minutes to render with CGAL renders in seconds with Manifold enabled. It can be enabled in the nightly builds by going to Edit -> Preferences -> Features and checking the box for "manifold". While you're in there you might also want to enable "roof" as well, since it's used for some of the (experimental) chamfering options.
+
 ### Assembly
 The [full build guide](guide/build_guide.md) goes into much more details and has pictures of the process, but here's how assembly works at a high level:
 
@@ -43,7 +45,7 @@ The basic layout format matches the commonly-used Keyboard Layout Editor (KLE) f
 ### Additional Context
 My original design was inspired by [stingray127's handwirehotswap project](https://github.com/stingray127/handwirehotswap), with the key difference being that I wanted to use stranded wire for the row contacts. That design worked pretty well, but I was using diode legs to connect the sockets vertically, and those connections turned out to be pretty flaky. In addition, there was nothing holding the sockets in place besides friction with the switch legs, and when seating switches you had to be pushing up on the socket from the back. I solved these problems by just using another set of wires for the columns and combining all the sockets into a solid plate.
 
-After that I got some requests to add a plate generation feature, and I went overboard from there.
+After that I got some requests to add a plate generation feature, and I went overboard from there. Most of my personal development in the near future will probably be related to case generation, as I've personally settled on a layout I like and have had solderable PCBs made for.
 
 ### Gallery
 Completed keyboard

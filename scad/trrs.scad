@@ -66,7 +66,13 @@ module pj320a_trrs(borders=[0,0,0,0]) {
     }
 }
 
-module trrs_plate_footprint(borders=[0,0,0,0]) {
+module trrs_pcb_cutout(borders, extra_data, trim) {
+    translate([0,0,-pcb_thickness-eps])
+    linear_extrude(pcb_thickness+2*eps) 
+        trrs_footprint_trim(borders, trim);
+}
+
+module trrs_footprint(borders=[0,0,0,0]) {
     translate([h_unit/2,-v_unit/2,0])
         border_footprint(
             [h_unit,v_unit], 
@@ -74,7 +80,7 @@ module trrs_plate_footprint(borders=[0,0,0,0]) {
         );
 }
 
-module trrs_plate_footprint_trim(borders=[0,0,0,0], trim=undef) {
+module trrs_footprint_trim(borders=[0,0,0,0], trim=undef) {
     if (trim) translate([h_unit/2,-v_unit/2,0])
         border_trim(
             [h_unit,v_unit], 
@@ -120,7 +126,7 @@ module trrs_plate_cutout_footprint() {
 
 module trrs_plate_base(borders=[0,0,0,0], thickness=plate_thickness) {
     linear_extrude(thickness, center=true)
-        trrs_plate_footprint(borders);
+        trrs_footprint(borders);
 }
 
 module trrs_plate_cutout(thickness=plate_thickness) {

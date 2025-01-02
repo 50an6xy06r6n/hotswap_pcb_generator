@@ -35,21 +35,25 @@ case_type = "plate_case";  // [sandwich, plate_case, backplate_case]
 // Thickness of case walls
 case_wall_thickness = 4;
 // Case wall draft angle
-case_wall_draft_angle = 15;
+case_wall_draft_angle = 10;
 // Width of the case chamfer
-case_chamfer_width = 1;
+case_chamfer_width = 2;
 // Angle of the case chamfer
 case_chamfer_angle = 45;
+// Chamfer/draft corner behavior (straight and beveled are experimental, require a nightly OpenSCAD build, and don't work with outer fillets)
+chamfer_corner_type = "rounded"; // [rounded, beveled, straight]
 // Height of the vertical portion at the bottom of the case 
 // (not including backplate flange)
 case_base_height = 2;
 // Fit tolerance between interlocking case parts
 case_fit_tolerance = 0.2;
+// Minimum gap between case wall and PCB
+case_min_pcb_clearance = 1;
 
 
 /* Plate Parameters */
 // Distance the plate sticks out past the PCB
-plate_margin = 5;
+plate_margin = 6;
 // Radius of outer fillets
 plate_outer_fillet = 2.5;
 // Radius of inner fillets
@@ -61,9 +65,13 @@ plate_precision = 1/100;
 
 /* Backplate Parameters */
 // Thickness of the backplate
-backplate_thickness = 3;
+backplate_thickness = 4;
 // Thickness of flange around backplate if using an integrated-plate case
-backplate_case_flange = 2;
+backplate_index_height = 1;
+// Width of the backplate indexing lip (solid area if undefined)
+backplate_lip_width = 2;
+// Thickness of the portion of the backplate that gets clamped by screws (i.e. thickness - counterbore depth)
+backplate_screw_flange_thickness = 2;
 // Spacing between the bottom of the PCB and the top of the backplate
 pcb_backplate_spacing = 3;
 
@@ -79,7 +87,7 @@ mcu_pin_count = 24;
 mcu_pin_pitch = 2.54;
 mcu_pin_offset = 0;  // Offset from the rear of the PCB
 mcu_connector_width = 13;  // Width of the connector (for plate cutout)
-mcu_connector_length = 4;  // Distance the connector extends onto the MCU (for plate cutout)
+mcu_connector_length = 6;  // Distance the connector extends onto the MCU (for plate cutout)
 mcu_connector_height = 8;  // Height of the plug housing
 mcu_connector_offset = 1.5; // Vertical offset of plug center from PCB center
 mcu_pcb_thickness = 1.6;
@@ -124,11 +132,11 @@ standoff_diameter = 4.5;
 // Diameter of standoff clearance hole
 standoff_clearance_hole_diameter = 2.5;
 // Diameter of standoff pilot hole
-standoff_pilot_hole_diameter = 1.6;
+standoff_pilot_hole_diameter = 2;
 // Diameter of standoff screw head counterbores
 standoff_counterbore_diameter = 4.5;
 // Radius of the fillet at the base of standoffs
-default_standoff_fillet=1;
+default_standoff_fillet=2;
 
 
 // Cutout Grid Parameters
@@ -141,7 +149,8 @@ cutout_grid_spacing = 1.6;
 fit_tolerance = 0;
 // Resolution of holes (affects render times)
 $fn= $preview ? 12 : 60;
-
+// Very small value added to dimensions for through cuts
+eps=0.001;
 
 /* Advanced Parameters (related to switch size) */
 // Switch spacing distance
@@ -152,11 +161,9 @@ h_unit = unit;
 v_unit = unit;
 // Spacing of grid for MX pins
 mx_schematic_unit =
-    switch_type == "mx"
-    ? 1.27
-    : switch_type == "choc"
-        ? 0
-        : assert(false, "switch_type is invalid");
+    switch_type == "mx" ? 1.27
+    : switch_type == "choc" ? 1
+    : undef;
 // Size of socket body
 assert(
     switch_type == "mx" || switch_type == "choc",
@@ -191,8 +198,12 @@ mcu_h_unit_size = ceil(mcu_socket_width/mcu_unit_resolution/h_unit) * mcu_unit_r
 mcu_v_unit_size = ceil(mcu_socket_length/mcu_unit_resolution/v_unit) * mcu_unit_resolution;
 
 // Total assembly thickness (for reference)
-total_thickness =
-    pcb_plate_spacing + pcb_thickness + pcb_backplate_spacing + backplate_thickness;
+total_thickness = 
+    pcb_plate_spacing +
+    pcb_thickness +
+    pcb_backplate_spacing +
+    backplate_index_height +
+    backplate_thickness;
 
 // Width of a border unit around the socket (for joining adjacent sockets)
 border_width = (unit - socket_size)/2;

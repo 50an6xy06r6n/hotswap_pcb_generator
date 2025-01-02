@@ -2,13 +2,52 @@ include <parameters.scad>
 include <param_processing.scad>
 
 use <plate.scad>
+use <pcb.scad>
 use <switch.scad>
 use <mcu.scad>
 use <trrs.scad>
 use <stabilizer.scad>
 use <standoff.scad>
 
-module case_shell(height, switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout) {
+// Chamfer that preserves hard corners (doesn't work with external fillets)
+module straight_chamfer(
+    height,
+    angle, // measured from horizontal
+) {
+    if (angle == 90) {
+        // For straight sides, just do a linear extrude
+        linear_extrude(height)
+            children(0);
+    } else {
+        // roof() uses a 45 degree angle, so we can scale vertically to adjust the angle
+        scale_factor = tan(angle) / tan(45);
+
+        difference() {
+            scale([1,1,scale_factor])
+            roof("straight")
+                children(0);
+            translate([0,0,height])
+                scale([1,1,scale_factor])
+                roof("straight")
+                    children(0);
+        };
+    }
+}
+
+// External profile of the case
+module case_shell(
+    height,
+    switch_layout,
+    mcu_layout,
+    trrs_layout,
+    plate_layout,
+    stab_layout
+) {
+    // Helper module for shared plate profile
+    module local_plate_profile() {
+        plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+    }
+
     // Additional wall thickness introduced by draft angle
     bottom_offset = (
         tan(case_wall_draft_angle) *
@@ -42,50 +81,159 @@ module case_shell(height, switch_layout, mcu_layout, trrs_layout, plate_layout, 
     // Use the outline as defined by the plate layout
     if (use_plate_layout_only) {
         if (case_wall_draft_angle == 0 && case_chamfer_width == 0) {
-            // If there are no angles then the minkowski geometry becomes degenerate
+            // If there are no angles then we can just do a simple linear extrude
+            // (also the minkowski geometry becomes degenerate)
             linear_extrude(height, convexity=10)
-                plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
-        } else {
+                local_plate_profile();
+        } else if (chamfer_corner_type == "rounded") {
+            // Generate case chamfers that round out at the corners
             minkowski() {
-                // Just extrude the straight-sided base
+                // Just extrude the straight-sided base (shrunken to account for the minkowski)
                 linear_extrude(case_base_height, convexity=10)
                     offset(-case_chamfer_width)
-                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+                    local_plate_profile();
 
-                // Side profile for both the chamfer and the draft angle
+                // Stacked-cone side profile for both the chamfer and the draft angle
+                // This gets "rolled" around the base profile to create slanted sides
                 union() {
                     translate([0,0,draft_height])
-                        cylinder(chamfer_height, case_chamfer_width + chamfer_offset, 0); // Chamfer cone
-                        cylinder(draft_height, bottom_offset + case_chamfer_width, case_chamfer_width + chamfer_offset); // Draft cone/cylinder
+                        // Chamfer cone
+                        cylinder(
+                            chamfer_height,
+                            case_chamfer_width + chamfer_offset,
+                            0
+                        );
+                        // Draft cone/cylinder
+                        cylinder(
+                            draft_height,
+                            case_chamfer_width + bottom_offset,
+                            case_chamfer_width + chamfer_offset
+                        );
                 }
             }
+        } else {
+            // Experimental setting to generate chamfers that intersect at straight lines or bevels
+            // May break if combined with external fillets
+
+            // Extra-experimental feature. The top of the drafted section seems to always line up with
+            // the bottom of the chamfer section, but I'm not sure that will always work out.
+            // I think it has to do with similarities between the straight skeleton algorithm used by
+            // roof() and the algorithm used to create beveled (chamfered) offset profiles.
+            beveled_corners = chamfer_corner_type == "beveled";
+
+            // Top chamfer section
+            translate([0,0,case_base_height+draft_height])
+            straight_chamfer(chamfer_height, case_chamfer_angle) {
+                offset(delta=chamfer_offset, chamfer=beveled_corners)
+                local_plate_profile();
+            };
+
+            // Drafted section
+            translate([0,0,case_base_height])
+            straight_chamfer(draft_height, 90-case_wall_draft_angle) {
+                offset(delta=bottom_offset, chamfer=beveled_corners)
+                local_plate_profile();
+            };
+
+            // Extrude the straight-sided base
+            linear_extrude(case_base_height, convexity=10)
+                offset(delta=bottom_offset, chamfer=beveled_corners)
+                local_plate_profile();
         }
-    } else { // Just hull everything to get a basic shape (eliminates any concavity in the profile)
-        eps = 0.001;
+    } else {
+        // Just hull everything to get a basic shape (eliminates any concavity in the profile)
+        // This could probably also be done via the minkowski method, but this is more computationally efficient
+        rounded_corners = chamfer_corner_type == "rounded";
+        beveled_corners = chamfer_corner_type == "beveled";
+
         hull() {
             // top plate surface
             translate([0,0,height-eps])
             linear_extrude(eps)
             offset(-case_chamfer_width)
-                plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+                local_plate_profile();
 
             // Chamfer-draft intersection
             translate([0,0,height-chamfer_height-eps])
             linear_extrude(eps)
-            offset(chamfer_offset)
-                plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+            offset(
+                r=rounded_corners ? chamfer_offset : undef,
+                delta=rounded_corners ? undef : chamfer_offset,
+                chamfer=beveled_corners
+            )
+                local_plate_profile();
 
             // Bottom section
             translate([0,0,-eps])
             linear_extrude(case_base_height+eps)
-            offset(bottom_offset)
-                plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+            offset(
+                r=rounded_corners ? bottom_offset : undef,
+                delta=rounded_corners ? undef : bottom_offset,
+                chamfer=beveled_corners
+            )
+                local_plate_profile();
+
         }
     }
 }
 
+// Internal space to put stuff in
+module case_cavity(
+    height,
+    switch_layout,
+    mcu_layout,
+    trrs_layout,
+    plate_layout,
+    stab_layout
+) {
+    linear_extrude(height-plate_thickness, convexity=10)
+    case_cavity_footprint(
+        switch_layout,
+        mcu_layout,
+        trrs_layout,
+        plate_layout,
+        stab_layout
+    );
+}
+
+module case_cavity_footprint(
+    switch_layout,
+    mcu_layout,
+    trrs_layout,
+    plate_layout,
+    stab_layout
+) {
+    union() {
+        offset(-case_wall_thickness)
+            plate_footprint(
+                switch_layout,
+                mcu_layout,
+                trrs_layout,
+                plate_layout,
+                stab_layout
+            );
+
+        // Also cut out the PCB profile to make extra sure there's room
+        offset(case_min_pcb_clearance)
+            pcb_footprint(
+                switch_layout,
+                mcu_layout,
+                trrs_layout,
+                stab_layout
+            );
+
+        // Add additional case cavities
+        additional_case_cavities();
+    }
+}
+
 module case(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, standoff_layout) {
-    height = total_thickness - backplate_case_flange;
+    // Helper module for shared plate profile
+    module local_plate_profile() {
+        plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+    }
+
+    height = total_thickness - backplate_thickness;
     intersection() {
         // Trim off any components that extend past the case (e.g. standoffs)
         translate([0,0,-height+plate_thickness/2])
@@ -96,11 +244,17 @@ module case(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, s
                 translate([0,0,-height+plate_thickness/2]) 
                 difference() {
                     case_shell(height, switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
-                    translate([0,0,-1])
-                    linear_extrude(height-plate_thickness+1, convexity=10)
-                        offset(-case_wall_thickness)
-                        plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+                    translate([0,0,-eps])
+                        case_cavity(
+                            height + eps,
+                            switch_layout,
+                            mcu_layout,
+                            trrs_layout,
+                            plate_layout,
+                            stab_layout
+                        );
                 }
+
                 // Add undrilled standoffs
                 layout_pattern(standoff_layout) {
                     plate_standoff($extra_data, true);
@@ -124,16 +278,28 @@ module case(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout, s
             layout_pattern(standoff_layout) {
                 case_standoff_hole($extra_data);
                 plate_standoff_hole($extra_data);
-                translate([0,0,plate_thickness/2-pcb_plate_spacing-pcb_thickness-pcb_backplate_spacing-backplate_thickness/2-0.5])
+                translate([0,0,-pcb_plate_spacing-pcb_thickness-pcb_backplate_spacing-0.25])
                     backplate_standoff_hole($extra_data);
             }
+
+            // Add clearance for backplate indexing feature
+            translate([0,0,-height+plate_thickness/2-eps])
+            linear_extrude(backplate_index_height+eps)
+                case_cavity_footprint(
+                    switch_layout,
+                    mcu_layout,
+                    trrs_layout,
+                    plate_layout,
+                    stab_layout
+                );
 
             // Additional user-defined cutouts
             linear_extrude(plate_thickness+1, center=true)
             intersection() {
                 // Make sure it doesn't cut into the case walls by intersecting with the inner plate profile
                 offset(-case_wall_thickness)
-                    plate_footprint(switch_layout, mcu_layout, trrs_layout, plate_layout, stab_layout);
+                    local_plate_profile();
+                // TODO: make this 2-D?
                 additional_plate_cutouts(); 
             }
         }
